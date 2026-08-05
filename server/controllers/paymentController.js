@@ -7,7 +7,6 @@ const Order = require("../models/Order");
 // ==============================
 
 const initializePayment = async (req, res) => {
-
   try {
 
     const {
@@ -19,14 +18,18 @@ const initializePayment = async (req, res) => {
     } = req.body;
 
 
-
-    const tx_ref =
-      "unique-healthcare-" + Date.now();
+    const tx_ref = "unique-healthcare-" + Date.now();
 
 
+    const FRONTEND_URL =
+      process.env.FRONTEND_URL ||
+      "https://unique-healthcare.vercel.app";
 
-    // Save pending order temporarily in response
-    // Frontend will store it locally until payment succeeds
+
+    const BACKEND_URL =
+      process.env.BACKEND_URL ||
+      "https://unique-healthcare-api.onrender.com";
+
 
 
     const response = await axios.post(
@@ -48,14 +51,17 @@ const initializePayment = async (req, res) => {
         tx_ref,
 
 
+        // Chapa calls this after payment verification
         callback_url:
-          `${process.env.BACKEND_URL || "http://localhost:5000"}/api/payment/verify/${tx_ref}`,
+          `${BACKEND_URL}/api/payment/verify/${tx_ref}`,
 
+
+        // User returns here after payment
         return_url:
-          `${process.env.FRONTEND_URL || "http://localhost:5173"}/payment-success?tx_ref=${tx_ref}`
-
+          `${FRONTEND_URL}/payment-success?tx_ref=${tx_ref}`
 
       },
+
 
       {
 
@@ -75,7 +81,6 @@ const initializePayment = async (req, res) => {
 
 
 
-
     res.json({
 
       status:"success",
@@ -84,7 +89,6 @@ const initializePayment = async (req, res) => {
         response.data.data.checkout_url,
 
       tx_ref
-
 
     });
 
@@ -114,17 +118,11 @@ const initializePayment = async (req, res) => {
 
 
 
-
-
-
-
 // ==============================
 // Verify Chapa Payment
 // ==============================
 
-
 const verifyPayment = async(req,res)=>{
-
 
   try{
 
@@ -135,9 +133,7 @@ const verifyPayment = async(req,res)=>{
 
     const response = await axios.get(
 
-
       `https://api.chapa.co/v1/transaction/verify/${tx_ref}`,
-
 
       {
 
@@ -150,16 +146,11 @@ const verifyPayment = async(req,res)=>{
 
       }
 
-
     );
 
 
 
-
-
     const data = response.data.data;
-
-
 
 
 
@@ -173,10 +164,7 @@ const verifyPayment = async(req,res)=>{
 
       });
 
-
     }
-
-
 
 
 
@@ -189,10 +177,7 @@ const verifyPayment = async(req,res)=>{
 
       data
 
-
     });
-
-
 
 
 
@@ -214,10 +199,7 @@ const verifyPayment = async(req,res)=>{
 
   }
 
-
 };
-
-
 
 
 
