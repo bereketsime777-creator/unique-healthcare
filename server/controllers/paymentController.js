@@ -1,5 +1,4 @@
 const axios = require("axios");
-const Order = require("../models/Order");
 
 
 // ==============================
@@ -7,18 +6,21 @@ const Order = require("../models/Order");
 // ==============================
 
 const initializePayment = async (req, res) => {
+
   try {
 
     const {
       amount,
       email,
       first_name,
-      phone_number,
-      orderData
+      phone_number
     } = req.body;
 
 
-    const tx_ref = "unique-healthcare-" + Date.now();
+
+    const tx_ref =
+      "unique-healthcare-" + Date.now();
+
 
 
     const FRONTEND_URL =
@@ -26,9 +28,12 @@ const initializePayment = async (req, res) => {
       "https://unique-healthcare.vercel.app";
 
 
+
     const BACKEND_URL =
       process.env.BACKEND_URL ||
       "https://unique-healthcare-api.onrender.com";
+
+
 
 
 
@@ -51,12 +56,12 @@ const initializePayment = async (req, res) => {
         tx_ref,
 
 
-        // Chapa calls this after payment verification
+        // Chapa server verification callback
         callback_url:
           `${BACKEND_URL}/api/payment/verify/${tx_ref}`,
 
 
-        // User returns here after payment
+        // Customer redirect after payment
         return_url:
           `${FRONTEND_URL}/payment-success?tx_ref=${tx_ref}`
 
@@ -81,9 +86,10 @@ const initializePayment = async (req, res) => {
 
 
 
+
     res.json({
 
-      status:"success",
+      status: "success",
 
       checkout_url:
         response.data.data.checkout_url,
@@ -94,12 +100,14 @@ const initializePayment = async (req, res) => {
 
 
 
-  } catch(error){
+  } catch (error) {
 
 
     console.log(
+      "Chapa Initialize Error:",
       error.response?.data || error.message
     );
+
 
 
     res.status(500).json({
@@ -118,35 +126,44 @@ const initializePayment = async (req, res) => {
 
 
 
+
+
+
 // ==============================
 // Verify Chapa Payment
 // ==============================
 
-const verifyPayment = async(req,res)=>{
-
-  try{
+const verifyPayment = async (req, res) => {
 
 
-    const {tx_ref}=req.params;
+  try {
+
+
+    const { tx_ref } = req.params;
 
 
 
     const response = await axios.get(
 
+
       `https://api.chapa.co/v1/transaction/verify/${tx_ref}`,
+
 
       {
 
-        headers:{
+        headers: {
 
           Authorization:
-          `Bearer ${process.env.CHAPA_SECRET_KEY}`
+            `Bearer ${process.env.CHAPA_SECRET_KEY}`
 
         }
 
       }
 
+
     );
+
+
 
 
 
@@ -154,52 +171,65 @@ const verifyPayment = async(req,res)=>{
 
 
 
-    if(data.status !== "success"){
+
+    if (data.status !== "success") {
 
 
       return res.status(400).json({
 
         message:
-        "Payment not completed"
+          "Payment not completed"
 
       });
+
 
     }
 
 
 
-    res.json({
-
-      status:"success",
-
-      message:
-      "Payment verified successfully",
-
-      data
-
-    });
 
 
+    // Redirect user back to React frontend
 
-  }catch(error){
+    return res.redirect(
+
+      `${process.env.FRONTEND_URL}/payment-success?tx_ref=${tx_ref}`
+
+    );
+
+
+
+
+
+  } catch (error) {
+
 
 
     console.log(
+
+      "Chapa Verify Error:",
+
       error.response?.data || error.message
+
     );
+
 
 
     res.status(500).json({
 
       message:
-      "Payment verification failed"
+        "Payment verification failed"
 
     });
 
 
   }
 
+
 };
+
+
+
 
 
 
