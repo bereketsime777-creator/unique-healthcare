@@ -36,7 +36,6 @@ const initializePayment = async (req, res) => {
 
 
 
-
     const response = await axios.post(
 
       "https://api.chapa.co/v1/transaction/initialize",
@@ -56,12 +55,10 @@ const initializePayment = async (req, res) => {
         tx_ref,
 
 
-        // Chapa server verification callback
         callback_url:
           `${BACKEND_URL}/api/payment/verify/${tx_ref}`,
 
 
-        // Customer redirect after payment
         return_url:
           `${FRONTEND_URL}/payment-success?tx_ref=${tx_ref}`
 
@@ -86,7 +83,6 @@ const initializePayment = async (req, res) => {
 
 
 
-
     res.json({
 
       status: "success",
@@ -107,7 +103,6 @@ const initializePayment = async (req, res) => {
       "Chapa Initialize Error:",
       error.response?.data || error.message
     );
-
 
 
     res.status(500).json({
@@ -143,6 +138,13 @@ const verifyPayment = async (req, res) => {
 
 
 
+    console.log(
+      "Verifying transaction:",
+      tx_ref
+    );
+
+
+
     const response = await axios.get(
 
 
@@ -166,19 +168,43 @@ const verifyPayment = async (req, res) => {
 
 
 
+    // Show Chapa response in Render logs
 
-    const data = response.data.data;
+    console.log(
+      "CHAPA VERIFY RESPONSE:"
+    );
+
+    console.log(
+      JSON.stringify(response.data, null, 2)
+    );
 
 
 
 
-    if (data.status !== "success") {
+    const data =
+      response.data.data;
+
+
+
+    if (
+      response.data.status !== "success" ||
+      !data ||
+      data.status !== "success"
+    ) {
+
+
+      console.log(
+        "Payment verification failed"
+      );
 
 
       return res.status(400).json({
 
         message:
-          "Payment not completed"
+          "Payment not completed",
+
+        chapaResponse:
+          response.data
 
       });
 
@@ -189,7 +215,16 @@ const verifyPayment = async (req, res) => {
 
 
 
-    // Redirect user back to React frontend
+
+    console.log(
+      "Payment verified successfully"
+    );
+
+
+
+
+
+    // Redirect customer to frontend
 
     return res.redirect(
 
