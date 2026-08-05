@@ -23,6 +23,7 @@ const initializePayment = async (req, res) => {
 
 
 
+
     const FRONTEND_URL =
       process.env.FRONTEND_URL ||
       "https://unique-healthcare.vercel.app";
@@ -36,22 +37,33 @@ const initializePayment = async (req, res) => {
 
 
 
+
+    console.log("Initializing Chapa Payment...");
+    console.log("Amount:", amount);
+    console.log("Email:", email);
+    console.log("TX REF:", tx_ref);
+
+
+
+
+
     const response = await axios.post(
 
-      "https://api.chapa.co/v1/transaction.initialize",
+      "https://api.chapa.co/v1/transaction/initialize",
 
       {
-        amount,
+
+        amount: amount,
 
         currency: "ETB",
 
-        email,
+        email: email,
 
-        first_name,
+        first_name: first_name,
 
-        phone_number,
+        phone_number: phone_number,
 
-        tx_ref,
+        tx_ref: tx_ref,
 
 
         callback_url:
@@ -82,36 +94,47 @@ const initializePayment = async (req, res) => {
 
 
 
-    res.json({
 
-      status:
-        "success",
 
+    console.log(
+      "Chapa Initialize Success"
+    );
+
+
+
+
+
+    return res.json({
+
+      status: "success",
 
       checkout_url:
         response.data.data.checkout_url,
 
-
-      tx_ref
+      tx_ref: tx_ref
 
     });
 
 
 
-  } catch(error) {
+
+
+  } catch (error) {
 
 
     console.log(
-
-      "Chapa Initialize Error:",
-
-      error.response?.data ||
-      error.message
-
+      "CHAPA INITIALIZE ERROR:"
     );
 
 
-    res.status(500).json({
+    console.log(
+      error.response?.data ||
+      error.message
+    );
+
+
+
+    return res.status(500).json({
 
       message:
         "Payment initialization failed"
@@ -130,9 +153,11 @@ const initializePayment = async (req, res) => {
 
 
 
+
 // ==============================
 // Verify Chapa Payment
 // ==============================
+
 
 const verifyPayment = async (req, res) => {
 
@@ -150,6 +175,8 @@ const verifyPayment = async (req, res) => {
       "Verifying transaction:",
       tx_ref
     );
+
+
 
 
 
@@ -177,6 +204,8 @@ const verifyPayment = async (req, res) => {
 
 
 
+
+
     console.log(
       "CHAPA VERIFY RESPONSE:"
     );
@@ -196,8 +225,11 @@ const verifyPayment = async (req, res) => {
 
 
 
+
+
     const data =
       response.data.data;
+
 
 
 
@@ -227,11 +259,11 @@ const verifyPayment = async (req, res) => {
         message:
           "Payment not completed"
 
-
       });
 
 
     }
+
 
 
 
@@ -248,8 +280,8 @@ const verifyPayment = async (req, res) => {
 
 
     // IMPORTANT:
-    // Return JSON to React
-    // Do NOT redirect here
+    // React will handle redirect
+    // Return JSON only
 
     return res.json({
 
@@ -261,10 +293,10 @@ const verifyPayment = async (req, res) => {
         "Payment verified successfully",
 
 
-      data
+      data:
+        data
 
     });
-
 
 
 
@@ -274,9 +306,13 @@ const verifyPayment = async (req, res) => {
   } catch(error) {
 
 
-    console.log(
 
-      "Chapa Verify Error:",
+    console.log(
+      "CHAPA VERIFY ERROR:"
+    );
+
+
+    console.log(
 
       error.response?.data ||
 
@@ -286,14 +322,12 @@ const verifyPayment = async (req, res) => {
 
 
 
-    return res.status(500).json({
 
-      status:
-        "error",
+
+    return res.status(500).json({
 
       message:
         "Payment verification failed"
-
 
     });
 
@@ -303,7 +337,6 @@ const verifyPayment = async (req, res) => {
 
 
 };
-
 
 
 
