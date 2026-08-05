@@ -38,10 +38,9 @@ const initializePayment = async (req, res) => {
 
     const response = await axios.post(
 
-      "https://api.chapa.co/v1/transaction/initialize",
+      "https://api.chapa.co/v1/transaction.initialize",
 
       {
-
         amount,
 
         currency: "ETB",
@@ -85,10 +84,13 @@ const initializePayment = async (req, res) => {
 
     res.json({
 
-      status: "success",
+      status:
+        "success",
+
 
       checkout_url:
         response.data.data.checkout_url,
+
 
       tx_ref
 
@@ -96,12 +98,16 @@ const initializePayment = async (req, res) => {
 
 
 
-  } catch (error) {
+  } catch(error) {
 
 
     console.log(
+
       "Chapa Initialize Error:",
-      error.response?.data || error.message
+
+      error.response?.data ||
+      error.message
+
     );
 
 
@@ -134,7 +140,9 @@ const verifyPayment = async (req, res) => {
   try {
 
 
-    const { tx_ref } = req.params;
+    const {
+      tx_ref
+    } = req.params;
 
 
 
@@ -142,6 +150,7 @@ const verifyPayment = async (req, res) => {
       "Verifying transaction:",
       tx_ref
     );
+
 
 
 
@@ -168,15 +177,21 @@ const verifyPayment = async (req, res) => {
 
 
 
-    // Show Chapa response in Render logs
-
     console.log(
       "CHAPA VERIFY RESPONSE:"
     );
 
+
     console.log(
-      JSON.stringify(response.data, null, 2)
+
+      JSON.stringify(
+        response.data,
+        null,
+        2
+      )
+
     );
+
 
 
 
@@ -186,25 +201,32 @@ const verifyPayment = async (req, res) => {
 
 
 
+
+
+
     if (
-      response.data.status !== "success" ||
-      !data ||
+
+      response.data.status !== "success"
+
+      ||
+
+      !data
+
+      ||
+
       data.status !== "success"
+
     ) {
-
-
-      console.log(
-        "Payment verification failed"
-      );
 
 
       return res.status(400).json({
 
-        message:
-          "Payment not completed",
+        status:
+          "failed",
 
-        chapaResponse:
-          response.data
+        message:
+          "Payment not completed"
+
 
       });
 
@@ -224,38 +246,57 @@ const verifyPayment = async (req, res) => {
 
 
 
-    // Redirect customer to frontend
 
-    return res.redirect(
+    // IMPORTANT:
+    // Return JSON to React
+    // Do NOT redirect here
 
-      `${process.env.FRONTEND_URL}/payment-success?tx_ref=${tx_ref}`
+    return res.json({
 
-    );
-
-
-
+      status:
+        "success",
 
 
-  } catch (error) {
+      message:
+        "Payment verified successfully",
 
+
+      data
+
+    });
+
+
+
+
+
+
+
+  } catch(error) {
 
 
     console.log(
 
       "Chapa Verify Error:",
 
-      error.response?.data || error.message
+      error.response?.data ||
+
+      error.message
 
     );
 
 
 
-    res.status(500).json({
+    return res.status(500).json({
+
+      status:
+        "error",
 
       message:
         "Payment verification failed"
 
+
     });
+
 
 
   }
