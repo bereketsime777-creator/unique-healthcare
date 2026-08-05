@@ -28,6 +28,10 @@ function PaymentSuccess() {
 
     const verifyPayment = async () => {
 
+      console.log("Payment Success Page Loaded");
+      console.log("Transaction Ref:", tx_ref);
+
+
       try {
 
 
@@ -44,12 +48,19 @@ function PaymentSuccess() {
 
 
 
-        // Prevent duplicate verification
+        // Check duplicate payment
+
         const alreadyPaid =
-          localStorage.getItem(`paid-${tx_ref}`);
+          localStorage.getItem(
+            `paid-${tx_ref}`
+          );
 
 
         if (alreadyPaid) {
+
+          console.log(
+            "Payment already verified"
+          );
 
           setMessage(
             "Payment Successful 🎉"
@@ -58,18 +69,50 @@ function PaymentSuccess() {
           setLoading(false);
 
           return;
+
         }
 
 
 
 
-        const pendingOrder = JSON.parse(
-          localStorage.getItem("pendingOrder")
+
+        // Get pending order
+
+        let pendingOrder;
+
+
+        try {
+
+          pendingOrder = JSON.parse(
+            localStorage.getItem(
+              "pendingOrder"
+            )
+          );
+
+
+        } catch(error){
+
+          console.log(
+            "Pending order JSON error",
+            error
+          );
+
+        }
+
+
+
+
+
+        console.log(
+          "Pending Order:",
+          pendingOrder
         );
 
 
 
+
         if (!pendingOrder) {
+
 
           setMessage(
             "No pending order found."
@@ -84,14 +127,31 @@ function PaymentSuccess() {
 
 
 
+
+
         // ===========================
         // Verify Chapa Payment
         // ===========================
 
 
-        const verifyResponse = await API.get(
-          `/payment/verify/${tx_ref}`
+        console.log(
+          "Verifying Chapa payment..."
         );
+
+
+        const verifyResponse =
+          await API.get(
+            `/payment/verify/${tx_ref}`
+          );
+
+
+
+        console.log(
+          "Verify Response:",
+          verifyResponse.data
+        );
+
+
 
 
 
@@ -99,6 +159,7 @@ function PaymentSuccess() {
           verifyResponse.data.status !== "success" ||
           verifyResponse.data.data.status !== "success"
         ) {
+
 
           setMessage(
             "Payment verification failed."
@@ -119,21 +180,37 @@ function PaymentSuccess() {
         // ===========================
 
 
-        await API.post("/orders", {
+        console.log(
+          "Creating order..."
+        );
 
-          items:
-            pendingOrder.items,
 
-          totalAmount:
-            pendingOrder.totalAmount,
+        const orderResponse =
+          await API.post(
+            "/orders",
+            {
 
-          shippingAddress:
-            pendingOrder.shippingAddress,
+              items:
+                pendingOrder.items,
 
-          paymentStatus:
-            "Paid",
+              totalAmount:
+                pendingOrder.totalAmount,
 
-        });
+              shippingAddress:
+                pendingOrder.shippingAddress,
+
+              paymentStatus:
+                "Paid",
+
+            }
+          );
+
+
+
+        console.log(
+          "Order Created:",
+          orderResponse.data
+        );
 
 
 
@@ -145,7 +222,8 @@ function PaymentSuccess() {
 
 
 
-        // Remove pending order
+
+        // Remove temporary order
 
         localStorage.removeItem(
           "pendingOrder"
@@ -153,12 +231,14 @@ function PaymentSuccess() {
 
 
 
-        // Mark transaction as completed
+
+        // Save payment completed
 
         localStorage.setItem(
           `paid-${tx_ref}`,
           "true"
         );
+
 
 
 
@@ -169,10 +249,13 @@ function PaymentSuccess() {
 
 
 
-      } catch (error) {
+      } catch(error) {
 
 
-        console.log(error);
+        console.log(
+          "Payment Error:",
+          error
+        );
 
 
         setMessage(
@@ -198,6 +281,7 @@ function PaymentSuccess() {
 
 
   }, [tx_ref, clearCart]);
+
 
 
 
@@ -232,7 +316,6 @@ function PaymentSuccess() {
 
       ) : (
 
-
         <>
 
 
@@ -256,7 +339,6 @@ function PaymentSuccess() {
 
             <>
 
-
               <p className="mt-4">
 
                 Your order has been placed successfully.
@@ -265,10 +347,11 @@ function PaymentSuccess() {
 
 
 
-
               <button
 
-                onClick={() => navigate("/my-orders")}
+                onClick={() =>
+                  navigate("/my-orders")
+                }
 
                 className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
 
@@ -281,8 +364,8 @@ function PaymentSuccess() {
 
             </>
 
-
           )}
+
 
 
 
@@ -290,10 +373,11 @@ function PaymentSuccess() {
 
           {message !== "Payment Successful 🎉" && (
 
-
             <button
 
-              onClick={() => navigate("/")}
+              onClick={() =>
+                navigate("/")
+              }
 
               className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-lg"
 
@@ -303,13 +387,11 @@ function PaymentSuccess() {
 
             </button>
 
-
           )}
 
 
 
         </>
-
 
       )}
 
