@@ -8,6 +8,7 @@ import API from "../services/api";
 import { useCart } from "../context/CartContext";
 
 function PaymentSuccess() {
+
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -22,122 +23,302 @@ function PaymentSuccess() {
     "Verifying your payment..."
   );
 
+
   useEffect(() => {
+
     const verifyPayment = async () => {
+
       try {
+
+
         if (!tx_ref) {
+
           setMessage(
             "Transaction reference not found."
           );
+
           setLoading(false);
+
           return;
         }
+
+
+
+        // Prevent duplicate verification
+        const alreadyPaid =
+          localStorage.getItem(`paid-${tx_ref}`);
+
+
+        if (alreadyPaid) {
+
+          setMessage(
+            "Payment Successful 🎉"
+          );
+
+          setLoading(false);
+
+          return;
+        }
+
+
+
 
         const pendingOrder = JSON.parse(
           localStorage.getItem("pendingOrder")
         );
 
+
+
         if (!pendingOrder) {
-          setMessage("No pending order found.");
+
+          setMessage(
+            "No pending order found."
+          );
+
           setLoading(false);
+
           return;
+
         }
 
+
+
+
         // ===========================
-        // Verify payment with backend
+        // Verify Chapa Payment
         // ===========================
+
 
         const verifyResponse = await API.get(
           `/payment/verify/${tx_ref}`
         );
 
+
+
         if (
           verifyResponse.data.status !== "success" ||
           verifyResponse.data.data.status !== "success"
         ) {
+
           setMessage(
             "Payment verification failed."
           );
+
           setLoading(false);
+
           return;
+
         }
+
+
+
+
 
         // ===========================
         // Create Order
         // ===========================
 
+
         await API.post("/orders", {
-          items: pendingOrder.items,
-          totalAmount: pendingOrder.totalAmount,
-          shippingAddress: pendingOrder.shippingAddress,
-          paymentStatus: "Paid",
+
+          items:
+            pendingOrder.items,
+
+          totalAmount:
+            pendingOrder.totalAmount,
+
+          shippingAddress:
+            pendingOrder.shippingAddress,
+
+          paymentStatus:
+            "Paid",
+
         });
 
+
+
+
+
+        // Clear cart
+
         clearCart();
+
+
+
+        // Remove pending order
 
         localStorage.removeItem(
           "pendingOrder"
         );
 
+
+
+        // Mark transaction as completed
+
+        localStorage.setItem(
+          `paid-${tx_ref}`,
+          "true"
+        );
+
+
+
         setMessage(
           "Payment Successful 🎉"
         );
 
-        setTimeout(() => {
-          navigate("/my-orders");
-        }, 2000);
+
+
 
       } catch (error) {
+
+
         console.log(error);
+
 
         setMessage(
           error.response?.data?.message ||
-            "Payment verification failed."
+          "Payment verification failed."
         );
+
+
+
       } finally {
+
+
         setLoading(false);
+
+
       }
+
     };
 
+
+
     verifyPayment();
-  }, [tx_ref, clearCart, navigate]);
+
+
+  }, [tx_ref, clearCart]);
+
+
+
+
+
 
   return (
+
     <div className="max-w-2xl mx-auto text-center py-20">
+
+
       {loading ? (
+
         <>
+
           <h1 className="text-3xl font-bold">
+
             Confirming Payment...
+
           </h1>
+
 
           <p className="mt-4 text-gray-600">
+
             Please wait while we verify your payment.
+
           </p>
+
+
         </>
+
+
       ) : (
+
+
         <>
-          <h1 className="text-4xl font-bold text-green-600">
+
+
+          <h1
+            className={
+              message === "Payment Successful 🎉"
+              ? "text-4xl font-bold text-green-600"
+              : "text-4xl font-bold text-red-600"
+            }
+          >
+
             {message}
+
           </h1>
 
+
+
+
+
           {message === "Payment Successful 🎉" && (
-            <p className="mt-4">
-              Your order has been placed successfully.
-            </p>
+
+            <>
+
+
+              <p className="mt-4">
+
+                Your order has been placed successfully.
+
+              </p>
+
+
+
+
+              <button
+
+                onClick={() => navigate("/my-orders")}
+
+                className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+
+              >
+
+                View My Orders
+
+              </button>
+
+
+            </>
+
+
           )}
 
+
+
+
+
           {message !== "Payment Successful 🎉" && (
+
+
             <button
+
               onClick={() => navigate("/")}
+
               className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-lg"
+
             >
+
               Back to Home
+
             </button>
+
+
           )}
+
+
+
         </>
+
+
       )}
+
+
     </div>
+
   );
+
 }
+
 
 export default PaymentSuccess;
