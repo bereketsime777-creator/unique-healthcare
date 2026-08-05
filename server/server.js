@@ -18,11 +18,17 @@ const messageRoutes = require("./routes/messageRoutes");
 const app = express();
 
 
+// ==============================
 // Connect Database
+// ==============================
+
 connectDB();
 
 
+// ==============================
 // Middleware
+// ==============================
+
 app.use(cors());
 
 app.use(express.json());
@@ -41,13 +47,11 @@ app.use(
 );
 
 
-
 // Products
 app.use(
   "/api/products",
   productRoutes
 );
-
 
 
 // Orders
@@ -57,7 +61,6 @@ app.use(
 );
 
 
-
 // Admin Dashboard
 app.use(
   "/api/dashboard",
@@ -65,12 +68,12 @@ app.use(
 );
 
 
-
 // Chapa Payment
 app.use(
   "/api/payment",
   paymentRoutes
 );
+
 
 // Messages / Contact
 app.use(
@@ -80,12 +83,9 @@ app.use(
 
 
 
-
-
 // ==============================
 // Test Route
 // ==============================
-
 
 app.get("/", (req, res) => {
 
@@ -97,20 +97,17 @@ app.get("/", (req, res) => {
 
 
 
-
-
 // ==============================
-// Start Server
+// Start Server (Render Ready)
 // ==============================
-
 
 const PORT = process.env.PORT || 5000;
 
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
 
   console.log(
-    `🚀 Server running on http://localhost:${PORT}`
+    `🚀 Server running on port ${PORT}`
   );
 
 });
