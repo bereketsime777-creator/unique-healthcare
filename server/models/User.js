@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-
     email: {
       type: String,
       required: true,
@@ -15,25 +14,28 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-
     password: {
       type: String,
       required: true,
     },
-
     phone: {
       type: String,
       default: "",
     },
-
     role: {
       type: String,
       default: "user",
     },
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("User", userSchema);

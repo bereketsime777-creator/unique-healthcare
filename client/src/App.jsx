@@ -26,6 +26,8 @@ import MyOrders from "./pages/MyOrders";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import Services from "./pages/Services";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import AdminLayout from "./admin/components/AdminLayout";
 import Dashboard from "./admin/Dashboard";
