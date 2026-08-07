@@ -145,9 +145,14 @@ export default function Login() {
             </div>
 
             <div style={{ marginBottom: "26px" }}>
-              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "7px" }}>
-                Password
-              </label>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "7px" }}>
+                <label style={{ fontSize: "13px", fontWeight: 600, color: "#374151" }}>
+                  Password
+                </label>
+                <Link to="/forgot-password" style={{ fontSize: "12px", color: "#2563eb", textDecoration: "none", fontWeight: 500 }}>
+                  Forgot password?
+                </Link>
+              </div>
               <div style={{ position: "relative" }}>
                 <input
                   type={showPass ? "text" : "password"}

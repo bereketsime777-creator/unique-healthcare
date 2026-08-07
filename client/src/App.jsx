@@ -1,15 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-// Scrolls to top on every route change
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
-  return null;
-}
-
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -19,6 +10,8 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -26,8 +19,6 @@ import MyOrders from "./pages/MyOrders";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
 import Services from "./pages/Services";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
 
 import AdminLayout from "./admin/components/AdminLayout";
 import Dashboard from "./admin/Dashboard";
@@ -38,10 +29,20 @@ import ManageOrders from "./admin/ManageOrders";
 import OrderDetails from "./admin/OrderDetails";
 import Messages from "./admin/Messages";
 
+// Scroll to top on every navigation
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
 function Layout() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
-  const isAuth = location.pathname === "/login" || location.pathname === "/register";
+  const isAuth = ["/login", "/register", "/forgot-password"].includes(location.pathname)
+    || location.pathname.startsWith("/reset-password");
 
   return (
     <>
@@ -49,19 +50,25 @@ function Layout() {
       {!isAdmin && !isAuth && <Navbar />}
 
       <Routes>
+        {/* Public */}
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/my-orders" element={<MyOrders />} />
         <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<ContactUs />} />
 
+        {/* Auth */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+        {/* Admin */}
         <Route
           path="/admin"
           element={
@@ -79,14 +86,15 @@ function Layout() {
           <Route path="messages" element={<Messages />} />
         </Route>
 
+        {/* 404 */}
         <Route
           path="*"
           element={
-            <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
-              <div className="text-8xl font-extrabold text-gray-200 mb-4">404</div>
-              <h1 className="text-2xl font-bold text-gray-700 mb-2">Page Not Found</h1>
-              <p className="text-gray-500 mb-6">The page you are looking for doesn&apos;t exist.</p>
-              <a href="/" className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700">
+            <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#f8fafc" }}>
+              <p style={{ fontSize: "96px", fontWeight: 900, color: "#e2e8f0", margin: "0 0 16px" }}>404</p>
+              <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#374151", margin: "0 0 8px" }}>Page Not Found</h1>
+              <p style={{ color: "#94a3b8", marginBottom: "28px" }}>The page you are looking for doesn&apos;t exist.</p>
+              <a href="/" style={{ background: "#2563eb", color: "#fff", padding: "12px 28px", borderRadius: "12px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
                 Back to Home
               </a>
             </div>
