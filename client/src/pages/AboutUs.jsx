@@ -1,164 +1,164 @@
 import { Link } from "react-router-dom";
 
 const stats = [
-  { value: "200+", label: "Hospitals Served" },
-  { value: "500+", label: "Products Available" },
-  { value: "10+",  label: "Years Experience" },
-  { value: "98%",  label: "Customer Satisfaction" },
+  { value: "200+", label: "Healthcare Clients" },
+  { value: "11",   label: "Regions Served" },
+  { value: "500+", label: "Products Supplied" },
+  { value: "10+",  label: "Years of Service" },
 ];
 
 const values = [
-  { icon: "🏅", title: "Quality First",        desc: "Every product meets international healthcare standards. We never compromise on quality." },
-  { icon: "🤝", title: "Trusted Partnerships", desc: "We work with Mindray, Philips, Dräger, Siemens and more to bring you the best equipment." },
-  { icon: "🚚", title: "Reliable Delivery",    desc: "Fast, safe delivery across Ethiopia with professional handling of sensitive medical devices." },
-  { icon: "🛠️", title: "After-Sales Support", desc: "Our technical team provides installation, training, and ongoing maintenance support." },
-  { icon: "💰", title: "Fair Pricing",          desc: "Competitive pricing with bulk discounts for hospitals, clinics and institutions." },
-  { icon: "🌍", title: "Local Expertise",       desc: "10+ years serving Ethiopian healthcare facilities. We understand what you need." },
+  {
+    title: "Integrity",
+    desc: "We conduct our business with honesty, transparency, and accountability.",
+  },
+  {
+    title: "Quality",
+    desc: "We are committed to providing dependable products that meet the needs and expectations of healthcare professionals.",
+  },
+  {
+    title: "Partnership",
+    desc: "We build long-term relationships with our customers, suppliers, and partners through trust, communication, and reliable service.",
+  },
+  {
+    title: "Service",
+    desc: "We go beyond product delivery by providing responsive support and solutions that help our customers succeed.",
+  },
 ];
 
-const team = [
-  { name: "Dr. Abebe Tadesse",  role: "Chief Executive Officer",      emoji: "👨‍⚕️" },
-  { name: "Meron Haile",        role: "Head of Operations",           emoji: "👩‍💼" },
-  { name: "Yonas Bekele",       role: "Technical Director",           emoji: "👨‍🔧" },
-  { name: "Tigist Alemu",       role: "Customer Relations Manager",   emoji: "👩‍💻" },
+const whyUs = [
+  {
+    title: "Reliable Products",
+    desc: "Quality medical equipment sourced through trusted manufacturing and supply partners.",
+  },
+  {
+    title: "Nationwide Reach",
+    desc: "Serving healthcare institutions across all regions of Ethiopia.",
+  },
+  {
+    title: "Professional Support",
+    desc: "Dedicated assistance to help customers identify and implement the right solutions.",
+  },
+  {
+    title: "Customer-Focused Service",
+    desc: "We listen to our customers and build solutions around their specific healthcare needs.",
+  },
+  {
+    title: "Committed to Healthcare",
+    desc: "Our work is driven by one goal: helping strengthen healthcare delivery across Ethiopia.",
+  },
 ];
-
-const s = {
-  page:      { background: "#fff", minHeight: "100vh" },
-  breadcrumb:{ background: "#fff", borderBottom: "1px solid #f1f5f9", padding: "14px 0" },
-  breadWrap: { maxWidth: "1280px", margin: "0 auto", padding: "0 32px" },
-  crumbRow:  { display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#94a3b8", marginBottom: "4px" },
-  crumbLink: { color: "#2563eb", textDecoration: "none" },
-  pageTitle: { fontWeight: 800, fontSize: "22px", color: "#0f172a", margin: 0 },
-
-  /* hero */
-  hero:      { background: "#1d4ed8", padding: "72px 0", textAlign: "center" },
-  heroWrap:  { maxWidth: "900px", margin: "0 auto", padding: "0 32px" },
-  heroTag:   { color: "#bfdbfe", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px", display: "block" },
-  heroH2:    { color: "#fff", fontWeight: 900, fontSize: "42px", lineHeight: 1.2, margin: "0 0 16px" },
-  heroP:     { color: "#bfdbfe", fontSize: "16px", lineHeight: 1.7, margin: "0 auto", maxWidth: "600px" },
-
-  /* stats */
-  statsBar:  { background: "#fff", borderBottom: "1px solid #f1f5f9", padding: "28px 0" },
-  statsWrap: { maxWidth: "1280px", margin: "0 auto", padding: "0 32px", display: "grid", gridTemplateColumns: "repeat(4,1fr)" },
-  statItem:  { textAlign: "center", padding: "8px 0" },
-  statVal:   { color: "#2563eb", fontWeight: 900, fontSize: "36px", margin: 0 },
-  statLbl:   { color: "#64748b", fontSize: "13px", margin: "2px 0 0" },
-
-  /* section wrapper */
-  section:   { padding: "72px 0" },
-  wrap:      { maxWidth: "1280px", margin: "0 auto", padding: "0 32px" },
-  secTag:    { color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "6px", display: "block" },
-  secH2:     { color: "#0f172a", fontWeight: 800, fontSize: "30px", margin: "0 0 12px" },
-  secP:      { color: "#64748b", fontSize: "15px", lineHeight: 1.7 },
-
-  /* story */
-  storyGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "center" },
-  storyCard: { background: "#fff", border: "1.5px solid #f1f5f9", borderRadius: "20px", padding: "28px", textAlign: "center" },
-  storyIcon: { fontSize: "40px", marginBottom: "8px" },
-  storyVal:  { color: "#0f172a", fontWeight: 800, fontSize: "18px", margin: "0 0 4px" },
-  storySub:  { color: "#94a3b8", fontSize: "12px", margin: 0 },
-
-  /* values */
-  valGrid:   { display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "20px" },
-  valCard:   { border: "1.5px solid #f1f5f9", borderRadius: "20px", padding: "28px" },
-  valIcon:   { width: "52px", height: "52px", background: "#eff6ff", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px", marginBottom: "16px" },
-  valH3:     { color: "#0f172a", fontWeight: 700, fontSize: "16px", margin: "0 0 8px" },
-  valP:      { color: "#64748b", fontSize: "13px", lineHeight: 1.65, margin: 0 },
-
-  /* team */
-  teamGrid:  { display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "20px" },
-  teamCard:  { background: "#fff", border: "1.5px solid #f1f5f9", borderRadius: "20px", padding: "28px", textAlign: "center" },
-  teamAvatar:{ width: "72px", height: "72px", background: "#eff6ff", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "36px", margin: "0 auto 16px" },
-  teamName:  { color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" },
-  teamRole:  { color: "#2563eb", fontSize: "12px", margin: 0 },
-
-  /* cta */
-  cta:       { background: "#2563eb", padding: "64px 0", textAlign: "center" },
-  ctaH2:     { color: "#fff", fontWeight: 900, fontSize: "34px", margin: "0 0 12px" },
-  ctaP:      { color: "#bfdbfe", fontSize: "15px", margin: "0 0 32px" },
-  btnRow:    { display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" },
-  btnWhite:  { background: "#fff", color: "#2563eb", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" },
-  btnOutline:{ border: "2px solid rgba(255,255,255,0.6)", color: "#fff", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" },
-};
 
 export default function AboutUs() {
-  return (
-    <div style={s.page}>
+  const s = {
+    tag:   { color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "10px", display: "block" },
+    h2:    { color: "#0f172a", fontWeight: 800, fontSize: "32px", lineHeight: 1.25, margin: "0 0 16px" },
+    body:  { color: "#475569", fontSize: "15px", lineHeight: 1.8, margin: "0 0 16px" },
+    card:  { background: "#fff", border: "1.5px solid #f1f5f9", borderRadius: "16px", padding: "28px" },
+    wrap:  { maxWidth: "1100px", margin: "0 auto", padding: "0 32px" },
+  };
 
-      {/* Breadcrumb */}
-      <div style={s.breadcrumb}>
-        <div style={s.breadWrap}>
-          <div style={s.crumbRow}>
-            <Link to="/" style={s.crumbLink}>Home</Link>
+  return (
+    <div style={{ background: "#fff" }}>
+
+      {/* ── Breadcrumb ── */}
+      <div style={{ borderBottom: "1px solid #f1f5f9", padding: "14px 0" }}>
+        <div style={s.wrap}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#94a3b8", marginBottom: "4px" }}>
+            <Link to="/" style={{ color: "#2563eb", textDecoration: "none" }}>Home</Link>
             <span>/</span>
             <span style={{ color: "#0f172a" }}>About Us</span>
           </div>
-          <h1 style={s.pageTitle}>About Us</h1>
+          <h1 style={{ fontWeight: 800, fontSize: "22px", color: "#0f172a", margin: 0 }}>About Us</h1>
         </div>
       </div>
 
-      {/* Hero */}
-      <section style={s.hero}>
-        <div style={s.heroWrap}>
-          <span style={s.heroTag}>Trusted by Hospitals. Driven by Care.</span>
-          <h2 style={s.heroH2}>Your Trusted Partner in<br />Hospital Equipment Solutions</h2>
-          <p style={s.heroP}>
-            Unique Healthcare has been at the forefront of supplying high-quality medical equipment
-            and supplies to hospitals, clinics, and healthcare professionals across Ethiopia since 2014.
+      {/* ── Hero ── */}
+      <section style={{ background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)", padding: "80px 0" }}>
+        <div style={{ ...s.wrap, textAlign: "center", maxWidth: "800px" }}>
+          <span style={{ ...s.tag, color: "#bfdbfe" }}>About Unique Healthcare PLC</span>
+          <h2 style={{ ...s.h2, color: "#fff", fontSize: "38px" }}>
+            Advancing Healthcare Across Ethiopia
+          </h2>
+          <p style={{ color: "#bfdbfe", fontSize: "16px", lineHeight: 1.8, margin: "0 auto" }}>
+            Unique Healthcare PLC is a leading wholesale medical device distribution company committed
+            to supporting healthcare providers across Ethiopia with reliable, high-quality medical
+            equipment and healthcare solutions.
           </p>
         </div>
       </section>
 
-      {/* Stats */}
-      <div style={s.statsBar}>
-        <div style={s.statsWrap}>
-          {stats.map((st, i) => (
-            <div key={st.label} style={{ ...s.statItem, borderRight: i < stats.length - 1 ? "1px solid #f1f5f9" : "none" }}>
-              <p style={s.statVal}>{st.value}</p>
-              <p style={s.statLbl}>{st.label}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Our Story */}
-      <section style={{ ...s.section, background: "#fff" }}>
+      {/* ── Intro ── */}
+      <section style={{ padding: "72px 0", background: "#fff" }}>
         <div style={s.wrap}>
-          <div style={s.storyGrid}>
-            <div>
-              <span style={s.secTag}>Our Story</span>
-              <h2 style={s.secH2}>A Decade of Serving Ethiopia's Healthcare Sector</h2>
-              <p style={{ ...s.secP, marginBottom: "16px" }}>
-                Founded in 2014 in Addis Ababa, Unique Healthcare started with a simple mission —
-                to make world-class medical equipment accessible to every healthcare facility in Ethiopia.
-              </p>
-              <p style={{ ...s.secP, marginBottom: "16px" }}>
-                Over the years we have grown to become one of Ethiopia's most trusted suppliers of
-                diagnostic equipment, surgical instruments, patient monitoring devices, laboratory
-                equipment, and medical consumables.
-              </p>
-              <p style={{ ...s.secP, marginBottom: "32px" }}>
-                We are proud to be the official distributor of leading global brands including
-                Mindray, Philips, Dräger, Siemens Healthineers, EDAN, and Getinge.
-              </p>
-              <div style={s.btnRow}>
-                <Link to="/products" style={{ ...s.btnWhite, background: "#2563eb", color: "#fff" }}>Browse Products</Link>
-                <Link to="/contact"  style={{ ...s.btnOutline, border: "2px solid #2563eb", color: "#2563eb" }}>Contact Us</Link>
+          <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
+            <p style={{ ...s.body, fontSize: "16px" }}>
+              We work with hospitals, clinics, laboratories, pharmacies, medical institutions, and
+              healthcare organizations to provide the equipment they need to deliver better, safer,
+              and more efficient patient care.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stats ── */}
+      <section style={{ background: "#1d4ed8", padding: "40px 0" }}>
+        <div style={s.wrap}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }}>
+            {stats.map((st, i) => (
+              <div key={st.label} style={{
+                textAlign: "center", padding: "16px",
+                borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.2)" : "none",
+              }}>
+                <p style={{ color: "#fff", fontWeight: 900, fontSize: "40px", margin: "0 0 4px" }}>{st.value}</p>
+                <p style={{ color: "#bfdbfe", fontSize: "13px", margin: 0, fontWeight: 500 }}>{st.label}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Our Story ── */}
+      <section style={{ padding: "80px 0", background: "#f8fafc" }}>
+        <div style={s.wrap}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "start" }}>
+            <div>
+              <span style={s.tag}>Our Story</span>
+              <h2 style={s.h2}>Built to Strengthen Ethiopia's Healthcare System</h2>
+              <p style={s.body}>
+                Unique Healthcare PLC was established with a clear purpose: to contribute to the
+                advancement of Ethiopia's healthcare system by making dependable medical technology
+                more accessible.
+              </p>
+              <p style={s.body}>
+                Over the years, we have built strong relationships with healthcare providers and
+                international manufacturers, enabling us to supply a wide range of medical products
+                to healthcare facilities across the country.
+              </p>
+              <p style={{ ...s.body, marginBottom: 0 }}>
+                Our portfolio includes diagnostic equipment, surgical instruments, patient monitoring
+                systems, laboratory equipment, hospital supplies, and emergency medical products.
+                Beyond supplying products, we focus on providing dependable service, technical
+                support, and warranty assistance to help our customers get the most from their
+                investments.
+              </p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {[
-                { icon: "🏥", label: "200+ Hospitals", sub: "Across Ethiopia" },
-                { icon: "📦", label: "500+ Products",  sub: "In our catalog" },
-                { icon: "🔬", label: "15+ Brands",     sub: "Global partners" },
-                { icon: "⭐", label: "10+ Years",      sub: "Of excellence" },
+                { icon: "🏥", title: "Who We Serve", desc: "Hospitals, clinics, laboratories, pharmacies, and healthcare organizations nationwide." },
+                { icon: "📦", title: "What We Supply", desc: "Diagnostic equipment, surgical instruments, monitoring systems, laboratory equipment, and emergency medical products." },
+                { icon: "🤝", title: "How We Work", desc: "We listen, understand your needs, and deliver practical solutions that support better healthcare outcomes." },
+                { icon: "🌍", title: "Our Reach", desc: "Serving healthcare institutions across all 11 regions of Ethiopia." },
               ].map((c) => (
-                <div key={c.label} style={s.storyCard}>
-                  <div style={s.storyIcon}>{c.icon}</div>
-                  <p style={s.storyVal}>{c.label}</p>
-                  <p style={s.storySub}>{c.sub}</p>
+                <div key={c.title} style={{ ...s.card, display: "flex", gap: "16px", alignItems: "flex-start" }}>
+                  <div style={{ width: "44px", height: "44px", background: "#eff6ff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", flexShrink: 0 }}>
+                    {c.icon}
+                  </div>
+                  <div>
+                    <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>{c.title}</p>
+                    <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.6, margin: 0 }}>{c.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -166,52 +166,126 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* Values */}
-      <section style={{ ...s.section, background: "#f8fafc" }}>
+      {/* ── Mission & Vision ── */}
+      <section style={{ padding: "80px 0", background: "#fff" }}>
         <div style={s.wrap}>
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <span style={s.secTag}>What We Stand For</span>
-            <h2 style={{ ...s.secH2, margin: 0 }}>Our Core Values</h2>
-          </div>
-          <div style={s.valGrid}>
-            {values.map((v) => (
-              <div key={v.title} style={s.valCard}>
-                <div style={s.valIcon}>{v.icon}</div>
-                <h3 style={s.valH3}>{v.title}</h3>
-                <p style={s.valP}>{v.desc}</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px" }}>
+
+            {/* Mission */}
+            <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: "20px", padding: "36px" }}>
+              <div style={{ width: "48px", height: "48px", background: "#2563eb", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+                <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
               </div>
-            ))}
+              <span style={{ ...s.tag, color: "#2563eb" }}>Our Mission</span>
+              <p style={{ color: "#1e3a8a", fontSize: "15px", lineHeight: 1.8, margin: 0, fontWeight: 500 }}>
+                To make quality, reliable, and affordable medical technology accessible to healthcare
+                facilities across Ethiopia, helping healthcare professionals improve diagnosis,
+                treatment, and patient care.
+              </p>
+            </div>
+
+            {/* Vision */}
+            <div style={{ background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "36px" }}>
+              <div style={{ width: "48px", height: "48px", background: "#16a34a", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+                <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </div>
+              <span style={{ ...s.tag, color: "#16a34a" }}>Our Vision</span>
+              <p style={{ color: "#14532d", fontSize: "15px", lineHeight: 1.8, margin: 0, fontWeight: 500 }}>
+                To contribute to a stronger Ethiopian healthcare system where every hospital, clinic,
+                and healthcare facility has access to reliable medical technology, regardless of
+                its location.
+              </p>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Team */}
-      <section style={{ ...s.section, background: "#fff" }}>
+      {/* ── Values ── */}
+      <section style={{ padding: "80px 0", background: "#f8fafc" }}>
         <div style={s.wrap}>
-          <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <span style={s.secTag}>The People Behind Us</span>
-            <h2 style={{ ...s.secH2, margin: 0 }}>Meet Our Team</h2>
+          <div style={{ textAlign: "center", marginBottom: "52px" }}>
+            <span style={s.tag}>What We Stand For</span>
+            <h2 style={{ ...s.h2, margin: 0 }}>Our Core Values</h2>
           </div>
-          <div style={s.teamGrid}>
-            {team.map((m) => (
-              <div key={m.name} style={s.teamCard}>
-                <div style={s.teamAvatar}>{m.emoji}</div>
-                <p style={s.teamName}>{m.name}</p>
-                <p style={s.teamRole}>{m.role}</p>
-              </div>
-            ))}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+            {values.map((v, i) => {
+              const colors = ["#2563eb", "#7c3aed", "#16a34a", "#d97706"];
+              const bgs    = ["#eff6ff", "#f5f3ff", "#f0fdf4", "#fffbeb"];
+              return (
+                <div key={v.title} style={{ ...s.card, textAlign: "center" }}>
+                  <div style={{ width: "52px", height: "52px", background: bgs[i], borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                    <div style={{ width: "20px", height: "20px", background: colors[i], borderRadius: "4px" }} />
+                  </div>
+                  <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "16px", margin: "0 0 10px" }}>{v.title}</h3>
+                  <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.7, margin: 0 }}>{v.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section style={s.cta}>
-        <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
-          <h2 style={s.ctaH2}>Ready to Equip Your Facility?</h2>
-          <p style={s.ctaP}>Browse our full catalog or get in touch for a custom quote.</p>
-          <div style={s.btnRow}>
-            <Link to="/products" style={s.btnWhite}>Shop Now</Link>
-            <Link to="/contact"  style={s.btnOutline}>Get a Quote</Link>
+      {/* ── Why Choose Us ── */}
+      <section style={{ padding: "80px 0", background: "#fff" }}>
+        <div style={s.wrap}>
+          <div style={{ textAlign: "center", marginBottom: "52px" }}>
+            <span style={s.tag}>Why Work With Us</span>
+            <h2 style={{ ...s.h2, margin: 0 }}>Why Choose Unique Healthcare?</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+            {whyUs.map((w, i) => {
+              const icons = ["✓", "→", "★", "◎", "♥"];
+              return (
+                <div key={w.title} style={{ ...s.card, borderLeft: "4px solid #2563eb", paddingLeft: "24px" }}>
+                  <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "16px", margin: "0 0 10px", display: "flex", alignItems: "center", gap: "10px" }}>
+                    <span style={{ width: "26px", height: "26px", background: "#eff6ff", borderRadius: "8px", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#2563eb", fontSize: "12px", fontWeight: 900, flexShrink: 0 }}>
+                      {icons[i]}
+                    </span>
+                    {w.title}
+                  </h3>
+                  <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.7, margin: 0 }}>{w.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Belief statement ── */}
+      <section style={{ padding: "60px 0", background: "#f8fafc", borderTop: "1px solid #f1f5f9" }}>
+        <div style={{ ...s.wrap, maxWidth: "760px", textAlign: "center" }}>
+          <p style={{ color: "#1e3a8a", fontSize: "18px", lineHeight: 1.8, fontWeight: 500, fontStyle: "italic", margin: "0 0 6px" }}>
+            "We believe that quality healthcare begins with access to the right technology."
+          </p>
+          <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>
+            That's why we work closely with our customers to understand their needs and deliver
+            practical solutions that support better healthcare outcomes.
+          </p>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section style={{ background: "#1d4ed8", padding: "64px 0" }}>
+        <div style={{ ...s.wrap, textAlign: "center" }}>
+          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "32px", margin: "0 0 12px" }}>
+            Partner With Us
+          </h2>
+          <p style={{ color: "#bfdbfe", fontSize: "15px", margin: "0 0 32px" }}>
+            Let's work together to improve healthcare delivery across Ethiopia.
+          </p>
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link to="/products" style={{ background: "#fff", color: "#1d4ed8", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
+              Browse Products
+            </Link>
+            <Link to="/contact" style={{ border: "2px solid rgba(255,255,255,0.6)", color: "#fff", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
+              Contact Us
+            </Link>
           </div>
         </div>
       </section>

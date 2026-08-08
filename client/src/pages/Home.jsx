@@ -325,13 +325,11 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────────────────────
-          CTA BANNER — pure background image
+          CTA BANNER — solid blue
       ───────────────────────────────────── */}
       <section
         style={{
-          backgroundImage: "url(/images/cta-banner.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)",
           padding: "80px 0",
         }}
       >
