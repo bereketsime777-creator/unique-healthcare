@@ -2,7 +2,10 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
+const {
+  isEmailConfigured,
+  sendPasswordResetEmail,
+} = require("../utils/email");
 
 // ==============================
 // Register
@@ -104,62 +107,12 @@ const forgotPassword = async (req, res) => {
     const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
 
     // Send email
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS &&
-        !process.env.EMAIL_USER.includes("your_gmail")) {
-      try {
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-          },
-        });
-
-        await transporter.sendMail({
-          from: `"Unique Healthcare" <${process.env.EMAIL_USER}>`,
-          to: user.email,
-          subject: "Password Reset Request — Unique Healthcare",
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; background: #f8fafc;">
-              <div style="background: #1d4ed8; padding: 28px 32px; text-align: center;">
-                <h1 style="color: #fff; margin: 0; font-size: 22px;">Unique Healthcare</h1>
-                <p style="color: #bfdbfe; margin: 6px 0 0; font-size: 13px;">Better Equipment. Better Care.</p>
-              </div>
-              <div style="padding: 36px 32px; background: #fff;">
-                <h2 style="color: #0f172a; font-size: 20px; margin: 0 0 12px;">Reset Your Password</h2>
-                <p style="color: #475569; font-size: 14px; line-height: 1.7; margin: 0 0 24px;">
-                  Hi <strong>${user.name}</strong>, we received a request to reset your Unique Healthcare account password.
-                  Click the button below to set a new password.
-                </p>
-                <div style="text-align: center; margin: 0 0 28px;">
-                  <a href="${resetUrl}"
-                    style="display: inline-block; background: #1d4ed8; color: #fff; padding: 14px 36px;
-                    border-radius: 8px; font-weight: 700; font-size: 15px; text-decoration: none;">
-                    Reset Password
-                  </a>
-                </div>
-                <p style="color: #94a3b8; font-size: 12px; margin: 0 0 8px;">
-                  This link will expire in <strong>1 hour</strong>.
-                </p>
-                <p style="color: #94a3b8; font-size: 12px; margin: 0;">
-                  If you did not request this, you can safely ignore this email.
-                  Your password will not be changed.
-                </p>
-              </div>
-              <div style="background: #1e293b; padding: 16px 32px; text-align: center;">
-                <p style="color: #64748b; font-size: 11px; margin: 0;">
-                  © 2026 Unique Healthcare · Addis Ababa, Ethiopia
-                </p>
-              </div>
-            </div>
-          `,
-        });
-      } catch (emailErr) {
-        console.error("Email send error:", emailErr.message);
-        // Don't fail the request — log it
+    if (isEmailConfigured()) {
+      const emailResult = await sendPasswordResetEmail({ user, resetUrl });
+      if (!emailResult.sent) {
+        console.error("Password reset email failed:", emailResult.reason);
       }
     } else {
-      // Dev mode — log the reset URL to console
       console.log("=== DEV PASSWORD RESET URL ===");
       console.log(resetUrl);
       console.log("==============================");

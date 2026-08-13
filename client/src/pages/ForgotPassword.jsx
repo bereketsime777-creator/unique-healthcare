@@ -13,10 +13,22 @@ export default function ForgotPassword() {
     setError("");
     try {
       setLoading(true);
-      await API.post("/auth/forgot-password", { email });
+      await API.post("/auth/forgot-password", { email: email.trim().toLowerCase() });
       setSent(true);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    setError("");
+    try {
+      setLoading(true);
+      await API.post("/auth/forgot-password", { email: email.trim().toLowerCase() });
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not resend email. Try again.");
     } finally {
       setLoading(false);
     }
@@ -98,12 +110,27 @@ export default function ForgotPassword() {
               <p style={{ color: "#64748b", fontSize: "14px", lineHeight: 1.7, margin: "0 0 8px" }}>
                 If an account exists for <strong style={{ color: "#0f172a" }}>{email}</strong>, a password reset link has been sent.
               </p>
-              <p style={{ color: "#94a3b8", fontSize: "13px", margin: "0 0 32px" }}>
+              <p style={{ color: "#94a3b8", fontSize: "13px", margin: "0 0 24px" }}>
                 The link expires in 1 hour. Check your spam folder if you don't see it.
               </p>
-              <Link to="/login" style={{ display: "inline-block", background: "#2563eb", color: "#fff", padding: "12px 32px", borderRadius: "12px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
-                Back to Sign In
-              </Link>
+              {error && (
+                <div style={{ background: "#fff1f2", border: "1.5px solid #fecdd3", color: "#be123c", borderRadius: "12px", padding: "12px 16px", fontSize: "13px", marginBottom: "16px" }}>
+                  {error}
+                </div>
+              )}
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={loading}
+                  style={{ background: "#fff", color: "#2563eb", border: "1.5px solid #2563eb", padding: "12px 32px", borderRadius: "12px", fontWeight: 700, fontSize: "14px", cursor: loading ? "not-allowed" : "pointer", fontFamily: "inherit" }}
+                >
+                  {loading ? "Sending..." : "Resend Email"}
+                </button>
+                <Link to="/login" style={{ display: "inline-block", background: "#2563eb", color: "#fff", padding: "12px 32px", borderRadius: "12px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
+                  Back to Sign In
+                </Link>
+              </div>
             </div>
           ) : (
             /* ── Form state ── */

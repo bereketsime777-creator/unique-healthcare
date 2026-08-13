@@ -1,4 +1,5 @@
 const Order = require("../models/Order");
+const { sendOrderStatusEmail } = require("../utils/email");
 
 
 // ==============================
@@ -14,7 +15,6 @@ const createOrder = async (req, res) => {
       items,
       totalAmount,
       shippingAddress,
-      // Use paymentStatus from request (Paid after successful Chapa payment)
       paymentStatus: paymentStatus || "Pending",
       orderStatus: "Pending",
     });
@@ -91,16 +91,50 @@ const getOrderById = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id);
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
+
+    const order = await Order.findById(req.params.id).populate(
+      "customer",
+      "name email phone"
+    );
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    order.orderStatus = req.body.status;
+    const previousStatus = order.orderStatus;
+    if (previousStatus === status) {
+      return res.json({
+        message: "Order status unchanged",
+        order,
+        emailSent: false,
+      });
+    }
+
+    order.orderStatus = status;
     await order.save();
 
-    res.json({ message: "Order status updated", order });
+    let emailResult = { sent: false, reason: "Not attempted" };
+    if (order.customer?.email) {
+      emailResult = await sendOrderStatusEmail({
+        order,
+        customer: order.customer,
+        status,
+      });
+    }
+
+    res.json({
+      message: emailResult.sent
+        ? `Order status updated to ${status}. Customer notified by email.`
+        : `Order status updated to ${status}.`,
+      order,
+      emailSent: emailResult.sent,
+      emailError: emailResult.sent ? undefined : emailResult.reason,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

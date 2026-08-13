@@ -16,13 +16,37 @@ function OrderDetails() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
+  const [updating, setUpdating] = useState(false);
+  const [notice, setNotice] = useState("");
 
-  useEffect(() => {
+  const loadOrder = () => {
+    setLoading(true);
     API.get(`/orders/${id}`)
-      .then((r) => setOrder(r.data))
+      .then((r) => {
+        setOrder(r.data);
+        setStatus(r.data.orderStatus);
+      })
       .catch(() => setError("Failed to load order."))
       .finally(() => setLoading(false));
-  }, [id]);
+  };
+
+  useEffect(() => { loadOrder(); }, [id]);
+
+  const updateStatus = async () => {
+    try {
+      setUpdating(true);
+      setNotice("");
+      const res = await API.put(`/orders/${id}`, { status });
+      setOrder(res.data.order);
+      setStatus(res.data.order.orderStatus);
+      setNotice(res.data.message || "Order status updated.");
+    } catch (e) {
+      alert(e.response?.data?.message || "Update failed");
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   const cardStyle = {
     background: "#fff",
@@ -89,16 +113,33 @@ function OrderDetails() {
       </div>
 
       {/* Status Banner */}
+      {notice && (
+        <div style={{ marginBottom: "16px", padding: "12px 16px", borderRadius: "12px", background: "#f0fdf4", border: "1px solid #bbf7d0", color: "#15803d", fontSize: "13px", fontWeight: 600 }}>
+          ✓ {notice}
+        </div>
+      )}
+
       <div style={{ ...cardStyle, marginBottom: "20px", display: "flex", flexWrap: "wrap", gap: "24px", alignItems: "center" }}>
         <div>
           <p style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase",
             letterSpacing: "0.08em", marginBottom: "6px" }}>Order Status</p>
-          <span style={{
-            padding: "6px 14px", borderRadius: "999px", fontSize: "14px", fontWeight: "700",
-            ...(statusStyles[order.orderStatus] || { color: "#64748b", background: "#f8fafc" }),
-          }}>
-            {order.orderStatus}
-          </span>
+          <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              style={{ border: "1px solid #e2e8f0", borderRadius: "10px", padding: "8px 12px", fontSize: "14px", fontFamily: "inherit" }}
+            >
+              {Object.keys(statusStyles).map((s) => <option key={s} value={s}>{s}</option>)}
+            </select>
+            <button
+              type="button"
+              onClick={updateStatus}
+              disabled={updating || status === order.orderStatus}
+              style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: "10px", padding: "8px 14px", fontSize: "13px", fontWeight: 600, cursor: updating ? "not-allowed" : "pointer", opacity: updating || status === order.orderStatus ? 0.6 : 1, fontFamily: "inherit" }}
+            >
+              {updating ? "Updating..." : "Update & Email Customer"}
+            </button>
+          </div>
         </div>
         <div>
           <p style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase",

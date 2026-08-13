@@ -15,6 +15,7 @@ function ManageOrders() {
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState({});
   const [updating, setUpdating] = useState(null);
+  const [notice, setNotice] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [search, setSearch] = useState("");
 
@@ -34,10 +35,15 @@ function ManageOrders() {
   const updateStatus = async (id) => {
     try {
       setUpdating(id);
-      await API.put(`/orders/${id}`, { status: selectedStatus[id] });
+      setNotice("");
+      const res = await API.put(`/orders/${id}`, { status: selectedStatus[id] });
       setOrders((prev) => prev.map((o) => o._id === id ? { ...o, orderStatus: selectedStatus[id] } : o));
-    } catch (e) { alert("Update failed"); }
-    finally { setUpdating(null); }
+      setNotice(res.data.message || "Order status updated.");
+    } catch (e) {
+      alert(e.response?.data?.message || "Update failed");
+    } finally {
+      setUpdating(null);
+    }
   };
 
   const filtered = orders.filter((o) => {
@@ -92,6 +98,21 @@ function ManageOrders() {
           </p>
         </div>
       </div>
+
+      {notice && (
+        <div style={{
+          marginBottom: "16px",
+          padding: "12px 16px",
+          borderRadius: "12px",
+          background: "#f0fdf4",
+          border: "1px solid #bbf7d0",
+          color: "#15803d",
+          fontSize: "13px",
+          fontWeight: 600,
+        }}>
+          ✓ {notice}
+        </div>
+      )}
 
       {/* Filters */}
       <div style={{ ...cardStyle, padding: "16px", marginBottom: "20px",
