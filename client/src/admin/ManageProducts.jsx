@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/api";
 
 function ManageProducts() {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(() => searchParams.get("search") || "");
   const [deletingId, setDeletingId] = useState(null);
+
+  useEffect(() => {
+    setSearch(searchParams.get("search") || "");
+  }, [searchParams]);
 
   const getProducts = async () => {
     try {
       setLoading(true);
       const res = await API.get("/products");
       setProducts(res.data);
-    } catch (e) {
-      console.log(e);
+    } catch {
+      // fetch failed silently; empty state shown below
     } finally {
       setLoading(false);
     }

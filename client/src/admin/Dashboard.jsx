@@ -94,8 +94,8 @@ function Dashboard() {
         setUnread(m.data.count);
         setRecentOrders(o.data.slice(0, 5));
         setRecentMessages(msgs.data.slice(0, 4));
-      } catch (e) {
-        console.log(e);
+      } catch {
+        // dashboard stats unavailable; defaults remain
       } finally {
         setLoading(false);
       }

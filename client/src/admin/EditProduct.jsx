@@ -49,6 +49,8 @@ function EditProduct() {
     stock: "", description: "", specifications: "",
   });
   const [currentImage, setCurrentImage] = useState("");
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState({ text: "", type: "" });
@@ -70,11 +72,33 @@ function EditProduct() {
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const clearNewImage = () => {
+    setImage(null);
+    setPreview(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSaving(true);
-      await API.put(`/products/${id}`, form);
+      if (image) {
+        const fd = new FormData();
+        Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+        fd.append("image", image);
+        await API.put(`/products/${id}`, fd, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        await API.put(`/products/${id}`, form);
+      }
       setStatus({ text: "Product updated successfully!", type: "success" });
       setTimeout(() => navigate("/admin/products"), 1200);
     } catch (err) {
@@ -199,18 +223,54 @@ function EditProduct() {
 
           {/* Right */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            {currentImage && (
-              <div style={cardStyle}>
-                <p style={sectionTitleStyle}>Current Image</p>
-                <div style={{ background: "#f8fafc", borderRadius: "12px", padding: "8px" }}>
+            <div style={cardStyle}>
+              <p style={sectionTitleStyle}>Product Image</p>
+              <div
+                onClick={() => document.getElementById("editImageInput").click()}
+                style={{
+                  border: "2px dashed #e2e8f0", borderRadius: "12px",
+                  padding: "16px", textAlign: "center", cursor: "pointer",
+                  transition: "border-color 0.15s",
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#2563eb"}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e2e8f0"}
+              >
+                {preview ? (
+                  <img src={preview} alt="New preview"
+                    style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "8px" }} />
+                ) : currentImage ? (
                   <img src={currentImage} alt="Current"
-                    style={{ width: "100%", height: "176px", objectFit: "contain", borderRadius: "8px" }} />
-                </div>
-                <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", marginTop: "8px" }}>
-                  Image update not supported yet
-                </p>
+                    style={{ width: "100%", height: "160px", objectFit: "contain", borderRadius: "8px" }} />
+                ) : (
+                  <div style={{ padding: "32px 0" }}>
+                    <div style={{ fontSize: "36px", marginBottom: "8px" }}>📷</div>
+                    <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 4px" }}>
+                      Click to upload image
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#94a3b8", margin: 0 }}>
+                      PNG, JPG up to 10MB
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
+              <input id="editImageInput" type="file" accept="image/*"
+                onChange={handleImageChange} style={{ display: "none" }} />
+              {preview && (
+                <button type="button" onClick={clearNewImage}
+                  style={{
+                    width: "100%", marginTop: "8px", padding: "4px",
+                    fontSize: "12px", color: "#ef4444",
+                    background: "transparent", border: "none", cursor: "pointer",
+                  }}>
+                  Remove new image
+                </button>
+              )}
+              {!preview && currentImage && (
+                <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", marginTop: "8px" }}>
+                  Click above to replace the current image
+                </p>
+              )}
+            </div>
 
             <div style={{ ...cardStyle, display: "flex", flexDirection: "column", gap: "12px" }}>
               <button type="submit" disabled={saving}

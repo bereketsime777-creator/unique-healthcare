@@ -21,8 +21,8 @@ function Messages() {
     try {
       const res = await API.get("/messages");
       setMessages(res.data);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      // messages unavailable; empty state shown below
     } finally {
       setLoading(false);
     }
@@ -41,8 +41,8 @@ function Messages() {
       );
       try {
         await API.get(`/messages/${msg._id}`);
-      } catch (err) {
-        console.log(err);
+      } catch {
+        // mark-as-read failed; UI already updated optimistically
       }
     }
   };

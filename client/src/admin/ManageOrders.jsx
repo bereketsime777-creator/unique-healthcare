@@ -26,7 +26,9 @@ function ManageOrders() {
       const init = {};
       res.data.forEach((o) => (init[o._id] = o.orderStatus));
       setSelectedStatus(init);
-    } catch (e) { console.log(e); }
+    } catch {
+      // orders unavailable; empty state shown below
+    }
     finally { setLoading(false); }
   };
 

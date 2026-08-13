@@ -132,6 +132,21 @@ const updateProduct = async (req, res) => {
     if (req.body.description !== undefined) product.description = req.body.description;
     if (req.body.specifications !== undefined) product.specifications = req.body.specifications;
 
+    if (req.file) {
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "unique-healthcare-products" },
+          (error, uploadResult) => {
+            if (error) reject(error);
+            else resolve(uploadResult);
+          }
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+      });
+
+      product.image = result.secure_url;
+    }
+
     await product.save();
 
     res.json({ message: "Product updated successfully", product });
