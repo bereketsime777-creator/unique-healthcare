@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
@@ -21,6 +21,7 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addedId, setAddedId] = useState(null);
+  const [sortBy, setSortBy] = useState("default");
 
   const searchQuery = searchParams.get("search") || "";
   const categoryQuery = searchParams.get("category") || "";
@@ -35,8 +36,8 @@ function Products() {
         if (categoryQuery) params.category = categoryQuery;
         const res = await API.get("/products", { params });
         setProducts(res.data);
-      } catch (e) {
-        console.log(e);
+      } catch {
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -65,6 +66,22 @@ function Products() {
     setAddedId(product._id);
     setTimeout(() => setAddedId(null), 1500);
   };
+
+  const sortedProducts = useMemo(() => {
+    const list = [...products];
+    switch (sortBy) {
+      case "price-asc":
+        return list.sort((a, b) => (a.price || 0) - (b.price || 0));
+      case "price-desc":
+        return list.sort((a, b) => (b.price || 0) - (a.price || 0));
+      case "newest":
+        return list.sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
+      default:
+        return list;
+    }
+  }, [products, sortBy]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -157,11 +174,15 @@ function Products() {
               <p className="text-sm text-gray-500">
                 {loading ? "Loading..." : `${products.length} product${products.length !== 1 ? "s" : ""} found`}
               </p>
-              <select className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500">
-                <option>Sort: Default</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Newest First</option>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
+              >
+                <option value="default">Sort: Default</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="newest">Newest First</option>
               </select>
             </div>
 
@@ -190,7 +211,7 @@ function Products() {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {products.map((product) => (
+                {sortedProducts.map((product) => (
                   <div
                     key={product._id}
                     className="bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow overflow-hidden group"
