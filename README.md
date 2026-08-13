@@ -64,6 +64,8 @@ See `server/.env.example` and `client/.env.example` for the full list.
 
 **Never commit `.env` files.** Copy from `.env.example` and fill in real values locally or in your host dashboard (Render, Vercel).
 
+**Important:** Your `MONGODB_URI` must include the database name in the path, e.g. `/unique-healthcare` before the `?`. Without it, MongoDB uses the empty default `test` database and the admin dashboard will show zeros.
+
 ## Production deployment
 
 | Service | Host | Notes |
