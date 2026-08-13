@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../services/api";
+import { CONTACT } from "../constants/contact";
 
 const info = [
-  { icon: "📍", title: "Our Office",    lines: ["Bole Sub-City, Woreda 03", "Addis Ababa, Ethiopia"] },
-  { icon: "📞", title: "Phone",         lines: ["+251 11 123 4567", "+251 91 234 5678"] },
-  { icon: "✉️", title: "Email",         lines: ["info@uniquehealthcare.et", "support@uniquehealthcare.et"] },
-  { icon: "🕐", title: "Working Hours", lines: ["Mon – Fri: 8:00 AM – 6:00 PM", "Saturday: 9:00 AM – 2:00 PM"] },
+  { icon: "📍", title: "Our Office", lines: CONTACT.address.lines },
+  { icon: "📞", title: "Phone", lines: CONTACT.phones.map((p) => p.display), links: CONTACT.phones.map((p) => `tel:${p.tel}`) },
+  { icon: "✉️", title: "Email", lines: [CONTACT.email], links: [`mailto:${CONTACT.email}`] },
+  { icon: "✈️", title: CONTACT.telegram.label, lines: ["Chat with us on Telegram"], links: [CONTACT.telegram.url] },
+  { icon: "🕐", title: "Working Hours", lines: CONTACT.hours.lines },
 ];
 
 const trust = [
@@ -96,7 +98,16 @@ export default function ContactUs() {
                     </div>
                     <div>
                       <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "14px", margin: "0 0 4px" }}>{c.title}</p>
-                      {c.lines.map((l) => <p key={l} style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>{l}</p>)}
+                      {c.lines.map((l, i) => (
+                        c.links?.[i] ? (
+                          <a key={l} href={c.links[i]} target={c.links[i].startsWith("http") ? "_blank" : undefined} rel={c.links[i].startsWith("http") ? "noreferrer" : undefined}
+                            style={{ color: "#64748b", fontSize: "13px", margin: 0, display: "block", textDecoration: "none" }}>
+                            {l}
+                          </a>
+                        ) : (
+                          <p key={l} style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>{l}</p>
+                        )
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -106,8 +117,8 @@ export default function ContactUs() {
               <div style={{ background: "#fff", border: "1.5px solid #f1f5f9", borderRadius: "16px", overflow: "hidden", marginTop: "16px" }}>
                 <div style={{ background: "#eff6ff", height: "160px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                   <span style={{ fontSize: "36px", marginBottom: "8px" }}>🗺️</span>
-                  <p style={{ color: "#2563eb", fontWeight: 600, fontSize: "14px", margin: 0 }}>Bole Sub-City</p>
-                  <p style={{ color: "#94a3b8", fontSize: "12px", margin: "2px 0 0" }}>Addis Ababa, Ethiopia</p>
+                  <p style={{ color: "#2563eb", fontWeight: 600, fontSize: "14px", margin: 0 }}>{CONTACT.address.mapTitle}</p>
+                  <p style={{ color: "#94a3b8", fontSize: "12px", margin: "2px 0 0" }}>{CONTACT.address.mapSubtitle}</p>
                 </div>
                 <div style={{ padding: "14px" }}>
                   <a href="https://maps.google.com" target="_blank" rel="noreferrer"

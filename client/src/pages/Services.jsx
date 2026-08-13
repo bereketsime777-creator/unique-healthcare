@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PRIMARY_PHONE } from "../constants/contact";
 
 const services = [
   { icon: "🔬", title: "Equipment Supply",          color: "#eff6ff", border: "#bfdbfe", desc: "We supply 500+ certified medical devices — diagnostic, surgical, monitoring, lab, and imaging — from globally recognised brands.", features: ["500+ products in catalog", "Genuine certified equipment", "Multiple global brands", "All healthcare categories"] },
@@ -163,7 +164,7 @@ export default function Services() {
           <p style={s.ctaP}>Contact our team today for a free consultation and service quote.</p>
           <div style={s.btnRow}>
             <Link to="/contact" style={s.btnWhite}>Contact Us</Link>
-            <a href="tel:+251111234567" style={s.btnOutline}>📞 +251 11 123 4567</a>
+            <a href={`tel:${PRIMARY_PHONE.tel}`} style={s.btnOutline}>📞 {PRIMARY_PHONE.display}</a>
           </div>
         </div>
       </section>

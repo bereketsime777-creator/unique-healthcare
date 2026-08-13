@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getFooterShopLinks } from "../constants/categories";
+import { CONTACT } from "../constants/contact";
 
 const shop = getFooterShopLinks();
 
@@ -20,10 +21,7 @@ const account = [
 ];
 
 const socials = [
-  { label: "Facebook",  icon: "f",  href: "#" },
-  { label: "Twitter",   icon: "𝕏",  href: "#" },
-  { label: "LinkedIn",  icon: "in", href: "#" },
-  { label: "YouTube",   icon: "▶",  href: "#" },
+  { label: "Telegram", icon: "✈", href: CONTACT.telegram.url },
 ];
 
 export default function Footer() {
@@ -79,7 +77,7 @@ export default function Footer() {
             {/* Socials */}
             <div style={{ display: "flex", gap: "10px" }}>
               {socials.map((s) => (
-                <a key={s.label} href={s.href}
+                <a key={s.label} href={s.href} target="_blank" rel="noreferrer"
                   style={{ width: "36px", height: "36px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "13px", fontWeight: 700, textDecoration: "none" }}>
                   {s.icon}
                 </a>
@@ -116,14 +114,24 @@ export default function Footer() {
             <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1px" }}>Contact Us</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {[
-                { icon: "📍", text: "Bole Sub-City, Addis Ababa, Ethiopia" },
-                { icon: "📞", text: "+251 11 123 4567" },
-                { icon: "✉️", text: "info@uniquehealthcare.et" },
-                { icon: "🕐", text: "Mon–Fri 8:00 AM – 6:00 PM" },
+                { icon: "📍", text: CONTACT.address.short },
+                ...CONTACT.phones.map((p) => ({
+                  icon: "📞",
+                  text: p.display,
+                  href: `tel:${p.tel}`,
+                })),
+                { icon: "✉️", text: CONTACT.email, href: `mailto:${CONTACT.email}` },
+                { icon: "🕐", text: CONTACT.hours.short },
               ].map((c) => (
                 <div key={c.text} style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
                   <span style={{ fontSize: "14px", flexShrink: 0 }}>{c.icon}</span>
-                  <span style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5 }}>{c.text}</span>
+                  {c.href ? (
+                    <a href={c.href} style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5, textDecoration: "none" }}>
+                      {c.text}
+                    </a>
+                  ) : (
+                    <span style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5 }}>{c.text}</span>
+                  )}
                 </div>
               ))}
             </div>
