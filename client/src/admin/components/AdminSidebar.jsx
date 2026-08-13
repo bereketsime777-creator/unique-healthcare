@@ -11,7 +11,7 @@ const navItems = [
   { to: "/admin/messages",    label: "Messages",    icon: "💬", badge: true },
 ];
 
-function AdminSidebar({ open }) {
+function AdminSidebar({ open, onNavigate }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, user } = useAuth();
@@ -104,7 +104,7 @@ function AdminSidebar({ open }) {
   };
 
   return (
-    <aside style={sidebarStyle}>
+    <aside className={`admin-sidebar ${open ? "is-open" : ""}`} style={sidebarStyle}>
       {/* Logo */}
       <div style={logoAreaStyle}>
         {open ? (
@@ -130,6 +130,7 @@ function AdminSidebar({ open }) {
             <Link
               key={item.to}
               to={item.to}
+              onClick={onNavigate}
               title={!open ? item.label : ""}
               style={getNavItemStyle(active)}
               onMouseEnter={(e) => {
@@ -175,6 +176,7 @@ function AdminSidebar({ open }) {
         )}
         <Link
           to="/"
+          onClick={onNavigate}
           title={!open ? "View Store" : ""}
           style={getNavItemStyle(false)}
           onMouseEnter={(e) => {

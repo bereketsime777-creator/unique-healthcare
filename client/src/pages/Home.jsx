@@ -8,7 +8,7 @@ const HERO_BG = "/images/hero1.jpg";
 const categories = [
   { label: "Diagnostic Equipment",  bg: "/images/category-diagnostic.jpg" },
   { label: "Surgical Instruments",  bg: "/images/category-surgical.jpg" },
-  { label: "Patient Monitoring",    bg: "/images/category-monitoring.jpg" },
+  { label: "Monitoring Devices",    bg: "/images/category-monitoring.jpg" },
   { label: "Laboratory Equipment",  bg: "/images/category-lab.jpg" },
 ];
 
@@ -60,17 +60,16 @@ export default function Home() {
           backgroundImage: `url(${HERO_BG})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "580px",
         }}
-        className="flex items-center"
+        className="flex items-center hero-section"
       >
-        <div className="max-w-7xl mx-auto px-8 py-24 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 sm:py-24 w-full">
           <div className="max-w-lg">
             <p style={{ color: "#fff", fontWeight: 700, fontSize: "13px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px" }}>
               Trusted by 200+ Hospitals
             </p>
 
-            <h1 style={{ color: "#ffffff", fontWeight: 900, fontSize: "52px", lineHeight: 1.15, marginBottom: "20px" }}>
+            <h1 className="hero-title" style={{ color: "#ffffff", fontWeight: 900, lineHeight: 1.15, marginBottom: "20px" }}>
               Your Trusted Partner in<br />
               <span style={{ color: "#ffffff" }}>Hospital Equipment</span>
             </h1>
@@ -120,8 +119,8 @@ export default function Home() {
           STATS BAR
       ───────────────────────────────────── */}
       <section style={{ background: "#1d4ed8", padding: "20px 0" }}>
-        <div className="max-w-7xl mx-auto px-8">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }}>
+        <div className="page-wrap">
+          <div className="stats-bar-grid">
             {stats.map((s, i) => (
               <div key={s.label} style={{
                 textAlign: "center",
@@ -139,17 +138,17 @@ export default function Home() {
       {/* ─────────────────────────────────────
           CATEGORY BANNERS
       ───────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "64px 0" }}>
-        <div className="max-w-7xl mx-auto px-8">
+      <section className="section-pad" style={{ background: "#fff" }}>
+        <div className="page-wrap">
           <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "6px" }}>Browse by Category</p>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "28px" }}>
+          <div className="section-header">
             <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>Shop by Equipment Type</h2>
             <Link to="/products" style={{ color: "#2563eb", fontWeight: 600, fontSize: "14px", textDecoration: "none" }}>
               View all →
             </Link>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
+          <div className="responsive-grid-4" style={{ gap: "16px" }}>
             {categories.map((cat) => (
               <div
                 key={cat.label}
@@ -199,9 +198,9 @@ export default function Home() {
       {/* ─────────────────────────────────────
           FEATURED PRODUCTS
       ───────────────────────────────────── */}
-      <section style={{ background: "#f8fafc", padding: "64px 0" }}>
-        <div className="max-w-7xl mx-auto px-8">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "32px" }}>
+      <section className="section-pad" style={{ background: "#f8fafc" }}>
+        <div className="page-wrap">
+          <div className="section-header" style={{ marginBottom: "32px" }}>
             <div>
               <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>Top Picks</p>
               <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>Featured Products</h2>
@@ -212,13 +211,13 @@ export default function Home() {
           </div>
 
           {featured.length === 0 ? (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+            <div className="responsive-grid-4">
               {[...Array(4)].map((_, i) => (
                 <div key={i} style={{ background: "#e2e8f0", borderRadius: "16px", height: "320px" }} />
               ))}
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+            <div className="responsive-grid-4">
               {featured.map((p) => (
                 <ProductCard key={p._id} product={p} onAdd={handleAdd} isAdded={addedId === p._id} />
               ))}
@@ -230,8 +229,8 @@ export default function Home() {
       {/* ─────────────────────────────────────
           WHY CHOOSE US
       ───────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "64px 0" }}>
-        <div className="max-w-7xl mx-auto px-8">
+      <section className="section-pad" style={{ background: "#fff" }}>
+        <div className="page-wrap">
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
             <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>Why Us</p>
             <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: "0 0 10px" }}>Why Choose Unique Healthcare?</h2>
@@ -239,7 +238,7 @@ export default function Home() {
               We go beyond just supply — we are your long-term healthcare equipment partner.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }}>
+          <div className="responsive-grid-4" style={{ gap: "24px" }}>
             {features.map((f) => (
               <div key={f.title} style={{
                 background: "#fff",
@@ -273,9 +272,9 @@ export default function Home() {
           LATEST PRODUCTS
       ───────────────────────────────────── */}
       {products.length > 0 && (
-        <section style={{ background: "#f8fafc", padding: "64px 0" }}>
-          <div className="max-w-7xl mx-auto px-8">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "32px" }}>
+        <section className="section-pad" style={{ background: "#f8fafc" }}>
+          <div className="page-wrap">
+            <div className="section-header" style={{ marginBottom: "32px" }}>
               <div>
                 <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>Just Added</p>
                 <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>Latest Products</h2>
@@ -284,7 +283,7 @@ export default function Home() {
                 View all →
               </Link>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+            <div className="responsive-grid-4">
               {latest.map((p) => (
                 <ProductCard key={p._id} product={p} onAdd={handleAdd} isAdded={addedId === p._id} />
               ))}
@@ -297,7 +296,7 @@ export default function Home() {
           BRANDS
       ───────────────────────────────────── */}
       <section style={{ background: "#fff", borderTop: "1px solid #f1f5f9", padding: "56px 0" }}>
-        <div className="max-w-7xl mx-auto px-8">
+        <div className="page-wrap">
           <div style={{ textAlign: "center", marginBottom: "36px" }}>
             <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>Partners</p>
             <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: "0 0 8px" }}>
@@ -307,7 +306,7 @@ export default function Home() {
               Official distributor of top global medical equipment manufacturers
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: "12px" }}>
+          <div className="responsive-grid-8">
             {brands.map((b) => (
               <div key={b} style={{
                 background: "#f8fafc",
@@ -330,11 +329,11 @@ export default function Home() {
       <section
         style={{
           background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)",
-          padding: "80px 0",
+          padding: "64px 0",
         }}
       >
-        <div className="max-w-7xl mx-auto px-8" style={{ textAlign: "center" }}>
-          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "38px", marginBottom: "12px" }}>
+        <div className="page-wrap" style={{ textAlign: "center" }}>
+          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "clamp(26px, 5vw, 38px)", marginBottom: "12px" }}>
             Ready to Equip Your Facility?
           </h2>
           <p style={{ color: "#fff", fontSize: "16px", marginBottom: "32px", opacity: 0.9 }}>
@@ -371,8 +370,8 @@ export default function Home() {
       {/* ─────────────────────────────────────
           NEWSLETTER
       ───────────────────────────────────── */}
-      <section style={{ background: "#fff", padding: "72px 0" }}>
-        <div className="max-w-7xl mx-auto px-8" style={{ maxWidth: "560px", textAlign: "center", margin: "0 auto" }}>
+      <section className="section-pad" style={{ background: "#fff" }}>
+        <div className="page-wrap" style={{ maxWidth: "560px", textAlign: "center", margin: "0 auto" }}>
           {subscribed ? (
             <div>
               <div style={{ fontSize: "48px", marginBottom: "16px" }}>✅</div>
@@ -390,7 +389,7 @@ export default function Home() {
               </p>
               <form
                 onSubmit={(e) => { e.preventDefault(); if (email.trim()) setSubscribed(true); }}
-                style={{ display: "flex", gap: "10px", maxWidth: "420px", margin: "0 auto" }}
+                className="newsletter-form-inline"
               >
                 <input
                   type="email"

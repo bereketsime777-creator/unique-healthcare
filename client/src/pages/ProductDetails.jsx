@@ -65,7 +65,7 @@ function ProductDetails() {
           <span>/</span>
           <span className="text-gray-400">{product.category}</span>
           <span>/</span>
-          <span className="text-gray-800 truncate max-w-xs">{product.name}</span>
+          <span className="text-gray-800 truncate max-w-[120px] sm:max-w-xs">{product.name}</span>
         </div>
       </div>
 

@@ -67,7 +67,7 @@ function Checkout() {
 
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Steps */}
-        <div className="flex items-center gap-2 mb-8">
+        <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2">
           {["Cart", "Shipping", "Payment"].map((step, i) => (
             <div key={step} className="flex items-center gap-2">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${

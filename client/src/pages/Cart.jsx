@@ -52,7 +52,7 @@ function Cart() {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-3">
             {cart.map((item) => (
-              <div key={item._id} className="bg-white rounded-xl border border-gray-100 p-4 flex gap-4 items-center">
+              <div key={item._id} className="bg-white rounded-xl border border-gray-100 p-4 flex flex-col sm:flex-row gap-4 sm:items-center">
                 {/* Image */}
                 <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center shrink-0 border border-gray-100 overflow-hidden">
                   {item.image && item.image.startsWith("http") ? (
@@ -70,7 +70,8 @@ function Cart() {
                 </div>
 
                 {/* Quantity */}
-                <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden shrink-0">
+                <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+                  <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden shrink-0">
                   <button
                     onClick={() => decreaseQuantity(item._id)}
                     className="px-2.5 py-1.5 text-gray-500 hover:bg-gray-100 text-sm font-bold"
@@ -86,10 +87,10 @@ function Cart() {
                   >
                     +
                   </button>
-                </div>
+                  </div>
 
                 {/* Subtotal */}
-                <div className="text-right shrink-0 w-24">
+                <div className="text-right shrink-0">
                   <p className="font-bold text-blue-600 text-sm">
                     ETB {(item.price * item.quantity).toLocaleString()}
                   </p>
@@ -99,6 +100,7 @@ function Cart() {
                   >
                     Remove
                   </button>
+                </div>
                 </div>
               </div>
             ))}

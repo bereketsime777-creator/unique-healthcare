@@ -134,7 +134,8 @@ function ManageOrders() {
             <p style={{ fontWeight: "600", color: "#374151" }}>No orders found</p>
           </div>
         ) : (
-          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse" }}>
+          <div className="table-scroll">
+          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse", minWidth: "720px" }}>
             <thead style={{ background: "#f8fafc", borderBottom: "1px solid #f1f5f9" }}>
               <tr>
                 <th style={thStyle}>Order</th>
@@ -254,6 +255,7 @@ function ManageOrders() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

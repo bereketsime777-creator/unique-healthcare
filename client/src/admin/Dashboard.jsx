@@ -123,7 +123,7 @@ function Dashboard() {
   if (loading) {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
+        <div className="admin-stat-grid">
           {[...Array(4)].map((_, i) => (
             <div key={i} style={{ ...cardStyle, height: "112px", opacity: 0.5 }} />
           ))}
@@ -164,7 +164,7 @@ function Dashboard() {
       </div>
 
       {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px" }}>
+      <div className="admin-stat-grid">
         {statCards.map((card) => {
           const value = allStats[card.key];
           const inner = (
@@ -202,7 +202,7 @@ function Dashboard() {
       </div>
 
       {/* Middle row: Chart + Recent Messages */}
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "16px" }}>
+      <div className="admin-chart-row">
         {/* Bar Chart */}
         <div style={{ ...cardStyle, padding: "24px" }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "4px" }}>
@@ -290,7 +290,8 @@ function Dashboard() {
             No orders yet
           </div>
         ) : (
-          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse" }}>
+          <div className="table-scroll">
+          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse", minWidth: "720px" }}>
             <thead>
               <tr style={{ background: "#f8fafc", borderBottom: "1px solid #f1f5f9" }}>
                 {["Customer", "Items", "Amount", "Payment", "Status", "Date"].map((h) => (
@@ -365,6 +366,7 @@ function Dashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

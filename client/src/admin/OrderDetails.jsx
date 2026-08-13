@@ -36,7 +36,7 @@ function OrderDetails() {
     return (
       <div style={{ maxWidth: "900px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "16px" }}>
         <div style={{ ...cardStyle, height: "128px", opacity: 0.4 }} />
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+        <div className="responsive-grid-form-2">
           <div style={{ ...cardStyle, height: "160px", opacity: 0.4 }} />
           <div style={{ ...cardStyle, height: "160px", opacity: 0.4 }} />
         </div>
@@ -129,7 +129,7 @@ function OrderDetails() {
       </div>
 
       {/* Customer + Shipping */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "20px" }}>
+      <div className="responsive-grid-2col">
         {/* Customer */}
         <div style={cardStyle}>
           <h2 style={{ fontWeight: "700", color: "#0f172a", marginBottom: "16px",

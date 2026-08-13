@@ -49,11 +49,10 @@ export default function Login() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", background: "#f1f5f9" }}>
+    <div className="auth-page">
 
       {/* ── Left panel — blue branding ── */}
-      <div style={{
-        width: "45%",
+      <div className="auth-brand-panel" style={{
         background: "linear-gradient(145deg, #1e3a8a 0%, #2563eb 50%, #1d4ed8 100%)",
         display: "flex",
         flexDirection: "column",

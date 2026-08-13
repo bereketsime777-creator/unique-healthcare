@@ -22,6 +22,7 @@ function Products() {
   const [loading, setLoading] = useState(true);
   const [addedId, setAddedId] = useState(null);
   const [sortBy, setSortBy] = useState("default");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const searchQuery = searchParams.get("search") || "";
   const categoryQuery = searchParams.get("category") || "";
@@ -107,7 +108,7 @@ function Products() {
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Search Bar */}
-        <form onSubmit={handleSearch} className="flex gap-2 mb-6">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 mb-6">
           <input
             type="text"
             placeholder="Search products, brands or categories..."
@@ -132,10 +133,18 @@ function Products() {
           )}
         </form>
 
-        <div className="flex gap-6">
+        <div className="products-layout">
           {/* ── Sidebar ── */}
-          <aside className="w-56 shrink-0">
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <aside className="products-sidebar">
+            <button
+              type="button"
+              onClick={() => setFiltersOpen((p) => !p)}
+              className="products-filter-toggle w-full mb-3 bg-blue-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold"
+            >
+              {filtersOpen ? "Hide Categories ✕" : "Show Categories ☰"}
+            </button>
+            <div className={`products-sidebar-inner ${filtersOpen ? "" : "collapsed"}`}>
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden md:block">
               <div className="bg-blue-600 text-white px-4 py-3 font-semibold text-sm">
                 Categories
               </div>
@@ -165,19 +174,20 @@ function Products() {
                 ))}
               </div>
             </div>
+            </div>
           </aside>
 
           {/* ── Product Grid ── */}
           <div className="flex-1">
             {/* Results bar */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
               <p className="text-sm text-gray-500">
                 {loading ? "Loading..." : `${products.length} product${products.length !== 1 ? "s" : ""} found`}
               </p>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
+                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-full sm:w-auto"
               >
                 <option value="default">Sort: Default</option>
                 <option value="price-asc">Price: Low to High</option>

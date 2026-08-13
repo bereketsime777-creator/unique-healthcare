@@ -30,7 +30,7 @@ const s = {
   hero:      { background: "#1d4ed8", padding: "72px 0", textAlign: "center" },
   heroWrap:  { maxWidth: "900px", margin: "0 auto", padding: "0 32px" },
   heroTag:   { color: "#bfdbfe", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px", display: "block" },
-  heroH2:    { color: "#fff", fontWeight: 900, fontSize: "42px", lineHeight: 1.2, margin: "0 0 16px" },
+  heroH2:    { color: "#fff", fontWeight: 900, fontSize: "clamp(28px, 5vw, 42px)", lineHeight: 1.2, margin: "0 0 16px" },
   heroP:     { color: "#bfdbfe", fontSize: "16px", lineHeight: 1.7, margin: "0 auto 32px", maxWidth: "600px" },
   btnRow:    { display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" },
   btnWhite:  { background: "#fff", color: "#2563eb", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" },
@@ -85,7 +85,7 @@ export default function Services() {
             <h2 style={{ ...s.secH2, margin: "0 0 10px" }}>Our Complete Service Portfolio</h2>
             <p style={s.secP}>Everything your healthcare facility needs — under one roof.</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px" }}>
+          <div className="responsive-grid-2">
             {services.map((sv) => (
               <div key={sv.title} style={{ background: sv.color, border: `1.5px solid ${sv.border}`, borderRadius: "20px", padding: "28px" }}>
                 <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
@@ -95,7 +95,7 @@ export default function Services() {
                   <div style={{ flex: 1 }}>
                     <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "17px", margin: "0 0 8px" }}>{sv.title}</h3>
                     <p style={{ color: "#475569", fontSize: "13px", lineHeight: 1.65, margin: "0 0 16px" }}>{sv.desc}</p>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
+                    <div className="responsive-grid-form-2" style={{ gap: "6px" }}>
                       {sv.features.map((f) => (
                         <div key={f} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#475569" }}>
                           <span style={{ color: "#2563eb", fontWeight: 700 }}>✓</span> {f}
@@ -118,7 +118,7 @@ export default function Services() {
             <h2 style={{ ...s.secH2, margin: "0 0 8px" }}>How It Works</h2>
             <p style={s.secP}>Getting the right equipment for your facility is easy with us.</p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "16px" }}>
+          <div className="responsive-grid-6">
             {process.map((p, i) => (
               <div key={p.step} style={{ textAlign: "center" }}>
                 <div style={{ width: "56px", height: "56px", background: "#2563eb", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: "16px", margin: "0 auto 14px" }}>
@@ -139,7 +139,7 @@ export default function Services() {
             <span style={s.secTag}>Why Unique Healthcare</span>
             <h2 style={{ ...s.secH2, margin: 0 }}>The Difference We Make</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+          <div className="responsive-grid-4">
             {[
               { icon: "🏅", title: "Certified Equipment",  desc: "Every product meets WHO and international medical standards." },
               { icon: "⚡", title: "Fast Turnaround",      desc: "Quick procurement and delivery — time is critical in healthcare." },

@@ -55,7 +55,7 @@ function AdminTopbar({ onToggleSidebar }) {
       </button>
 
       {/* Search */}
-      <form onSubmit={handleSearch} style={{ flex: 1, maxWidth: "400px" }}>
+      <form onSubmit={handleSearch} className="admin-topbar-search" style={{ flex: 1, maxWidth: "400px" }}>
         <div style={{ position: "relative" }}>
           <svg style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)",
             width: "16px", height: "16px", color: "#94a3b8", pointerEvents: "none" }}
@@ -117,7 +117,7 @@ function AdminTopbar({ onToggleSidebar }) {
           }}>
             {user?.name?.charAt(0)?.toUpperCase() || "A"}
           </div>
-          <span style={{ fontSize: "14px", fontWeight: "600", color: "#374151" }}>
+          <span className="admin-topbar-user-name" style={{ fontSize: "14px", fontWeight: "600", color: "#374151" }}>
             {user?.name}
           </span>
           <svg width="14" height="14" fill="none" stroke="#94a3b8" viewBox="0 0 24 24">

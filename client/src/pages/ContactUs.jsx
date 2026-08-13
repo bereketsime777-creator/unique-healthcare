@@ -72,7 +72,7 @@ export default function ContactUs() {
       {/* Hero */}
       <section style={{ background: "#1d4ed8", padding: "64px 0", textAlign: "center" }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
-          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "42px", margin: "0 0 14px" }}>Get In Touch</h2>
+          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "clamp(28px, 5vw, 42px)", margin: "0 0 14px" }}>Get In Touch</h2>
           <p style={{ color: "#bfdbfe", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>
             Have a question about a product, need a bulk quote, or want technical support?
             Our team is ready to help.
@@ -82,8 +82,8 @@ export default function ContactUs() {
 
       {/* Main content */}
       <section style={{ padding: "72px 0", background: "#f8fafc" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "32px", alignItems: "start" }}>
+        <div className="page-wrap">
+          <div className="responsive-grid-1-2">
 
             {/* Info cards */}
             <div>
@@ -119,7 +119,7 @@ export default function ContactUs() {
             </div>
 
             {/* Contact Form */}
-            <div style={{ background: "#fff", border: "1.5px solid #f1f5f9", borderRadius: "20px", padding: "36px" }}>
+            <div style={{ background: "#fff", border: "1.5px solid #f1f5f9", borderRadius: "20px", padding: "clamp(20px, 4vw, 36px)" }}>
               <h2 style={{ color: "#0f172a", fontWeight: 700, fontSize: "20px", margin: "0 0 6px" }}>Send Us a Message</h2>
               <p style={{ color: "#64748b", fontSize: "13px", margin: "0 0 28px" }}>
                 Fill out the form and our team will get back to you within 24 hours.
@@ -147,7 +147,7 @@ export default function ContactUs() {
                     </div>
                   )}
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+                  <div className="responsive-grid-form-2" style={{ marginBottom: "16px" }}>
                     <div>
                       <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Full Name *</label>
                       <input name="name" value={form.name} onChange={handleChange} required placeholder="Dr. Abebe Kebede" style={input} />
@@ -158,7 +158,7 @@ export default function ContactUs() {
                     </div>
                   </div>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+                  <div className="responsive-grid-form-2" style={{ marginBottom: "16px" }}>
                     <div>
                       <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Phone Number</label>
                       <input name="phone" value={form.phone} onChange={handleChange} placeholder="+251 9XX XXX XXX" style={input} />
@@ -199,8 +199,8 @@ export default function ContactUs() {
 
       {/* Trust bar */}
       <section style={{ background: "#fff", borderTop: "1px solid #f1f5f9", padding: "48px 0" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" }}>
+        <div className="page-wrap">
+          <div className="responsive-grid-4" style={{ gap: "24px" }}>
             {trust.map((t) => (
               <div key={t.title} style={{ textAlign: "center" }}>
                 <div style={{ fontSize: "32px", marginBottom: "10px" }}>{t.icon}</div>

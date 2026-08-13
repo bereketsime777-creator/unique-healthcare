@@ -56,11 +56,10 @@ export default function Register() {
   ];
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", background: "#f1f5f9" }}>
+    <div className="auth-page">
 
       {/* ── Left branding panel ── */}
-      <div style={{
-        width: "42%",
+      <div className="auth-brand-panel" style={{
         background: "linear-gradient(145deg, #1e3a8a 0%, #2563eb 60%, #1d4ed8 100%)",
         display: "flex",
         flexDirection: "column",
@@ -138,7 +137,7 @@ export default function Register() {
                 style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "26px" }}>
+            <div className="responsive-grid-form-2" style={{ gap: "14px", marginBottom: "26px" }}>
               <div>
                 <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "7px" }}>Password *</label>
                 <input type="password" name="password" value={form.password} onChange={handleChange} required

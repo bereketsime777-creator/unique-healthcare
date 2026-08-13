@@ -3,9 +3,14 @@ import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
 
 const categories = [
-  "Diagnostic Equipment", "Surgical Equipment", "Patient Monitoring",
-  "Laboratory Equipment", "Imaging Systems", "Disposables & Consumables",
-  "Rehabilitation", "Furniture & Fixtures", "Other",
+  "Diagnostic Equipment",
+  "Patient Care Equipment",
+  "Monitoring Devices",
+  "Surgical Instruments",
+  "Laboratory Equipment",
+  "Imaging Systems",
+  "Disposables & Consumables",
+  "Furniture & Fixtures",
 ];
 
 const inputStyle = {
@@ -117,7 +122,7 @@ function AddProduct() {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "24px" }}>
+        <div className="responsive-grid-sidebar">
           {/* Left: Main info */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             {/* Basic Information */}
@@ -130,7 +135,7 @@ function AddProduct() {
                     required placeholder="e.g. Multipara Patient Monitor"
                     style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="responsive-grid-form-2">
                   <div>
                     <label style={labelStyle}>Category *</label>
                     <select name="category" value={formData.category} onChange={handleChange}
@@ -146,7 +151,7 @@ function AddProduct() {
                       style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
                   </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="responsive-grid-form-2">
                   <div>
                     <label style={labelStyle}>Price (ETB) *</label>
                     <input type="number" name="price" value={formData.price} onChange={handleChange}

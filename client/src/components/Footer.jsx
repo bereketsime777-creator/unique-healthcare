@@ -5,7 +5,7 @@ const shop = [
   { label: "All Products",          to: "/products" },
   { label: "Diagnostic Equipment",  to: "/products?category=Diagnostic+Equipment" },
   { label: "Surgical Instruments",  to: "/products?category=Surgical+Instruments" },
-  { label: "Patient Monitoring",    to: "/products?category=Patient+Monitoring" },
+  { label: "Monitoring Devices",    to: "/products?category=Monitoring+Devices" },
   { label: "Laboratory Equipment",  to: "/products?category=Laboratory+Equipment" },
 ];
 
@@ -42,7 +42,7 @@ export default function Footer() {
 
       {/* ── Newsletter strip ── */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)", padding: "28px 0" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", flexWrap: "wrap" }}>
+        <div className="page-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", flexWrap: "wrap" }}>
           <div>
             <p style={{ color: "#fff", fontWeight: 700, fontSize: "16px", margin: "0 0 2px" }}>
               📬 Subscribe for exclusive updates
@@ -55,7 +55,7 @@ export default function Footer() {
             <span style={{ color: "#4ade80", fontWeight: 700, fontSize: "14px" }}>✓ You&apos;re subscribed!</span>
           ) : (
             <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) setSubscribed(true); }}
-              style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
+              className="footer-newsletter-form">
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
@@ -70,8 +70,8 @@ export default function Footer() {
       </div>
 
       {/* ── Main footer columns ── */}
-      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "56px 32px 40px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1.8fr 1fr 1fr 1fr 1.4fr", gap: "40px" }}>
+      <div className="page-wrap" style={{ paddingTop: "56px", paddingBottom: "40px" }}>
+        <div className="footer-grid">
 
           {/* Brand */}
           <div>
@@ -145,11 +145,11 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", padding: "16px 0" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
+        <div className="page-wrap" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", paddingTop: "16px", paddingBottom: "16px" }}>
           <p style={{ color: "#6b9fd4", fontSize: "12px", margin: 0 }}>
             © 2026 Unique Healthcare. All Rights Reserved.
           </p>
-          <div style={{ display: "flex", gap: "20px" }}>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {["Privacy Policy", "Terms of Service", "Refund Policy"].map((t) => (
               <span key={t} style={{ color: "#6b9fd4", fontSize: "12px", cursor: "pointer" }}>{t}</span>
             ))}

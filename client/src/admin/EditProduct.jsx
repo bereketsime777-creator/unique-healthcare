@@ -3,9 +3,14 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
 
 const categories = [
-  "Diagnostic Equipment", "Surgical Equipment", "Patient Monitoring",
-  "Laboratory Equipment", "Imaging Systems", "Disposables & Consumables",
-  "Rehabilitation", "Furniture & Fixtures", "Other",
+  "Diagnostic Equipment",
+  "Patient Care Equipment",
+  "Monitoring Devices",
+  "Surgical Instruments",
+  "Laboratory Equipment",
+  "Imaging Systems",
+  "Disposables & Consumables",
+  "Furniture & Fixtures",
 ];
 
 const inputStyle = {
@@ -95,7 +100,7 @@ function EditProduct() {
   if (loading) {
     return (
       <div style={{ maxWidth: "960px", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "24px" }}>
+        <div className="responsive-grid-sidebar">
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div style={{ ...cardStyle, opacity: 0.5 }}>
               {[...Array(4)].map((_, i) => (
@@ -139,7 +144,7 @@ function EditProduct() {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "24px" }}>
+        <div className="responsive-grid-sidebar">
           {/* Left */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={cardStyle}>
@@ -150,7 +155,7 @@ function EditProduct() {
                   <input type="text" name="name" value={form.name} onChange={handleChange}
                     required style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="responsive-grid-form-2">
                   <div>
                     <label style={labelStyle}>Category *</label>
                     <select name="category" value={form.category} onChange={handleChange}
@@ -166,7 +171,7 @@ function EditProduct() {
                       style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
                   </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                <div className="responsive-grid-form-2">
                   <div>
                     <label style={labelStyle}>Price (ETB) *</label>
                     <input type="number" name="price" value={form.price} onChange={handleChange}

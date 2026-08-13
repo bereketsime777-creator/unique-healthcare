@@ -141,7 +141,8 @@ function ManageProducts() {
             </Link>
           </div>
         ) : (
-          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse" }}>
+          <div className="table-scroll">
+          <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse", minWidth: "640px" }}>
             <thead style={{ background: "#f8fafc", borderBottom: "1px solid #f1f5f9" }}>
               <tr>
                 <th style={thStyle}>Product</th>
@@ -243,6 +244,7 @@ function ManageProducts() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>

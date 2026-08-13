@@ -104,7 +104,7 @@ export default function AboutUs() {
       {/* ── Stats ── */}
       <section style={{ background: "#1d4ed8", padding: "40px 0" }}>
         <div style={s.wrap}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }}>
+          <div className="stats-bar-grid">
             {stats.map((st, i) => (
               <div key={st.label} style={{
                 textAlign: "center", padding: "16px",
@@ -121,7 +121,7 @@ export default function AboutUs() {
       {/* ── Our Story ── */}
       <section style={{ padding: "80px 0", background: "#f8fafc" }}>
         <div style={s.wrap}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "start" }}>
+          <div className="responsive-grid-2col" style={{ gap: "64px" }}>
             <div>
               <span style={s.tag}>Our Story</span>
               <h2 style={s.h2}>Built to Strengthen Ethiopia's Healthcare System</h2>
@@ -169,7 +169,7 @@ export default function AboutUs() {
       {/* ── Mission & Vision ── */}
       <section style={{ padding: "80px 0", background: "#fff" }}>
         <div style={s.wrap}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px" }}>
+          <div className="responsive-grid-2col">
 
             {/* Mission */}
             <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: "20px", padding: "36px" }}>
@@ -213,7 +213,7 @@ export default function AboutUs() {
             <span style={s.tag}>What We Stand For</span>
             <h2 style={{ ...s.h2, margin: 0 }}>Our Core Values</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px" }}>
+          <div className="responsive-grid-4">
             {values.map((v, i) => {
               const colors = ["#2563eb", "#7c3aed", "#16a34a", "#d97706"];
               const bgs    = ["#eff6ff", "#f5f3ff", "#f0fdf4", "#fffbeb"];
@@ -238,7 +238,7 @@ export default function AboutUs() {
             <span style={s.tag}>Why Work With Us</span>
             <h2 style={{ ...s.h2, margin: 0 }}>Why Choose Unique Healthcare?</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+          <div className="responsive-grid-3">
             {whyUs.map((w, i) => {
               const icons = ["✓", "→", "★", "◎", "♥"];
               return (
