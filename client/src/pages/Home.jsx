@@ -2,15 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
+import { categoryFilterUrl, getHomeCategoryBanners, normalizeCategory } from "../constants/categories";
 
 const HERO_BG = "/images/hero1.jpg";
-
-const categories = [
-  { label: "Diagnostic Equipment",  bg: "/images/category-diagnostic.jpg" },
-  { label: "Surgical Instruments",  bg: "/images/category-surgical.jpg" },
-  { label: "Monitoring Devices",    bg: "/images/category-monitoring.jpg" },
-  { label: "Laboratory Equipment",  bg: "/images/category-lab.jpg" },
-];
+const categories = getHomeCategoryBanners();
 
 const brands = ["Mindray", "Dräger", "Philips", "Siemens Healthineers", "EDAN", "Getinge", "GE Healthcare", "Stryker"];
 
@@ -37,7 +32,10 @@ export default function Home() {
   const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
-    API.get("/products").then((r) => setProducts(r.data)).catch(console.log);
+    API.get("/products").then((r) => setProducts(r.data.map((p) => ({
+      ...p,
+      category: normalizeCategory(p.category),
+    })))).catch(() => {});
   }, []);
 
   const handleAdd = (product) => {
@@ -152,7 +150,7 @@ export default function Home() {
             {categories.map((cat) => (
               <div
                 key={cat.label}
-                onClick={() => navigate(`/products?category=${encodeURIComponent(cat.label)}`)}
+                onClick={() => navigate(categoryFilterUrl(cat.label))}
                 style={{
                   position: "relative",
                   height: "200px",

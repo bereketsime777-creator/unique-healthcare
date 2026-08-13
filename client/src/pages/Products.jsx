@@ -2,17 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
-
-const categories = [
-  "Diagnostic Equipment",
-  "Patient Care Equipment",
-  "Monitoring Devices",
-  "Surgical Instruments",
-  "Laboratory Equipment",
-  "Imaging Systems",
-  "Disposables & Consumables",
-  "Furniture & Fixtures",
-];
+import { PRODUCT_CATEGORIES, normalizeCategory } from "../constants/categories";
 
 function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -36,7 +26,12 @@ function Products() {
         if (searchQuery) params.search = searchQuery;
         if (categoryQuery) params.category = categoryQuery;
         const res = await API.get("/products", { params });
-        setProducts(res.data);
+        setProducts(
+          res.data.map((p) => ({
+            ...p,
+            category: normalizeCategory(p.category),
+          }))
+        );
       } catch {
         setProducts([]);
       } finally {
@@ -159,7 +154,7 @@ function Products() {
                 >
                   All Products
                 </button>
-                {categories.map((cat) => (
+                {PRODUCT_CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => handleCategory(cat)}

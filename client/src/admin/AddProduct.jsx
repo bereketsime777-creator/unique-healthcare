@@ -1,17 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
-
-const categories = [
-  "Diagnostic Equipment",
-  "Patient Care Equipment",
-  "Monitoring Devices",
-  "Surgical Instruments",
-  "Laboratory Equipment",
-  "Imaging Systems",
-  "Disposables & Consumables",
-  "Furniture & Fixtures",
-];
+import { PRODUCT_CATEGORIES } from "../constants/categories";
 
 const inputStyle = {
   width: "100%",
@@ -141,7 +131,7 @@ function AddProduct() {
                     <select name="category" value={formData.category} onChange={handleChange}
                       required style={inputStyle} onFocus={focusInput} onBlur={blurInput}>
                       <option value="">Select category</option>
-                      {categories.map((c) => <option key={c}>{c}</option>)}
+                      {PRODUCT_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>

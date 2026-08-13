@@ -1,17 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
-
-const categories = [
-  "Diagnostic Equipment",
-  "Patient Care Equipment",
-  "Monitoring Devices",
-  "Surgical Instruments",
-  "Laboratory Equipment",
-  "Imaging Systems",
-  "Disposables & Consumables",
-  "Furniture & Fixtures",
-];
+import { PRODUCT_CATEGORIES, normalizeCategory } from "../constants/categories";
 
 const inputStyle = {
   width: "100%",
@@ -68,7 +58,7 @@ function EditProduct() {
       .then((r) => {
         const p = r.data;
         setForm({
-          name: p.name || "", category: p.category || "", manufacturer: p.manufacturer || "",
+          name: p.name || "", category: normalizeCategory(p.category) || "", manufacturer: p.manufacturer || "",
           price: p.price || "", stock: p.stock || "",
           description: p.description || "", specifications: p.specifications || "",
         });
@@ -161,7 +151,7 @@ function EditProduct() {
                     <select name="category" value={form.category} onChange={handleChange}
                       required style={inputStyle} onFocus={focusInput} onBlur={blurInput}>
                       <option value="">Select category</option>
-                      {categories.map((c) => <option key={c}>{c}</option>)}
+                      {PRODUCT_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
                     </select>
                   </div>
                   <div>

@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
+const { getCategoryFilterValues, normalizeCategory } = require("../utils/categories");
 
 
 // ==============================
@@ -28,7 +29,7 @@ const createProduct = async (req, res) => {
 
     const product = await Product.create({
       name: req.body.name,
-      category: req.body.category,
+      category: normalizeCategory(req.body.category),
       manufacturer: req.body.manufacturer,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
@@ -59,7 +60,8 @@ const getProducts = async (req, res) => {
     const filter = {};
 
     if (category) {
-      filter.category = { $regex: category, $options: "i" };
+      const values = getCategoryFilterValues(category);
+      filter.category = values.length === 1 ? values[0] : { $in: values };
     }
 
     if (search) {
@@ -72,7 +74,13 @@ const getProducts = async (req, res) => {
 
     const products = await Product.find(filter).sort({ createdAt: -1 });
 
-    res.status(200).json(products);
+    res.status(200).json(
+      products.map((product) => {
+        const doc = product.toObject();
+        doc.category = normalizeCategory(doc.category);
+        return doc;
+      })
+    );
   } catch (error) {
     console.error("Get Products Error:", error);
     res.status(500).json({ message: error.message });
@@ -92,7 +100,9 @@ const getProductById = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    res.json(product);
+    const doc = product.toObject();
+    doc.category = normalizeCategory(doc.category);
+    res.json(doc);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -113,7 +123,9 @@ const updateProduct = async (req, res) => {
 
     // Use explicit undefined checks so values like 0 are accepted
     if (req.body.name !== undefined) product.name = req.body.name;
-    if (req.body.category !== undefined) product.category = req.body.category;
+    if (req.body.category !== undefined) {
+      product.category = normalizeCategory(req.body.category);
+    }
     if (req.body.manufacturer !== undefined) product.manufacturer = req.body.manufacturer;
     if (req.body.price !== undefined) product.price = Number(req.body.price);
     if (req.body.stock !== undefined) product.stock = Number(req.body.stock);

@@ -1,13 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { getFooterShopLinks } from "../constants/categories";
 
-const shop = [
-  { label: "All Products",          to: "/products" },
-  { label: "Diagnostic Equipment",  to: "/products?category=Diagnostic+Equipment" },
-  { label: "Surgical Instruments",  to: "/products?category=Surgical+Instruments" },
-  { label: "Monitoring Devices",    to: "/products?category=Monitoring+Devices" },
-  { label: "Laboratory Equipment",  to: "/products?category=Laboratory+Equipment" },
-];
+const shop = getFooterShopLinks();
 
 const pages = [
   { label: "Home",       to: "/" },
