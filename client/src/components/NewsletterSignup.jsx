@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FiMail } from "react-icons/fi";
 import API from "../services/api";
 
 export default function NewsletterSignup({ variant = "home" }) {
@@ -92,7 +93,13 @@ export default function NewsletterSignup({ variant = "home" }) {
 
   return (
     <div>
-      <div style={{ fontSize: "44px", marginBottom: "16px" }}>📬</div>
+      <div style={{
+        width: "56px", height: "56px", background: "linear-gradient(135deg, #eff6ff, #dbeafe)",
+        borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center",
+        margin: "0 auto 16px", color: "#2563eb",
+      }}>
+        <FiMail size={24} />
+      </div>
       <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "26px", margin: "0 0 10px" }}>
         Subscribe for <span style={{ color: "#2563eb" }}>exclusive updates</span>
       </h2>

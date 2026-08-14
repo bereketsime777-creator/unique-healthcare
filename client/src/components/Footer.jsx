@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { FiMapPin, FiPhone, FiMail, FiClock, FiArrowRight } from "react-icons/fi";
+import { FaTelegramPlane } from "react-icons/fa";
 import { getFooterShopLinks } from "../constants/categories";
 import { CONTACT } from "../constants/contact";
 import NewsletterSignup from "./NewsletterSignup";
@@ -21,7 +23,7 @@ const account = [
 ];
 
 const socials = [
-  { label: "Telegram", icon: "✈", href: CONTACT.telegram.url },
+  { label: "Telegram", icon: FaTelegramPlane, href: CONTACT.telegram.url },
 ];
 
 const legal = [
@@ -31,17 +33,17 @@ const legal = [
 ];
 
 export default function Footer() {
-  const lnk = { color: "#93c5fd", fontSize: "13px", textDecoration: "none", lineHeight: "2" };
+  const lnk = { color: "#93c5fd", fontSize: "13px", textDecoration: "none", lineHeight: "2.2", transition: "color 0.15s" };
 
   return (
-    <footer style={{ background: "linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%)" }}>
+    <footer style={{ background: "linear-gradient(180deg, #0f172a 0%, #1e3a8a 100%)" }}>
 
-      {/* ── Newsletter strip ── */}
-      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.1)", padding: "28px 0" }}>
+      {/* Newsletter strip */}
+      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.08)", padding: "32px 0" }}>
         <div className="page-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", flexWrap: "wrap" }}>
           <div>
-            <p style={{ color: "#fff", fontWeight: 700, fontSize: "16px", margin: "0 0 2px" }}>
-              📬 Subscribe for exclusive updates
+            <p style={{ color: "#fff", fontWeight: 700, fontSize: "16px", margin: "0 0 4px" }}>
+              Subscribe for exclusive updates
             </p>
             <p style={{ color: "#93c5fd", fontSize: "13px", margin: 0 }}>
               New arrivals, special offers, and healthcare news.
@@ -51,99 +53,95 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* ── Main footer columns ── */}
+      {/* Main footer */}
       <div className="page-wrap" style={{ paddingTop: "56px", paddingBottom: "40px" }}>
         <div className="footer-grid">
 
-          {/* Brand */}
           <div>
-            <div style={{ background: "#fff", borderRadius: "10px", padding: "6px 10px", display: "inline-block", marginBottom: "16px" }}>
-              <img src="/logo.png" alt="Unique Healthcare" style={{ height: "32px", width: "auto", display: "block" }} />
-            </div>
-            <p style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.75, margin: "0 0 20px", maxWidth: "240px" }}>
+            <img src="/logo.png" alt="Unique Healthcare" style={{ height: "36px", width: "auto", display: "block", marginBottom: "16px", filter: "brightness(0) invert(1)" }} />
+            <p style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.75, margin: "0 0 20px", maxWidth: "260px" }}>
               Ethiopia&apos;s trusted partner for premium medical equipment and healthcare supplies since 2014.
             </p>
-            {/* Socials */}
             <div style={{ display: "flex", gap: "10px" }}>
-              {socials.map((s) => (
-                <a key={s.label} href={s.href} target="_blank" rel="noreferrer"
-                  style={{ width: "36px", height: "36px", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "13px", fontWeight: 700, textDecoration: "none" }}>
-                  {s.icon}
-                </a>
-              ))}
+              {socials.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <a key={s.label} href={s.href} target="_blank" rel="noreferrer" aria-label={s.label}
+                    style={{
+                      width: "38px", height: "38px", background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.15)", borderRadius: "10px",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "#fff", fontSize: "16px", textDecoration: "none",
+                      transition: "background 0.15s, border-color 0.15s",
+                    }}>
+                    <Icon />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
-          {/* Shop */}
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1px" }}>Shop</h4>
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "13px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Shop</h4>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {shop.map((l) => <Link key={l.label} to={l.to} style={lnk}>{l.label}</Link>)}
             </div>
           </div>
 
-          {/* Pages */}
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1px" }}>Pages</h4>
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "13px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Pages</h4>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {pages.map((l) => <Link key={l.label} to={l.to} style={lnk}>{l.label}</Link>)}
             </div>
           </div>
 
-          {/* Account */}
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1px" }}>Account</h4>
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "13px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Account</h4>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {account.map((l) => <Link key={l.label} to={l.to} style={lnk}>{l.label}</Link>)}
             </div>
           </div>
 
-          {/* Contact */}
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1px" }}>Contact Us</h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              {[
-                { icon: "📍", text: CONTACT.address.short },
-                ...CONTACT.phones.map((p) => ({
-                  icon: "📞",
-                  text: p.display,
-                  href: `tel:${p.tel}`,
-                })),
-                { icon: "✉️", text: CONTACT.email, href: `mailto:${CONTACT.email}` },
-                { icon: "🕐", text: CONTACT.hours.short },
-              ].map((c) => (
-                <div key={c.text} style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-                  <span style={{ fontSize: "14px", flexShrink: 0 }}>{c.icon}</span>
-                  {c.href ? (
-                    <a href={c.href} style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5, textDecoration: "none" }}>
-                      {c.text}
-                    </a>
-                  ) : (
-                    <span style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5 }}>{c.text}</span>
-                  )}
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "13px", margin: "0 0 16px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Contact Us</h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                <FiMapPin size={15} style={{ color: "#60a5fa", flexShrink: 0, marginTop: "2px" }} />
+                <span style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5 }}>{CONTACT.address.short}</span>
+              </div>
+              {CONTACT.phones.map((p) => (
+                <div key={p.tel} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <FiPhone size={15} style={{ color: "#60a5fa", flexShrink: 0 }} />
+                  <a href={`tel:${p.tel}`} style={{ color: "#93c5fd", fontSize: "13px", textDecoration: "none" }}>{p.display}</a>
                 </div>
               ))}
+              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <FiMail size={15} style={{ color: "#60a5fa", flexShrink: 0 }} />
+                <a href={`mailto:${CONTACT.email}`} style={{ color: "#93c5fd", fontSize: "13px", textDecoration: "none" }}>{CONTACT.email}</a>
+              </div>
+              <div style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
+                <FiClock size={15} style={{ color: "#60a5fa", flexShrink: 0, marginTop: "2px" }} />
+                <span style={{ color: "#93c5fd", fontSize: "13px", lineHeight: 1.5 }}>{CONTACT.hours.short}</span>
+              </div>
             </div>
 
-            {/* CTA Button */}
-            <Link to="/contact"
-              style={{ display: "inline-block", marginTop: "20px", background: "#fff", color: "#1d4ed8", padding: "10px 22px", borderRadius: "50px", fontWeight: 700, fontSize: "13px", textDecoration: "none" }}>
-              Get a Quote →
+            <Link to="/contact" className="btn btn-white" style={{ marginTop: "20px", padding: "10px 22px", fontSize: "13px" }}>
+              Get a Quote <FiArrowRight size={14} />
             </Link>
           </div>
 
         </div>
       </div>
 
-      {/* ── Bottom bar ── */}
-      <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", padding: "16px 0" }}>
-        <div className="page-wrap" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", paddingTop: "16px", paddingBottom: "16px" }}>
-          <p style={{ color: "#6b9fd4", fontSize: "12px", margin: 0 }}>
+      {/* Bottom bar */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "16px 0" }}>
+        <div className="page-wrap" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
+          <p style={{ color: "#64748b", fontSize: "12px", margin: 0 }}>
             © 2026 Unique Healthcare. All Rights Reserved.
           </p>
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             {legal.map((t) => (
-              <Link key={t.to} to={t.to} style={{ color: "#6b9fd4", fontSize: "12px", textDecoration: "none" }}>
+              <Link key={t.to} to={t.to} style={{ color: "#64748b", fontSize: "12px", textDecoration: "none" }}>
                 {t.label}
               </Link>
             ))}
