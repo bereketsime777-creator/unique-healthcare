@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
 import { categoryFilterUrl, getHomeCategoryBanners, normalizeCategory } from "../constants/categories";
+import NewsletterSignup from "../components/NewsletterSignup";
 
 const HERO_BG = "/images/hero1.jpg";
 const categories = getHomeCategoryBanners();
@@ -28,8 +29,6 @@ export default function Home() {
   const { addToCart } = useCart();
   const [products, setProducts]   = useState([]);
   const [addedId, setAddedId]     = useState(null);
-  const [email, setEmail]         = useState("");
-  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     API.get("/products").then((r) => setProducts(r.data.map((p) => ({
@@ -370,55 +369,7 @@ export default function Home() {
       ───────────────────────────────────── */}
       <section className="section-pad" style={{ background: "#fff" }}>
         <div className="page-wrap" style={{ maxWidth: "560px", textAlign: "center", margin: "0 auto" }}>
-          {subscribed ? (
-            <div>
-              <div style={{ fontSize: "48px", marginBottom: "16px" }}>✅</div>
-              <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "24px", margin: "0 0 8px" }}>You&apos;re subscribed!</h2>
-              <p style={{ color: "#64748b", fontSize: "14px" }}>We&apos;ll keep you updated on new products and offers.</p>
-            </div>
-          ) : (
-            <div>
-              <div style={{ fontSize: "44px", marginBottom: "16px" }}>📬</div>
-              <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "26px", margin: "0 0 10px" }}>
-                Subscribe for <span style={{ color: "#2563eb" }}>exclusive updates</span>
-              </h2>
-              <p style={{ color: "#64748b", fontSize: "14px", marginBottom: "28px" }}>
-                Be the first to know about new arrivals, special offers, and healthcare news.
-              </p>
-              <form
-                onSubmit={(e) => { e.preventDefault(); if (email.trim()) setSubscribed(true); }}
-                className="newsletter-form-inline"
-              >
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  required
-                  style={{
-                    flex: 1,
-                    border: "2px solid #e2e8f0",
-                    borderRadius: "50px",
-                    padding: "12px 20px",
-                    fontSize: "14px",
-                    outline: "none",
-                  }}
-                />
-                <button type="submit" style={{
-                  background: "#2563eb",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "50px",
-                  padding: "12px 24px",
-                  fontWeight: 700,
-                  fontSize: "14px",
-                  cursor: "pointer",
-                }}>
-                  Subscribe
-                </button>
-              </form>
-            </div>
-          )}
+          <NewsletterSignup variant="home" />
         </div>
       </section>
 

@@ -13,6 +13,7 @@ const orderRoutes = require("./routes/orderRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const newsletterRoutes = require("./routes/newsletterRoutes");
 
 
 const app = express();
@@ -79,6 +80,12 @@ app.use(
 app.use(
   "/api/messages",
   messageRoutes
+);
+
+// Newsletter
+app.use(
+  "/api/newsletter",
+  newsletterRoutes
 );
 
 

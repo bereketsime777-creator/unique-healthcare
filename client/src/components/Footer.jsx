@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getFooterShopLinks } from "../constants/categories";
 import { CONTACT } from "../constants/contact";
+import NewsletterSignup from "./NewsletterSignup";
 
 const shop = getFooterShopLinks();
 
@@ -24,10 +24,13 @@ const socials = [
   { label: "Telegram", icon: "✈", href: CONTACT.telegram.url },
 ];
 
-export default function Footer() {
-  const [email, setEmail]         = useState("");
-  const [subscribed, setSubscribed] = useState(false);
+const legal = [
+  { label: "Privacy Policy", to: "/privacy" },
+  { label: "Terms of Service", to: "/terms" },
+  { label: "Refund Policy", to: "/refund" },
+];
 
+export default function Footer() {
   const lnk = { color: "#93c5fd", fontSize: "13px", textDecoration: "none", lineHeight: "2" };
 
   return (
@@ -44,21 +47,7 @@ export default function Footer() {
               New arrivals, special offers, and healthcare news.
             </p>
           </div>
-          {subscribed ? (
-            <span style={{ color: "#4ade80", fontWeight: 700, fontSize: "14px" }}>✓ You&apos;re subscribed!</span>
-          ) : (
-            <form onSubmit={(e) => { e.preventDefault(); if (email.trim()) setSubscribed(true); }}
-              className="footer-newsletter-form">
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                style={{ background: "rgba(255,255,255,0.1)", border: "1.5px solid rgba(255,255,255,0.25)", color: "#fff", borderRadius: "50px", padding: "10px 20px", fontSize: "13px", outline: "none", fontFamily: "inherit", width: "220px" }} />
-              <button type="submit"
-                style={{ background: "#fff", color: "#1d4ed8", border: "none", borderRadius: "50px", padding: "10px 22px", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit" }}>
-                Subscribe
-              </button>
-            </form>
-          )}
+          <NewsletterSignup variant="footer" />
         </div>
       </div>
 
@@ -153,8 +142,10 @@ export default function Footer() {
             © 2026 Unique Healthcare. All Rights Reserved.
           </p>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            {["Privacy Policy", "Terms of Service", "Refund Policy"].map((t) => (
-              <span key={t} style={{ color: "#6b9fd4", fontSize: "12px", cursor: "pointer" }}>{t}</span>
+            {legal.map((t) => (
+              <Link key={t.to} to={t.to} style={{ color: "#6b9fd4", fontSize: "12px", textDecoration: "none" }}>
+                {t.label}
+              </Link>
             ))}
           </div>
         </div>
