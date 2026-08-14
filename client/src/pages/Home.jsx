@@ -6,7 +6,7 @@ import API from "../services/api";
 import { useCart } from "../context/CartContext";
 import { categoryFilterUrl, getHomeCategoryBanners, normalizeCategory } from "../constants/categories";
 
-const HERO_BG = "/images/hero1.jpg";
+const HERO_BG = "/images/hero1.png";
 const categories = getHomeCategoryBanners();
 
 const brands = ["Mindray", "Dräger", "Philips", "Siemens Healthineers", "EDAN", "Getinge", "GE Healthcare", "Stryker"];
