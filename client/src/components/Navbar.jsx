@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FiSearch, FiShoppingCart, FiMenu, FiX, FiPhone, FiMail, FiClock } from "react-icons/fi";
+import { FiSearch, FiShoppingCart, FiMenu, FiX } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { CONTACT } from "../constants/contact";
 
 const navLinks = [
   { label: "Home",       to: "/" },
@@ -58,34 +57,14 @@ export default function Navbar() {
         .navbar-auth-desktop { display: flex; align-items: center; gap: 8px; }
         .navbar-hamburger { display: none; }
         .navbar-mobile-panel { display: none; }
-        .top-bar-items { display: flex; align-items: center; gap: 24px; }
         @media (max-width: 900px) {
           .navbar-desktop-links { display: none !important; }
           .navbar-auth-desktop { display: none !important; }
           .navbar-hamburger { display: flex !important; }
           .navbar-mobile-panel { display: block !important; }
           .navbar-inner { padding: 0 16px !important; }
-          .top-bar-items { display: none !important; }
         }
       `}</style>
-
-      {/* Top contact bar */}
-      <div className="top-bar">
-        <div className="page-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 32px" }}>
-          <div className="top-bar-items">
-            <a href={`tel:${CONTACT.phones[0].tel}`} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <FiPhone size={13} /> {CONTACT.phones[0].display}
-            </a>
-            <a href={`mailto:${CONTACT.email}`} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <FiMail size={13} /> {CONTACT.email}
-            </a>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", marginLeft: "auto" }}>
-            <FiClock size={13} />
-            <span>{CONTACT.hours.short}</span>
-          </div>
-        </div>
-      </div>
 
       {/* Main nav */}
       <nav className="site-nav">
