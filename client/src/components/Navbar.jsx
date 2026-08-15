@@ -68,10 +68,10 @@ export default function Navbar() {
 
       {/* Main nav */}
       <nav className="site-nav">
-        <div className="navbar-inner page-wrap" style={{ height: "72px", display: "flex", alignItems: "center", gap: "24px" }}>
+        <div className="navbar-inner page-wrap" style={{ height: "80px", display: "flex", alignItems: "center", gap: "24px" }}>
 
           <Link to="/" onClick={closeMobile} style={{ textDecoration: "none", display: "flex", alignItems: "center", flexShrink: 0 }}>
-            <img src="/logo.png" alt="Unique Healthcare" style={{ height: "48px", width: "auto", display: "block" }} />
+            <img src="/logo.png" alt="Unique Healthcare" style={{ height: "60px", width: "auto", display: "block" }} />
           </Link>
 
           <div className="navbar-desktop-links">
