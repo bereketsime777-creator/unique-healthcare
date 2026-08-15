@@ -109,7 +109,7 @@ Keep the existing environment variables from your `.env` file
 - `client/.env.example` - Added production guidance
 
 ### Created:
-- `client/.env` - Local development configuration
+- `client/.env` - Local development configuration (not committed to Git)
 - `server/.gitignore` - Server file exclusions
 - `server/test-api-endpoints.js` - API testing script
 
