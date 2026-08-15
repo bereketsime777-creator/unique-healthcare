@@ -170,6 +170,50 @@ const resetPassword = async (req, res) => {
 };
 
 // ==============================
+// Change Password (for logged-in users)
+// ==============================
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Current password and new password are required." });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "New password must be at least 6 characters." });
+    }
+
+    // Get user from protect middleware (req.user is set by protect middleware)
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect." });
+    }
+
+    // Check if new password is same as current
+    if (currentPassword === newPassword) {
+      return res.status(400).json({ message: "New password must be different from current password." });
+    }
+
+    // Update password
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.json({ message: "Password changed successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong. Please try again." });
+  }
+};
+
+// ==============================
 // Verify Reset Token (check if valid before showing form)
 // ==============================
 const verifyResetToken = async (req, res) => {
@@ -194,4 +238,4 @@ const verifyResetToken = async (req, res) => {
   }
 };
 
-module.exports = { register, login, forgotPassword, resetPassword, verifyResetToken };
+module.exports = { register, login, forgotPassword, resetPassword, verifyResetToken, changePassword };

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Authentication - Unique Healthcare</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0f172a;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .data {
+            background: #f1f5f9;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        .success {
+            background: #22c55e;
+        }
+        .success:hover {
+            background: #16a34a;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .result.success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔧 Authentication Debug Tool</h1>
+        
+        <div class="info">
+            <strong>Current Stored Data:</strong>
+            <div class="data" id="currentData">Loading...</div>
+        </div>
+
+        <button onclick="clearAuth()">🗑️ Clear Authentication</button>
+        <button onclick="location.href='/'" class="success">🏠 Go to Home</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Show current data
+        function showCurrentData() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            let html = '';
+            
+            if (token) {
+                // Try to decode JWT (just the payload part)
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    html += '<strong>Token Role:</strong> ' + (payload.role || 'not specified') + '<br>';
+                    html += '<strong>Token User ID:</strong> ' + payload.id + '<br>';
+                    html += '<strong>Token Expires:</strong> ' + new Date(payload.exp * 1000).toLocaleString() + '<br><br>';
+                } catch (e) {
+                    html += '<strong>Token:</strong> Present but invalid<br><br>';
+                }
+            } else {
+                html += '<strong>Token:</strong> Not found<br><br>';
+            }
+            
+            if (user) {
+                try {
+                    const userData = JSON.parse(user);
+                    html += '<strong>User Data:</strong><br>';
+                    html += JSON.stringify(userData, null, 2);
+                } catch (e) {
+                    html += '<strong>User Data:</strong> Present but invalid';
+                }
+            } else {
+                html += '<strong>User Data:</strong> Not found';
+            }
+            
+            document.getElementById('currentData').innerHTML = html;
+        }
+
+        // Clear authentication
+        function clearAuth() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.clear();
+            
+            document.getElementById('result').innerHTML = 
+                '<div class="result success"><strong>✅ Authentication Cleared!</strong><br><br>You can now:<br>1. Close this page<br>2. Go to login page<br>3. Login with: admin@uniquehealthcare.com / Admin@123</div>';
+            
+            showCurrentData();
+        }
+
+        // Show data on load
+        showCurrentData();
+    </script>
+</body>
+</html>

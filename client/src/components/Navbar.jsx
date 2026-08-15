@@ -176,6 +176,10 @@ export default function Navbar() {
                             Admin Panel
                           </Link>
                         )}
+                        <Link to="/change-password" onClick={() => setDropOpen(false)}
+                          style={{ display: "block", padding: "11px 16px", fontSize: "13px", color: "#374151", textDecoration: "none", borderTop: "1px solid #f1f5f9" }}>
+                          Change Password
+                        </Link>
                         <div style={{ borderTop: "1px solid #f1f5f9" }}>
                           <button type="button" onClick={handleLogout}
                             style={{ width: "100%", textAlign: "left", padding: "11px 16px", fontSize: "13px", color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
@@ -260,6 +264,9 @@ export default function Navbar() {
                         Admin Panel
                       </Link>
                     )}
+                    <Link to="/change-password" onClick={closeMobile} className="nav-link" style={{ display: "block" }}>
+                      Change Password
+                    </Link>
                     <button type="button" onClick={handleLogout}
                       style={{ width: "100%", textAlign: "left", padding: "12px 16px", fontSize: "14px", color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
                       Logout
