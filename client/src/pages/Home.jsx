@@ -59,7 +59,7 @@ export default function Home() {
       {/* HERO - Modern Centered Design */}
       <section
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${HERO_BG})`,
+          backgroundImage: `url(${HERO_BG})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           minHeight: "90vh",
