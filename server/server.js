@@ -30,21 +30,23 @@ connectDB();
 // Middleware
 // ==============================
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://your-vercel-domain.vercel.app' // Replace with your actual Vercel domain
-];
+const allowedOrigins = new Set(
+  [
+    process.env.FRONTEND_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+  ].filter(Boolean)
+);
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    // Allow requests with no origin (Postman, curl, server-to-server)
+    if (!origin || allowedOrigins.has(origin)) {
+      return callback(null, true);
     }
+
+    console.warn(`CORS blocked origin: ${origin}`);
+    callback(null, false);
   },
   credentials: true
 }));

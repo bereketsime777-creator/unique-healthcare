@@ -18,7 +18,6 @@ const connectDB = async () => {
       {
         family: 4,
         serverSelectionTimeoutMS: 10000,
-        dbName: 'test' // Use test database as preferred
       }
     );
 

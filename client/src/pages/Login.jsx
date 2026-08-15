@@ -28,7 +28,11 @@ export default function Login() {
       login(res.data.token, res.data.user);
       navigate(res.data.user.role === "admin" ? "/admin" : "/");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed. Please try again.");
+      if (!err.response) {
+        setError("Cannot reach the server. Make sure the backend is running and try again.");
+      } else {
+        setError(err.response.data?.message || "Login failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }

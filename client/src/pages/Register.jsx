@@ -25,7 +25,11 @@ export default function Register() {
       });
       navigate("/login", { state: { message: "Account created successfully! Please sign in." } });
     } catch (err) {
-      setError(err.response?.data?.message || "Registration failed. Please try again.");
+      if (!err.response) {
+        setError("Cannot reach the server. Make sure the backend is running and try again.");
+      } else {
+        setError(err.response.data?.message || "Registration failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
