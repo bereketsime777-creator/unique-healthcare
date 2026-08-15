@@ -18,7 +18,7 @@ const connectDB = async () => {
       {
         family: 4,
         serverSelectionTimeoutMS: 10000,
-        dbName: 'unique-healthcare' // Force database name
+        dbName: 'test' // Use test database as preferred
       }
     );
 
