@@ -59,18 +59,6 @@ export default function ContactUs() {
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }}>
 
-      {/* Breadcrumb */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #f1f5f9", padding: "14px 0" }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 32px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#94a3b8", marginBottom: "4px" }}>
-            <Link to="/" style={{ color: "#2563eb", textDecoration: "none" }}>Home</Link>
-            <span>/</span>
-            <span style={{ color: "#0f172a" }}>Contact Us</span>
-          </div>
-          <h1 style={{ fontWeight: 800, fontSize: "22px", color: "#0f172a", margin: 0 }}>Contact Us</h1>
-        </div>
-      </div>
-
       {/* Hero */}
       <section style={{ background: "#1d4ed8", padding: "64px 0", textAlign: "center" }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>

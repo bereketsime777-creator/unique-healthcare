@@ -61,18 +61,6 @@ export default function AboutUs() {
   return (
     <div style={{ background: "#fff" }}>
 
-      {/* ── Breadcrumb ── */}
-      <div style={{ borderBottom: "1px solid #f1f5f9", padding: "14px 0" }}>
-        <div style={s.wrap}>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#94a3b8", marginBottom: "4px" }}>
-            <Link to="/" style={{ color: "#2563eb", textDecoration: "none" }}>Home</Link>
-            <span>/</span>
-            <span style={{ color: "#0f172a" }}>About Us</span>
-          </div>
-          <h1 style={{ fontWeight: 800, fontSize: "22px", color: "#0f172a", margin: 0 }}>About Us</h1>
-        </div>
-      </div>
-
       {/* ── Hero ── */}
       <section style={{ background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)", padding: "80px 0" }}>
         <div style={{ ...s.wrap, textAlign: "center", maxWidth: "800px" }}>

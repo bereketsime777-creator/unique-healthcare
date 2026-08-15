@@ -50,18 +50,6 @@ export default function Services() {
   return (
     <div style={s.page}>
 
-      {/* Breadcrumb */}
-      <div style={s.breadcrumb}>
-        <div style={s.breadWrap}>
-          <div style={s.crumbRow}>
-            <Link to="/" style={s.crumbLink}>Home</Link>
-            <span>/</span>
-            <span style={{ color: "#0f172a" }}>Services</span>
-          </div>
-          <h1 style={s.pageTitle}>Our Services</h1>
-        </div>
-      </div>
-
       {/* Hero */}
       <section style={s.hero}>
         <div style={s.heroWrap}>
