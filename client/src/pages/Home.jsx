@@ -94,11 +94,9 @@ export default function Home() {
             }}>
               Your Trusted Partner in<br />
               <span style={{
-                background: "linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                display: "inline-block"
+                color: "#1e40af",
+                display: "inline-block",
+                textShadow: "0 2px 4px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)"
               }}>Hospital Equipment</span>
             </h1>
 
