@@ -33,6 +33,21 @@ export default function Navbar() {
 
   const closeMobile = () => setMobileOpen(false);
 
+  const handleLogoClick = (e) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    closeMobile();
+  };
+
+  const handleHomeClick = (e) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate("/login");
@@ -70,13 +85,18 @@ export default function Navbar() {
       <nav className="site-nav">
         <div className="navbar-inner page-wrap" style={{ height: "80px", display: "flex", alignItems: "center", gap: "24px" }}>
 
-          <Link to="/" onClick={closeMobile} style={{ textDecoration: "none", display: "flex", alignItems: "center", flexShrink: 0 }}>
+          <Link to="/" onClick={handleLogoClick} style={{ textDecoration: "none", display: "flex", alignItems: "center", flexShrink: 0 }}>
             <img src="/logo.png" alt="Unique Healthcare" style={{ height: "60px", width: "auto", display: "block" }} />
           </Link>
 
           <div className="navbar-desktop-links">
             {navLinks.map((l) => (
-              <Link key={l.to} to={l.to} className={`nav-link${isActive(l.to) ? " active" : ""}`}>
+              <Link 
+                key={l.to} 
+                to={l.to} 
+                className={`nav-link${isActive(l.to) ? " active" : ""}`}
+                onClick={l.to === "/" ? handleHomeClick : undefined}
+              >
                 {l.label}
               </Link>
             ))}
@@ -209,7 +229,13 @@ export default function Navbar() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  onClick={closeMobile}
+                  onClick={(e) => {
+                    if (l.to === "/" && location.pathname === "/") {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                    closeMobile();
+                  }}
                   className={`nav-link${isActive(l.to) ? " active" : ""}`}
                   style={{ display: "block", marginBottom: "4px" }}
                 >
