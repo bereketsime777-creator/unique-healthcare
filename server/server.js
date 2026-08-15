@@ -35,6 +35,7 @@ const allowedOrigins = new Set(
     process.env.FRONTEND_URL,
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://localhost:5174", // Vite alternate port
   ].filter(Boolean)
 );
 
@@ -45,8 +46,9 @@ app.use(cors({
       return callback(null, true);
     }
 
-    console.warn(`CORS blocked origin: ${origin}`);
-    callback(null, false);
+    console.warn(`❌ CORS blocked origin: ${origin}`);
+    console.log(`✅ Allowed origins:`, Array.from(allowedOrigins));
+    callback(new Error('Not allowed by CORS'));
   },
   credentials: true
 }));
