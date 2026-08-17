@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Frontend Connection</title>
+</head>
+<body>
+    <h1>Testing Backend Connection</h1>
+    <button onclick="testConnection()">Test Registration</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testConnection() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = 'Testing...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User ' + Date.now(),
+                        email: `test${Date.now()}@example.com`,
+                        phone: '1234567890',
+                        password: 'test123456'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+                
+                if (response.ok) {
+                    resultDiv.textContent = '✅ SUCCESS!\n\n' + resultDiv.textContent;
+                } else {
+                    resultDiv.textContent = '❌ ERROR!\n\n' + resultDiv.textContent;
+                }
+            } catch (error) {
+                resultDiv.textContent = '❌ CONNECTION ERROR:\n\n' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
