@@ -32,6 +32,12 @@ function ProductCard({ product }) {
         Manufacturer: {product.manufacturer}
       </p>
 
+      {product.model && (
+        <p style={{ fontSize: "13px", color: "#64748b", marginTop: "4px" }}>
+          Models: {product.model}
+        </p>
+      )}
+
       <h4>
         ETB {product.price}
       </h4>

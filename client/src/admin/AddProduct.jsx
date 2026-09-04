@@ -44,7 +44,7 @@ const sectionTitleStyle = {
 function AddProduct() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    storekeepingId: "", name: "", category: "", manufacturer: "", price: "",
+    storekeepingId: "", name: "", category: "", manufacturer: "", model: "", price: "",
     stock: "", description: "", specifications: "",
   });
   const [image, setImage] = useState(null);
@@ -148,6 +148,15 @@ function AddProduct() {
                     <input type="text" name="manufacturer" value={formData.manufacturer}
                       onChange={handleChange} placeholder="e.g. Mindray"
                       style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Model</label>
+                    <input type="text" name="model" value={formData.model}
+                      onChange={handleChange} placeholder="e.g. Model A, Model B, Model C"
+                      style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                    <small style={{ color: "#64748b", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                      Available models/variants (comma-separated)
+                    </small>
                   </div>
                 </div>
                 <div className="responsive-grid-form-2">

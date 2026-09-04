@@ -56,6 +56,7 @@ const createProduct = async (req, res) => {
       name: req.body.name,
       category: normalizeCategory(req.body.category),
       manufacturer: req.body.manufacturer,
+      model: req.body.model,
       price: Number(req.body.price),
       stock: Number(req.body.stock),
       description: req.body.description,

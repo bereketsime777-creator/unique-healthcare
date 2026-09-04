@@ -108,6 +108,23 @@ function ProductDetails() {
                 By <span className="font-semibold text-gray-700">{product.manufacturer || "Unknown"}</span>
               </p>
 
+              {/* Model/Variants */}
+              {product.model && (
+                <div className="mb-4">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Available Models:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {product.model.split(',').map((model, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full border border-blue-200"
+                      >
+                        {model.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Stock */}
               <div className="flex items-center gap-2 mb-5">
                 {product.stock > 0 ? (

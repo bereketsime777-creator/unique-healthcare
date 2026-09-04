@@ -45,7 +45,7 @@ function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    storekeepingId: "", name: "", category: "", manufacturer: "", price: "",
+    storekeepingId: "", name: "", category: "", manufacturer: "", model: "", price: "",
     stock: "", description: "", specifications: "",
   });
   const [currentImage, setCurrentImage] = useState("");
@@ -61,7 +61,7 @@ function EditProduct() {
         const p = r.data;
         setForm({
           storekeepingId: p.storekeepingId || "", name: p.name || "", category: normalizeCategory(p.category) || "", manufacturer: p.manufacturer || "",
-          price: p.price || "", stock: p.stock || "",
+          model: p.model || "", price: p.price || "", stock: p.stock || "",
           description: p.description || "", specifications: p.specifications || "",
         });
         setCurrentImage(p.image || "");
@@ -192,6 +192,15 @@ function EditProduct() {
                     <input type="text" name="manufacturer" value={form.manufacturer}
                       onChange={handleChange}
                       style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Model</label>
+                    <input type="text" name="model" value={form.model}
+                      onChange={handleChange} placeholder="e.g. Model A, Model B, Model C"
+                      style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                    <small style={{ color: "#64748b", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                      Available models/variants
+                    </small>
                   </div>
                 </div>
                 <div className="responsive-grid-form-2">
