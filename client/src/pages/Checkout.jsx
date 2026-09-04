@@ -156,6 +156,7 @@ function Checkout() {
 
                   <button type="submit" disabled={loading}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-base transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                    style={{ color: '#ffffff' }}
                   >
                     {loading ? (
                       <><span className="animate-spin">↻</span> Redirecting to Chapa...</>

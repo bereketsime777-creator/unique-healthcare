@@ -137,6 +137,7 @@ function Cart() {
               <Link
                 to="/checkout"
                 className="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold text-center transition-colors mb-3"
+                style={{ color: '#ffffff' }}
               >
                 Proceed to Checkout
               </Link>
