@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Testimonials from "../components/Testimonials";
 
 const stats = [
   { value: "200+", label: "Healthcare Clients" },
@@ -257,6 +258,9 @@ export default function AboutUs() {
           </p>
         </div>
       </section>
+
+      {/* ── Testimonials ── */}
+      <Testimonials />
 
       {/* ── CTA ── */}
       <section style={{ background: "#1d4ed8", padding: "64px 0" }}>

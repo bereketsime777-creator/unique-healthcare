@@ -4,6 +4,7 @@ import API from "../services/api";
 import { useCart } from "../context/CartContext";
 import { categoryFilterUrl, getHomeCategoryBanners, normalizeCategory } from "../constants/categories";
 import NewsletterSignup from "../components/NewsletterSignup";
+import Testimonials from "../components/Testimonials";
 import "../styles/home-enhancements.css";
 
 const HERO_BG = "/images/hero1.png";
@@ -418,6 +419,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* TESTIMONIALS */}
+      <Testimonials limit={3} title="Trusted by Healthcare Professionals Across Ethiopia" />
 
       {/* NEWSLETTER */}
       <section className="section-pad" style={{ background: "#fff" }}>
