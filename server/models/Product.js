@@ -35,8 +35,17 @@ const productSchema = new mongoose.Schema(
 
     price: {
       type: Number,
-      required: true,
+      required: function() {
+        return this.priceType === 'fixed';
+      },
       min: 0,
+      default: 0,
+    },
+
+    priceType: {
+      type: String,
+      enum: ['fixed', 'quote'],
+      default: 'fixed',
     },
 
     stock: {

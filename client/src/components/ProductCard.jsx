@@ -38,9 +38,15 @@ function ProductCard({ product }) {
         </p>
       )}
 
-      <h4>
-        ETB {product.price}
-      </h4>
+      {product.priceType === 'quote' ? (
+        <h4 style={{ color: "#2563eb", fontWeight: "bold" }}>
+          Price on Request
+        </h4>
+      ) : (
+        <h4>
+          ETB {product.price}
+        </h4>
+      )}
 
     </div>
   );

@@ -147,13 +147,34 @@ function ProductDetails() {
 
               {/* Price */}
               <div className="mb-6">
-                <p className="text-3xl font-extrabold text-blue-600">
-                  ETB {product.price?.toLocaleString()}
-                </p>
+                {product.priceType === 'quote' ? (
+                  <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                    <p className="text-lg font-bold text-blue-900 mb-1">
+                      Price Available on Request
+                    </p>
+                    <p className="text-sm text-blue-700">
+                      Contact us for pricing and custom quotes
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-3xl font-extrabold text-blue-600">
+                    ETB {product.price?.toLocaleString()}
+                  </p>
+                )}
               </div>
 
-              {/* Quantity + Cart */}
-              {product.stock > 0 && (
+              {/* Quantity + Cart or Request Quote Button */}
+              {product.priceType === 'quote' ? (
+                <Link
+                  to="/contact"
+                  className="block w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-bold text-center transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Request a Quote
+                </Link>
+              ) : product.stock > 0 ? (
                 <div className="flex items-center gap-3 mb-6">
                   <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                     <button
@@ -202,7 +223,7 @@ function ProductDetails() {
                     </button>
                   )}
                 </div>
-              )}
+              ) : null}
 
               {/* Trust icons */}
               <div className="border-t border-gray-100 pt-5 grid grid-cols-2 gap-3">

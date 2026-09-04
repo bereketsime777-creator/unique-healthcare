@@ -256,9 +256,15 @@ function Products() {
                       <p className="text-xs text-gray-400 mb-2">{product.manufacturer}</p>
 
                       <div className="flex items-center justify-between mb-3">
-                        <p className="text-blue-600 font-extrabold text-base">
-                          ETB {product.price?.toLocaleString()}
-                        </p>
+                        {product.priceType === 'quote' ? (
+                          <p className="text-blue-600 font-bold text-sm">
+                            Price on Request
+                          </p>
+                        ) : (
+                          <p className="text-blue-600 font-extrabold text-base">
+                            ETB {product.price?.toLocaleString()}
+                          </p>
+                        )}
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
                           product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                         }`}>
@@ -273,19 +279,28 @@ function Products() {
                         >
                           Details
                         </Link>
-                        <button
-                          onClick={(e) => handleAddToCart(product, e)}
-                          disabled={product.stock === 0}
-                          className={`flex-1 py-1.5 rounded-full text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
-                            addedId === product._id
-                              ? "bg-green-500 text-white"
-                              : product.stock === 0
-                              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                              : "bg-blue-600 hover:bg-blue-700 text-white"
-                          }`}
-                        >
-                          {addedId === product._id ? "✓ Added" : "Add to Cart"}
-                        </button>
+                        {product.priceType === 'quote' ? (
+                          <Link
+                            to="/contact"
+                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
+                          >
+                            Request Quote
+                          </Link>
+                        ) : (
+                          <button
+                            onClick={(e) => handleAddToCart(product, e)}
+                            disabled={product.stock === 0}
+                            className={`flex-1 py-1.5 rounded-full text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
+                              addedId === product._id
+                                ? "bg-green-500 text-white"
+                                : product.stock === 0
+                                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                : "bg-blue-600 hover:bg-blue-700 text-white"
+                            }`}
+                          >
+                            {addedId === product._id ? "✓ Added" : "Add to Cart"}
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

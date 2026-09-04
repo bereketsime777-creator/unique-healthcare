@@ -46,7 +46,7 @@ function EditProduct() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     storekeepingId: "", name: "", category: "", manufacturer: "", model: "", price: "",
-    stock: "", description: "", specifications: "",
+    stock: "", description: "", specifications: "", priceType: "fixed",
   });
   const [currentImage, setCurrentImage] = useState("");
   const [image, setImage] = useState(null);
@@ -62,7 +62,7 @@ function EditProduct() {
         setForm({
           storekeepingId: p.storekeepingId || "", name: p.name || "", category: normalizeCategory(p.category) || "", manufacturer: p.manufacturer || "",
           model: p.model || "", price: p.price || "", stock: p.stock || "",
-          description: p.description || "", specifications: p.specifications || "",
+          description: p.description || "", specifications: p.specifications || "", priceType: p.priceType || "fixed",
         });
         setCurrentImage(p.image || "");
       })
@@ -205,11 +205,45 @@ function EditProduct() {
                 </div>
                 <div className="responsive-grid-form-2">
                   <div>
-                    <label style={labelStyle}>Price (ETB) *</label>
-                    <input type="number" name="price" value={form.price} onChange={handleChange}
-                      required min="0"
-                      style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                    <label style={labelStyle}>Price Type *</label>
+                    <select name="priceType" value={form.priceType} onChange={handleChange}
+                      required style={inputStyle} onFocus={focusInput} onBlur={blurInput}>
+                      <option value="fixed">Fixed Price</option>
+                      <option value="quote">Request a Quote</option>
+                    </select>
+                    <small style={{ color: "#64748b", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                      Choose how pricing is displayed
+                    </small>
                   </div>
+                  <div>
+                    <label style={labelStyle}>
+                      Price (ETB) {form.priceType === 'fixed' ? '*' : ''}
+                    </label>
+                    <input 
+                      type="number" 
+                      name="price" 
+                      value={form.price} 
+                      onChange={handleChange}
+                      required={form.priceType === 'fixed'}
+                      disabled={form.priceType === 'quote'}
+                      min="0"
+                      style={{
+                        ...inputStyle,
+                        background: form.priceType === 'quote' ? '#f1f5f9' : '#fff',
+                        cursor: form.priceType === 'quote' ? 'not-allowed' : 'text'
+                      }}
+                      onFocus={focusInput} 
+                      onBlur={blurInput} 
+                    />
+                    {form.priceType === 'quote' && (
+                      <small style={{ color: "#2563eb", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                        Clients will see "Request a Quote" button
+                      </small>
+                    )}
+                  </div>
+                </div>
+                <div className="responsive-grid-form-2">
+                  <div></div>
                   <div>
                     <label style={labelStyle}>Stock Quantity *</label>
                     <input type="number" name="stock" value={form.stock} onChange={handleChange}

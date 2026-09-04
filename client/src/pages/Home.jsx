@@ -499,28 +499,58 @@ function ProductCard({ product, onAdd, isAdded }) {
           <p style={{ color: "#94a3b8", fontSize: "12px", margin: "0 0 12px" }}>{product.manufacturer}</p>
         )}
 
-        <p style={{ color: "#2563eb", fontWeight: 800, fontSize: "18px", margin: "0 0 14px" }}>
-          ETB {product.price?.toLocaleString()}
-        </p>
+        {product.priceType === 'quote' ? (
+          <div style={{ marginBottom: "14px" }}>
+            <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "14px", margin: 0 }}>
+              Price on Request
+            </p>
+          </div>
+        ) : (
+          <p style={{ color: "#2563eb", fontWeight: 800, fontSize: "18px", margin: "0 0 14px" }}>
+            ETB {product.price?.toLocaleString()}
+          </p>
+        )}
 
-        <button
-          onClick={() => onAdd(product)}
-          disabled={product.stock === 0}
-          style={{
-            width: "100%",
-            padding: "11px",
-            borderRadius: "50px",
-            border: "none",
-            fontWeight: 700,
-            fontSize: "13px",
-            cursor: product.stock === 0 ? "not-allowed" : "pointer",
-            background: isAdded ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
-            color: product.stock === 0 ? "#94a3b8" : "#fff",
-            transition: "background 0.2s",
-          }}
-        >
-          {isAdded ? "✓  Added to Cart" : product.stock === 0 ? "Out of Stock" : "Add to Cart"}
-        </button>
+        {product.priceType === 'quote' ? (
+          <Link
+            to="/contact"
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "11px",
+              borderRadius: "50px",
+              border: "none",
+              fontWeight: 700,
+              fontSize: "13px",
+              textAlign: "center",
+              textDecoration: "none",
+              background: "#2563eb",
+              color: "#fff",
+              transition: "background 0.2s",
+            }}
+          >
+            Request a Quote
+          </Link>
+        ) : (
+          <button
+            onClick={() => onAdd(product)}
+            disabled={product.stock === 0}
+            style={{
+              width: "100%",
+              padding: "11px",
+              borderRadius: "50px",
+              border: "none",
+              fontWeight: 700,
+              fontSize: "13px",
+              cursor: product.stock === 0 ? "not-allowed" : "pointer",
+              background: isAdded ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
+              color: product.stock === 0 ? "#94a3b8" : "#fff",
+              transition: "background 0.2s",
+            }}
+          >
+            {isAdded ? "✓  Added to Cart" : product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+          </button>
+        )}
       </div>
     </div>
   );
