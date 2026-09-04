@@ -34,7 +34,7 @@ const legal = [
 ];
 
 export default function Footer() {
-  const lnk = { color: "#93c5fd", fontSize: "12px", textDecoration: "none", lineHeight: "2", transition: "color 0.15s" };
+  const lnk = { color: "#dbeafe", fontSize: "12px", textDecoration: "none", lineHeight: "2", transition: "color 0.15s" };
 
   return (
     <footer style={{ background: "linear-gradient(180deg, #0f172a 0%, #1e3a8a 100%)" }}>
@@ -46,7 +46,7 @@ export default function Footer() {
             <p style={{ color: "#fff", fontWeight: 700, fontSize: "15px", margin: "0 0 2px" }}>
               Subscribe for exclusive updates
             </p>
-            <p style={{ color: "#93c5fd", fontSize: "12px", margin: 0 }}>
+            <p style={{ color: "#dbeafe", fontSize: "12px", margin: 0 }}>
               New arrivals, special offers, and healthcare news.
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function Footer() {
 
           <div>
             <img src="/logo.png" alt="Unique Healthcare" style={{ height: "48px", width: "auto", display: "block", marginBottom: "14px", filter: "brightness(1.2)" }} />
-            <p style={{ color: "#93c5fd", fontSize: "12px", lineHeight: 1.7, margin: "0 0 16px", maxWidth: "260px" }}>
+            <p style={{ color: "#dbeafe", fontSize: "12px", lineHeight: 1.7, margin: "0 0 16px", maxWidth: "260px" }}>
               Ethiopia&apos;s trusted partner for premium medical equipment and healthcare supplies since 2014.
             </p>
             <div style={{ display: "flex", gap: "10px" }}>
@@ -108,21 +108,21 @@ export default function Footer() {
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
                 <FiMapPin size={14} style={{ color: "#60a5fa", flexShrink: 0, marginTop: "2px" }} />
-                <span style={{ color: "#93c5fd", fontSize: "12px", lineHeight: 1.5 }}>{CONTACT.address.short}</span>
+                <span style={{ color: "#dbeafe", fontSize: "12px", lineHeight: 1.5 }}>{CONTACT.address.short}</span>
               </div>
               {CONTACT.phones.map((p) => (
                 <div key={p.tel} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                   <FiPhone size={14} style={{ color: "#60a5fa", flexShrink: 0 }} />
-                  <a href={`tel:${p.tel}`} style={{ color: "#93c5fd", fontSize: "12px", textDecoration: "none" }}>{p.display}</a>
+                  <a href={`tel:${p.tel}`} style={{ color: "#dbeafe", fontSize: "12px", textDecoration: "none" }}>{p.display}</a>
                 </div>
               ))}
               <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                 <FiMail size={14} style={{ color: "#60a5fa", flexShrink: 0 }} />
-                <a href={`mailto:${CONTACT.email}`} style={{ color: "#93c5fd", fontSize: "12px", textDecoration: "none" }}>{CONTACT.email}</a>
+                <a href={`mailto:${CONTACT.email}`} style={{ color: "#dbeafe", fontSize: "12px", textDecoration: "none" }}>{CONTACT.email}</a>
               </div>
               <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
                 <FiClock size={14} style={{ color: "#60a5fa", flexShrink: 0, marginTop: "2px" }} />
-                <span style={{ color: "#93c5fd", fontSize: "12px", lineHeight: 1.5 }}>{CONTACT.hours.short}</span>
+                <span style={{ color: "#dbeafe", fontSize: "12px", lineHeight: 1.5 }}>{CONTACT.hours.short}</span>
               </div>
             </div>
 
@@ -137,12 +137,12 @@ export default function Footer() {
       {/* Bottom bar */}
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "14px 0" }}>
         <div className="page-wrap" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
-          <p style={{ color: "#64748b", fontSize: "12px", margin: 0 }}>
+          <p style={{ color: "#93c5fd", fontSize: "12px", margin: 0 }}>
             © 2026 Unique Healthcare. All Rights Reserved.
           </p>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             {legal.map((t) => (
-              <Link key={t.to} to={t.to} style={{ color: "#64748b", fontSize: "12px", textDecoration: "none" }}>
+              <Link key={t.to} to={t.to} style={{ color: "#93c5fd", fontSize: "12px", textDecoration: "none" }}>
                 {t.label}
               </Link>
             ))}
