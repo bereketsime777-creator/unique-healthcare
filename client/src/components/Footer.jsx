@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FiMapPin, FiPhone, FiMail, FiClock, FiArrowRight } from "react-icons/fi";
-import { FaTelegramPlane } from "react-icons/fa";
+import { FaTelegramPlane, FaWhatsapp } from "react-icons/fa";
 import { getFooterShopLinks } from "../constants/categories";
 import { CONTACT } from "../constants/contact";
 import NewsletterSignup from "./NewsletterSignup";
@@ -24,6 +24,7 @@ const account = [
 
 const socials = [
   { label: "Telegram", icon: FaTelegramPlane, href: CONTACT.telegram.url },
+  { label: "WhatsApp", icon: FaWhatsapp, href: `https://wa.me/${CONTACT.phones[0].tel.replace(/\+/g, '')}` },
 ];
 
 const legal = [

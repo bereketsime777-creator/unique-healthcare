@@ -6,8 +6,7 @@ export const CONTACT = {
     mapSubtitle: "Addis Ababa, Ethiopia",
   },
   phones: [
-    { display: "+251 924 137135", tel: "+251924137135" },
-    { display: "+251 934 405656", tel: "+251934405656" },
+    { display: "+251 92 413 7135", tel: "+251924137135" },
   ],
   email: "info@uniquehealthcare.et",
   telegram: {
