@@ -57,7 +57,8 @@ const createProduct = async (req, res) => {
       category: normalizeCategory(req.body.category),
       manufacturer: req.body.manufacturer,
       model: req.body.model,
-      price: Number(req.body.price),
+      price: req.body.priceType === 'quote' ? 0 : Number(req.body.price),
+      priceType: req.body.priceType || 'fixed',
       stock: Number(req.body.stock),
       description: req.body.description,
       specifications: req.body.specifications,
@@ -153,10 +154,15 @@ const updateProduct = async (req, res) => {
       product.category = normalizeCategory(req.body.category);
     }
     if (req.body.manufacturer !== undefined) product.manufacturer = req.body.manufacturer;
-    if (req.body.price !== undefined) product.price = Number(req.body.price);
+    if (req.body.model !== undefined) product.model = req.body.model;
+    if (req.body.priceType !== undefined) product.priceType = req.body.priceType;
+    if (req.body.price !== undefined) {
+      product.price = req.body.priceType === 'quote' ? 0 : Number(req.body.price);
+    }
     if (req.body.stock !== undefined) product.stock = Number(req.body.stock);
     if (req.body.description !== undefined) product.description = req.body.description;
     if (req.body.specifications !== undefined) product.specifications = req.body.specifications;
+    if (req.body.storekeepingId !== undefined) product.storekeepingId = req.body.storekeepingId;
 
     if (req.file) {
       const result = await new Promise((resolve, reject) => {
