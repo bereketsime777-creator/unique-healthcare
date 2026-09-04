@@ -525,7 +525,7 @@ function ProductCard({ product, onAdd, isAdded }) {
               textAlign: "center",
               textDecoration: "none",
               background: "#2563eb",
-              color: "#ffffff",
+              color: "#fff",
               transition: "background 0.2s",
             }}
           >

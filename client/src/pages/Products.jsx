@@ -282,7 +282,6 @@ function Products() {
                         {product.priceType === 'quote' ? (
                           <Link
                             to="/contact"
-                            style={{ color: '#ffffff' }}
                             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
                           >
                             Request Quote
