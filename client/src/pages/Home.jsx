@@ -148,7 +148,7 @@ export default function Home() {
                   display: "inline-block",
                 }}
               >
-                Request a Quote
+                Contact Us
               </Link>
             </div>
           </div>
@@ -414,7 +414,7 @@ export default function Home() {
               fontSize: "14px",
               textDecoration: "none",
             }}>
-              Get a Quote
+              Contact Us
             </Link>
           </div>
         </div>
