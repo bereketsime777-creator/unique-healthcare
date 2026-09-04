@@ -110,15 +110,20 @@ function ProductDetails() {
 
               {/* Model/Variants */}
               {product.model && (
-                <div className="mb-4">
-                  <p className="text-sm font-semibold text-gray-700 mb-2">Available Models:</p>
+                <div className="mb-5 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                  <p className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                    <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    Available Models / Variants:
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {product.model.split(',').map((model, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 bg-blue-50 text-blue-700 text-sm font-medium rounded-full border border-blue-200"
+                        className="px-4 py-2 bg-white text-blue-700 text-sm font-semibold rounded-lg border-2 border-blue-300 shadow-sm hover:shadow-md hover:border-blue-400 transition-all"
                       >
-                        {model.trim()}
+                        ✓ {model.trim()}
                       </span>
                     ))}
                   </div>
