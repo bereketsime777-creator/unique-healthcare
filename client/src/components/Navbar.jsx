@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { FiSearch, FiShoppingCart, FiMenu, FiX } from "react-icons/fi";
+import { FiSearch, FiShoppingCart, FiMenu, FiX, FiPackage } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -112,6 +112,12 @@ export default function Navbar() {
             >
               <FiSearch size={18} />
             </button>
+
+            {token && user && user.role !== "admin" && (
+              <Link to="/my-orders" onClick={closeMobile} className="nav-icon-btn" aria-label="My Orders" title="My Orders">
+                <FiPackage size={18} />
+              </Link>
+            )}
 
             <Link to="/cart" onClick={closeMobile} className="nav-icon-btn" aria-label="Cart" style={{ position: "relative" }}>
               <FiShoppingCart size={18} />
