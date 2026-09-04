@@ -45,7 +45,7 @@ function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    name: "", category: "", manufacturer: "", price: "",
+    storekeepingId: "", name: "", category: "", manufacturer: "", price: "",
     stock: "", description: "", specifications: "",
   });
   const [currentImage, setCurrentImage] = useState("");
@@ -60,7 +60,7 @@ function EditProduct() {
       .then((r) => {
         const p = r.data;
         setForm({
-          name: p.name || "", category: normalizeCategory(p.category) || "", manufacturer: p.manufacturer || "",
+          storekeepingId: p.storekeepingId || "", name: p.name || "", category: normalizeCategory(p.category) || "", manufacturer: p.manufacturer || "",
           price: p.price || "", stock: p.stock || "",
           description: p.description || "", specifications: p.specifications || "",
         });
@@ -164,6 +164,15 @@ function EditProduct() {
             <div style={cardStyle}>
               <p style={sectionTitleStyle}>Basic Information</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div>
+                  <label style={labelStyle}>Storekeeping ID</label>
+                  <input type="text" name="storekeepingId" value={form.storekeepingId} onChange={handleChange}
+                    placeholder="e.g. SKU-001"
+                    style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                  <small style={{ color: "#64748b", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                    Unique identifier for inventory management
+                  </small>
+                </div>
                 <div>
                   <label style={labelStyle}>Product Name *</label>
                   <input type="text" name="name" value={form.name} onChange={handleChange}

@@ -150,6 +150,7 @@ function ManageProducts() {
           <table style={{ width: "100%", fontSize: "14px", borderCollapse: "collapse", minWidth: "640px" }}>
             <thead style={{ background: "#f8fafc", borderBottom: "1px solid #f1f5f9" }}>
               <tr>
+                <th style={thStyle}>SKU</th>
                 <th style={thStyle}>Product</th>
                 <th style={thStyle}>Category</th>
                 <th style={thStyle}>Price</th>
@@ -164,6 +165,19 @@ function ManageProducts() {
                   onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"}
                   onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                 >
+                  <td style={{ padding: "14px 20px" }}>
+                    <span style={{
+                      fontFamily: "monospace",
+                      fontSize: "12px",
+                      color: "#64748b",
+                      background: "#f8fafc",
+                      padding: "4px 8px",
+                      borderRadius: "6px",
+                      border: "1px solid #e2e8f0",
+                    }}>
+                      {product.storekeepingId || "N/A"}
+                    </span>
+                  </td>
                   <td style={{ padding: "14px 20px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                       <div style={{

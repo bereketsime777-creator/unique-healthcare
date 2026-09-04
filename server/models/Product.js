@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema(
   {
+    storekeepingId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+    },
+
     name: {
       type: String,
       required: true,

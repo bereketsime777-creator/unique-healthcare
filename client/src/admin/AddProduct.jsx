@@ -44,7 +44,7 @@ const sectionTitleStyle = {
 function AddProduct() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "", category: "", manufacturer: "", price: "",
+    storekeepingId: "", name: "", category: "", manufacturer: "", price: "",
     stock: "", description: "", specifications: "",
   });
   const [image, setImage] = useState(null);
@@ -119,6 +119,15 @@ function AddProduct() {
             <div style={cardStyle}>
               <p style={sectionTitleStyle}>Basic Information</p>
               <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div>
+                  <label style={labelStyle}>Storekeeping ID</label>
+                  <input type="text" name="storekeepingId" value={formData.storekeepingId} onChange={handleChange}
+                    placeholder="e.g. SKU-001 (optional - auto-generated if empty)"
+                    style={inputStyle} onFocus={focusInput} onBlur={blurInput} />
+                  <small style={{ color: "#64748b", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                    Leave empty to auto-generate (e.g., UHC-2026-001)
+                  </small>
+                </div>
                 <div>
                   <label style={labelStyle}>Product Name *</label>
                   <input type="text" name="name" value={formData.name} onChange={handleChange}

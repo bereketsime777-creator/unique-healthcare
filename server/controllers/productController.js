@@ -5,6 +5,24 @@ const { getCategoryFilterValues, normalizeCategory } = require("../utils/categor
 
 
 // ==============================
+// Generate Storekeeping ID
+// ==============================
+const generateStorekeepingId = async () => {
+  const year = new Date().getFullYear();
+  const latestProduct = await Product.findOne({ storekeepingId: { $regex: `^UHC-${year}-` } })
+    .sort({ storekeepingId: -1 })
+    .select('storekeepingId');
+  
+  if (latestProduct && latestProduct.storekeepingId) {
+    const lastNumber = parseInt(latestProduct.storekeepingId.split('-')[2]);
+    const nextNumber = (lastNumber + 1).toString().padStart(3, '0');
+    return `UHC-${year}-${nextNumber}`;
+  }
+  
+  return `UHC-${year}-001`;
+};
+
+// ==============================
 // Create Product (Admin)
 // ==============================
 
@@ -27,7 +45,14 @@ const createProduct = async (req, res) => {
       imageUrl = result.secure_url;
     }
 
+    // Auto-generate storekeeping ID if not provided
+    let storekeepingId = req.body.storekeepingId?.trim();
+    if (!storekeepingId) {
+      storekeepingId = await generateStorekeepingId();
+    }
+
     const product = await Product.create({
+      storekeepingId,
       name: req.body.name,
       category: normalizeCategory(req.body.category),
       manufacturer: req.body.manufacturer,
