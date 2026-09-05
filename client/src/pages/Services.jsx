@@ -51,7 +51,12 @@ export default function Services() {
     <div style={s.page}>
 
       {/* Hero */}
-      <section style={s.hero}>
+      <section style={{
+        ...s.hero,
+        backgroundImage: 'url(/images/hero1.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
         <div style={s.heroWrap}>
           <span style={s.heroTag}>End-to-End Healthcare Solutions</span>
           <h2 style={s.heroH2}>More Than Just Equipment Supply</h2>

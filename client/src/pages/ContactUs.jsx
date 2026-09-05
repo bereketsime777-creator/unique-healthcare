@@ -60,7 +60,14 @@ export default function ContactUs() {
     <div style={{ background: "#fff", minHeight: "100vh" }}>
 
       {/* Hero */}
-      <section style={{ background: "#1d4ed8", padding: "64px 0", textAlign: "center" }}>
+      <section style={{
+        background: "#1d4ed8",
+        backgroundImage: 'url(/images/hero1.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        padding: "64px 0",
+        textAlign: "center"
+      }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
           <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "clamp(28px, 5vw, 42px)", margin: "0 0 14px" }}>Get In Touch</h2>
           <p style={{ color: "#bfdbfe", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>

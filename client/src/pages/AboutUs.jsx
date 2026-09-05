@@ -63,7 +63,13 @@ export default function AboutUs() {
     <div style={{ background: "#fff" }}>
 
       {/* ── Hero ── */}
-      <section style={{ background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)", padding: "80px 0" }}>
+      <section style={{
+        background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)",
+        backgroundImage: 'url(/images/hero1.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        padding: "80px 0"
+      }}>
         <div style={{ ...s.wrap, textAlign: "center", maxWidth: "800px" }}>
           <span style={{ ...s.tag, color: "#bfdbfe" }}>About Unique Healthcare PLC</span>
           <h2 style={{ ...s.h2, color: "#fff", fontSize: "38px" }}>
