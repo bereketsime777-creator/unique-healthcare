@@ -81,25 +81,111 @@ function Products() {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Page Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
-            <Link to="/" className="hover:text-blue-600">Home</Link>
-            <span>/</span>
-            <span className="text-gray-800">Products</span>
+      <style>{`
+        @keyframes scroll-indicator {
+          0% { opacity: 1; transform: translate(-50%, 0); }
+          100% { opacity: 0; transform: translate(-50%, 20px); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
+
+      {/* Hero Section */}
+      <section
+        className="hero-section"
+        style={{
+          background: "#1d4ed8",
+          backgroundImage: 'url(/images/hero1.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          padding: "64px 0",
+          textAlign: "center",
+          position: "relative",
+          minHeight: "50vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 32px" }}>
+          <div className="hero-content">
+            <p style={{ 
+              color: "#fff", 
+              fontWeight: 700, 
+              fontSize: "14px", 
+              letterSpacing: "4px", 
+              textTransform: "uppercase", 
+              marginBottom: "20px",
+              opacity: 0.9
+            }}>
+              Browse Our Complete Catalog
+            </p>
+            <h1 style={{ 
+              color: "#ffffff", 
+              fontWeight: 900, 
+              fontSize: "clamp(32px, 5vw, 48px)", 
+              margin: "0 0 16px",
+              lineHeight: 1.2,
+              textShadow: "0 4px 20px rgba(0,0,0,0.3)"
+            }}>
+              {categoryQuery || "Premium Medical Equipment"}
+            </h1>
+            <p style={{ 
+              color: "#ffffff", 
+              fontSize: "16px", 
+              lineHeight: 1.7, 
+              margin: "0 auto 24px",
+              maxWidth: "650px",
+              opacity: 0.95,
+              textShadow: "0 2px 8px rgba(0,0,0,0.2)"
+            }}>
+              {categoryQuery 
+                ? `Explore our range of ${categoryQuery.toLowerCase()} products from leading manufacturers`
+                : "500+ certified medical devices from globally recognized brands"}
+            </p>
             {categoryQuery && (
-              <>
+              <div className="flex items-center gap-2 justify-center text-sm" style={{ color: "#ffffff", opacity: 0.9 }}>
+                <Link to="/" style={{ color: "#ffffff", textDecoration: "none" }}>Home</Link>
                 <span>/</span>
-                <span className="text-blue-600">{categoryQuery}</span>
-              </>
+                <Link to="/products" style={{ color: "#ffffff", textDecoration: "none" }}>Products</Link>
+                <span>/</span>
+                <span style={{ fontWeight: 600 }}>{categoryQuery}</span>
+              </div>
             )}
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {categoryQuery || "All Healthcare Products"}
-          </h1>
         </div>
-      </div>
+
+        {/* Scroll Indicator */}
+        <div style={{
+          position: "absolute",
+          bottom: "30px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          animation: "float 2s ease-in-out infinite"
+        }}>
+          <div style={{
+            width: "30px",
+            height: "50px",
+            border: "2px solid rgba(255,255,255,0.5)",
+            borderRadius: "25px",
+            position: "relative"
+          }}>
+            <div style={{
+              width: "6px",
+              height: "10px",
+              background: "rgba(255,255,255,0.8)",
+              borderRadius: "3px",
+              position: "absolute",
+              top: "8px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              animation: "scroll-indicator 1.5s infinite"
+            }}></div>
+          </div>
+        </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Search Bar */}
