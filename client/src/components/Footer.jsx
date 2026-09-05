@@ -147,12 +147,12 @@ export default function Footer() {
       {/* Bottom bar */}
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "14px 0" }}>
         <div className="page-wrap" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
-          <p style={{ color: "#93c5fd", fontSize: "12px", margin: 0 }}>
+          <p style={{ color: "#ffffff", fontSize: "12px", margin: 0 }}>
             © 2026 Unique Healthcare. All Rights Reserved.
           </p>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             {legal.map((t) => (
-              <Link key={t.to} to={t.to} style={{ color: "#93c5fd", fontSize: "12px", textDecoration: "none" }}>
+              <Link key={t.to} to={t.to} style={{ color: "#ffffff", fontSize: "12px", textDecoration: "none" }}>
                 {t.label}
               </Link>
             ))}
