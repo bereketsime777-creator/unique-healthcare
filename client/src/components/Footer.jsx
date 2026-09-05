@@ -59,7 +59,17 @@ export default function Footer() {
         <div className="footer-grid">
 
           <div>
-            <img src="/logo.png" alt="Unique Healthcare" style={{ height: "48px", width: "auto", display: "block", marginBottom: "14px", filter: "brightness(1.2)" }} />
+            <img src="/logo.png" alt="Unique Healthcare" style={{ 
+              height: "48px", 
+              width: "auto", 
+              display: "block", 
+              marginBottom: "14px", 
+              filter: "brightness(1.2)", 
+              borderRadius: "8px",
+              padding: "8px",
+              background: "rgba(255, 255, 255, 0.1)",
+              border: "1px solid rgba(255, 255, 255, 0.15)"
+            }} />
             <p style={{ color: "#dbeafe", fontSize: "12px", lineHeight: 1.7, margin: "0 0 16px", maxWidth: "260px" }}>
               Ethiopia&apos;s trusted partner for premium medical equipment and healthcare supplies since 2014.
             </p>
