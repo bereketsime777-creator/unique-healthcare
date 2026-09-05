@@ -65,6 +65,9 @@ export default function Register() {
       {/* ── Left branding panel ── */}
       <div className="auth-brand-panel" style={{
         background: "linear-gradient(145deg, #1e3a8a 0%, #2563eb 60%, #1d4ed8 100%)",
+        backgroundImage: 'url(/images/hero1.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
