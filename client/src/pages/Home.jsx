@@ -513,7 +513,7 @@ function ProductCard({ product, onAdd, isAdded }) {
 
         {product.priceType === 'quote' ? (
           <Link
-            to="/contact"
+            to="/contact?subject=Request a Quote"
             style={{
               display: "block",
               width: "100%",

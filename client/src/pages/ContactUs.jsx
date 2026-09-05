@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/api";
 import { CONTACT } from "../constants/contact";
 
@@ -19,10 +19,19 @@ const trust = [
 ];
 
 export default function ContactUs() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [searchParams] = useSearchParams();
+  const subjectParam = searchParams.get("subject") || "";
+  
+  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: subjectParam, message: "" });
   const [loading, setLoading]     = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError]         = useState("");
+
+  useEffect(() => {
+    if (subjectParam) {
+      setForm(prev => ({ ...prev, subject: subjectParam }));
+    }
+  }, [subjectParam]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });

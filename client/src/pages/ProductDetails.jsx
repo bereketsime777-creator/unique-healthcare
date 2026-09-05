@@ -166,7 +166,7 @@ function ProductDetails() {
               {/* Quantity + Cart or Request Quote Button */}
               {product.priceType === 'quote' ? (
                 <Link
-                  to="/contact"
+                  to="/contact?subject=Request a Quote"
                   className="block w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-bold text-center transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                   style={{ color: '#ffffff' }}
                 >
