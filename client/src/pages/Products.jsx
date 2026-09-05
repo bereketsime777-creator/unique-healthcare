@@ -100,10 +100,10 @@ function Products() {
           backgroundImage: 'url(/images/hero1.png)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          padding: "64px 0",
+          padding: "40px 0 50px",
           textAlign: "center",
           position: "relative",
-          minHeight: "50vh",
+          minHeight: "35vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center"
@@ -114,10 +114,10 @@ function Products() {
             <p style={{ 
               color: "#fff", 
               fontWeight: 700, 
-              fontSize: "14px", 
-              letterSpacing: "4px", 
+              fontSize: "12px", 
+              letterSpacing: "3px", 
               textTransform: "uppercase", 
-              marginBottom: "20px",
+              marginBottom: "14px",
               opacity: 0.9
             }}>
               Browse Our Complete Catalog
@@ -125,8 +125,8 @@ function Products() {
             <h1 style={{ 
               color: "#ffffff", 
               fontWeight: 900, 
-              fontSize: "clamp(32px, 5vw, 48px)", 
-              margin: "0 0 16px",
+              fontSize: "clamp(28px, 4.5vw, 40px)", 
+              margin: "0 0 12px",
               lineHeight: 1.2,
               textShadow: "0 4px 20px rgba(0,0,0,0.3)"
             }}>
@@ -134,9 +134,9 @@ function Products() {
             </h1>
             <p style={{ 
               color: "#ffffff", 
-              fontSize: "16px", 
-              lineHeight: 1.7, 
-              margin: "0 auto 24px",
+              fontSize: "15px", 
+              lineHeight: 1.6, 
+              margin: "0 auto 18px",
               maxWidth: "650px",
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
@@ -160,25 +160,25 @@ function Products() {
         {/* Scroll Indicator */}
         <div style={{
           position: "absolute",
-          bottom: "30px",
+          bottom: "20px",
           left: "50%",
           transform: "translateX(-50%)",
           animation: "float 2s ease-in-out infinite"
         }}>
           <div style={{
-            width: "30px",
-            height: "50px",
+            width: "26px",
+            height: "42px",
             border: "2px solid rgba(255,255,255,0.5)",
-            borderRadius: "25px",
+            borderRadius: "20px",
             position: "relative"
           }}>
             <div style={{
-              width: "6px",
-              height: "10px",
+              width: "5px",
+              height: "8px",
               background: "rgba(255,255,255,0.8)",
               borderRadius: "3px",
               position: "absolute",
-              top: "8px",
+              top: "6px",
               left: "50%",
               transform: "translateX(-50%)",
               animation: "scroll-indicator 1.5s infinite"
