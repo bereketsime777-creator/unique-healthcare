@@ -80,9 +80,9 @@ export default function AboutUs() {
         backgroundImage: 'url(/images/hero1.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: "80px 0",
+        padding: "40px 0 50px",
         position: "relative",
-        minHeight: "70vh",
+        minHeight: "35vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
@@ -92,10 +92,10 @@ export default function AboutUs() {
             <p style={{ 
               color: "#fff", 
               fontWeight: 700, 
-              fontSize: "14px", 
-              letterSpacing: "4px", 
+              fontSize: "12px", 
+              letterSpacing: "3px", 
               textTransform: "uppercase", 
-              marginBottom: "24px",
+              marginBottom: "14px",
               opacity: 0.9
             }}>
               Your Trusted Healthcare Partner
@@ -103,16 +103,17 @@ export default function AboutUs() {
             <h2 style={{ 
               ...s.h2, 
               color: "#ffffff", 
-              fontSize: "38px",
-              textShadow: "0 4px 20px rgba(0,0,0,0.3)"
+              fontSize: "clamp(28px, 4.5vw, 40px)",
+              textShadow: "0 4px 20px rgba(0,0,0,0.3)",
+              margin: "0 0 12px"
             }}>
               Advancing Healthcare Across Ethiopia
             </h2>
             <p style={{ 
               color: "#ffffff", 
-              fontSize: "16px", 
-              lineHeight: 1.8, 
-              margin: "0 auto",
+              fontSize: "15px", 
+              lineHeight: 1.6, 
+              margin: "0 auto 18px",
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
@@ -126,25 +127,25 @@ export default function AboutUs() {
         {/* Scroll Indicator */}
         <div style={{
           position: "absolute",
-          bottom: "40px",
+          bottom: "20px",
           left: "50%",
           transform: "translateX(-50%)",
           animation: "float 2s ease-in-out infinite"
         }}>
           <div style={{
-            width: "30px",
-            height: "50px",
+            width: "26px",
+            height: "42px",
             border: "2px solid rgba(255,255,255,0.5)",
-            borderRadius: "25px",
+            borderRadius: "20px",
             position: "relative"
           }}>
             <div style={{
-              width: "6px",
-              height: "10px",
+              width: "5px",
+              height: "8px",
               background: "rgba(255,255,255,0.8)",
               borderRadius: "3px",
               position: "absolute",
-              top: "8px",
+              top: "6px",
               left: "50%",
               transform: "translateX(-50%)",
               animation: "scroll-indicator 1.5s infinite"

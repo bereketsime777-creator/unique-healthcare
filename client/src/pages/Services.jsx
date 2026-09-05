@@ -69,16 +69,17 @@ export default function Services() {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: "relative",
-        minHeight: "70vh",
+        minHeight: "35vh",
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        padding: "40px 0 50px"
       }}>
         <div style={s.heroWrap}>
           <div className="hero-content">
-            <span style={s.heroTag}>End-to-End Healthcare Solutions</span>
-            <h2 style={s.heroH2}>More Than Just Equipment Supply</h2>
-            <p style={s.heroP}>
+            <span style={{ ...s.heroTag, fontSize: "12px", letterSpacing: "3px", marginBottom: "14px" }}>End-to-End Healthcare Solutions</span>
+            <h2 style={{ ...s.heroH2, fontSize: "clamp(28px, 4.5vw, 40px)", margin: "0 0 12px" }}>More Than Just Equipment Supply</h2>
+            <p style={{ ...s.heroP, fontSize: "15px", lineHeight: 1.6, margin: "0 auto 18px" }}>
               From consultation and procurement to installation, training, and long-term maintenance —
               we support your facility at every step.
             </p>
@@ -92,25 +93,25 @@ export default function Services() {
         {/* Scroll Indicator */}
         <div style={{
           position: "absolute",
-          bottom: "40px",
+          bottom: "20px",
           left: "50%",
           transform: "translateX(-50%)",
           animation: "float 2s ease-in-out infinite"
         }}>
           <div style={{
-            width: "30px",
-            height: "50px",
+            width: "26px",
+            height: "42px",
             border: "2px solid rgba(255,255,255,0.5)",
-            borderRadius: "25px",
+            borderRadius: "20px",
             position: "relative"
           }}>
             <div style={{
-              width: "6px",
-              height: "10px",
+              width: "5px",
+              height: "8px",
               background: "rgba(255,255,255,0.8)",
               borderRadius: "3px",
               position: "absolute",
-              top: "8px",
+              top: "6px",
               left: "50%",
               transform: "translateX(-50%)",
               animation: "scroll-indicator 1.5s infinite"
