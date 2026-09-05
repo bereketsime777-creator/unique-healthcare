@@ -58,22 +58,94 @@ export default function ContactUs() {
 
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }}>
+      <style>{`
+        @keyframes scroll-indicator {
+          0% { opacity: 1; transform: translate(-50%, 0); }
+          100% { opacity: 0; transform: translate(-50%, 20px); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
 
       {/* Hero */}
-      <section style={{
+      <section 
+        className="hero-section"
+        style={{
         background: "#1d4ed8",
         backgroundImage: 'url(/images/hero1.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         padding: "64px 0",
-        textAlign: "center"
+        textAlign: "center",
+        position: "relative",
+        minHeight: "70vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
       }}>
         <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
-          <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "clamp(28px, 5vw, 42px)", margin: "0 0 14px" }}>Get In Touch</h2>
-          <p style={{ color: "#bfdbfe", fontSize: "16px", lineHeight: 1.7, margin: 0 }}>
-            Have a question about a product, need a bulk quote, or want technical support?
-            Our team is ready to help.
-          </p>
+          <div className="hero-content">
+            <p style={{ 
+              color: "#fff", 
+              fontWeight: 700, 
+              fontSize: "14px", 
+              letterSpacing: "4px", 
+              textTransform: "uppercase", 
+              marginBottom: "24px",
+              opacity: 0.9
+            }}>
+              We're Here to Help
+            </p>
+            <h2 style={{ 
+              color: "#ffffff", 
+              fontWeight: 900, 
+              fontSize: "clamp(28px, 5vw, 42px)", 
+              margin: "0 0 14px",
+              textShadow: "0 4px 20px rgba(0,0,0,0.3)"
+            }}>Get In Touch</h2>
+            <p style={{ 
+              color: "#ffffff", 
+              fontSize: "16px", 
+              lineHeight: 1.7, 
+              margin: 0,
+              opacity: 0.95,
+              textShadow: "0 2px 8px rgba(0,0,0,0.2)"
+            }}>
+              Have a question about a product, need a bulk quote, or want technical support?
+              Our team is ready to help.
+            </p>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div style={{
+          position: "absolute",
+          bottom: "40px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          animation: "float 2s ease-in-out infinite"
+        }}>
+          <div style={{
+            width: "30px",
+            height: "50px",
+            border: "2px solid rgba(255,255,255,0.5)",
+            borderRadius: "25px",
+            position: "relative"
+          }}>
+            <div style={{
+              width: "6px",
+              height: "10px",
+              background: "rgba(255,255,255,0.8)",
+              borderRadius: "3px",
+              position: "absolute",
+              top: "8px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              animation: "scroll-indicator 1.5s infinite"
+            }}></div>
+          </div>
         </div>
       </section>
 

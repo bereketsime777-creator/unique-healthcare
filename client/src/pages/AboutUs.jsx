@@ -61,25 +61,95 @@ export default function AboutUs() {
 
   return (
     <div style={{ background: "#fff" }}>
+      <style>{`
+        @keyframes scroll-indicator {
+          0% { opacity: 1; transform: translate(-50%, 0); }
+          100% { opacity: 0; transform: translate(-50%, 20px); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
 
       {/* ── Hero ── */}
-      <section style={{
+      <section 
+        className="hero-section"
+        style={{
         background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)",
         backgroundImage: 'url(/images/hero1.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        padding: "80px 0"
+        padding: "80px 0",
+        position: "relative",
+        minHeight: "70vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
       }}>
         <div style={{ ...s.wrap, textAlign: "center", maxWidth: "800px" }}>
-          <span style={{ ...s.tag, color: "#bfdbfe" }}>About Unique Healthcare PLC</span>
-          <h2 style={{ ...s.h2, color: "#fff", fontSize: "38px" }}>
-            Advancing Healthcare Across Ethiopia
-          </h2>
-          <p style={{ color: "#bfdbfe", fontSize: "16px", lineHeight: 1.8, margin: "0 auto" }}>
-            Unique Healthcare PLC is a leading wholesale medical device distribution company committed
-            to supporting healthcare providers across Ethiopia with reliable, high-quality medical
-            equipment and healthcare solutions.
-          </p>
+          <div className="hero-content">
+            <p style={{ 
+              color: "#fff", 
+              fontWeight: 700, 
+              fontSize: "14px", 
+              letterSpacing: "4px", 
+              textTransform: "uppercase", 
+              marginBottom: "24px",
+              opacity: 0.9
+            }}>
+              Your Trusted Healthcare Partner
+            </p>
+            <h2 style={{ 
+              ...s.h2, 
+              color: "#ffffff", 
+              fontSize: "38px",
+              textShadow: "0 4px 20px rgba(0,0,0,0.3)"
+            }}>
+              Advancing Healthcare Across Ethiopia
+            </h2>
+            <p style={{ 
+              color: "#ffffff", 
+              fontSize: "16px", 
+              lineHeight: 1.8, 
+              margin: "0 auto",
+              opacity: 0.95,
+              textShadow: "0 2px 8px rgba(0,0,0,0.2)"
+            }}>
+              Unique Healthcare PLC is a leading wholesale medical device distribution company committed
+              to supporting healthcare providers across Ethiopia with reliable, high-quality medical
+              equipment and healthcare solutions.
+            </p>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div style={{
+          position: "absolute",
+          bottom: "40px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          animation: "float 2s ease-in-out infinite"
+        }}>
+          <div style={{
+            width: "30px",
+            height: "50px",
+            border: "2px solid rgba(255,255,255,0.5)",
+            borderRadius: "25px",
+            position: "relative"
+          }}>
+            <div style={{
+              width: "6px",
+              height: "10px",
+              background: "rgba(255,255,255,0.8)",
+              borderRadius: "3px",
+              position: "absolute",
+              top: "8px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              animation: "scroll-indicator 1.5s infinite"
+            }}></div>
+          </div>
         </div>
       </section>
 

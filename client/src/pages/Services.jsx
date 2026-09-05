@@ -30,9 +30,9 @@ const s = {
   pageTitle: { fontWeight: 800, fontSize: "22px", color: "#0f172a", margin: 0 },
   hero:      { background: "#1d4ed8", padding: "72px 0", textAlign: "center" },
   heroWrap:  { maxWidth: "900px", margin: "0 auto", padding: "0 32px" },
-  heroTag:   { color: "#bfdbfe", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px", display: "block" },
-  heroH2:    { color: "#fff", fontWeight: 900, fontSize: "clamp(28px, 5vw, 42px)", lineHeight: 1.2, margin: "0 0 16px" },
-  heroP:     { color: "#bfdbfe", fontSize: "16px", lineHeight: 1.7, margin: "0 auto 32px", maxWidth: "600px" },
+  heroTag:   { color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "16px", display: "block", opacity: 0.9 },
+  heroH2:    { color: "#ffffff", fontWeight: 900, fontSize: "clamp(28px, 5vw, 42px)", lineHeight: 1.2, margin: "0 0 16px", textShadow: "0 4px 20px rgba(0,0,0,0.3)" },
+  heroP:     { color: "#ffffff", fontSize: "16px", lineHeight: 1.7, margin: "0 auto 32px", maxWidth: "600px", opacity: 0.95, textShadow: "0 2px 8px rgba(0,0,0,0.2)" },
   btnRow:    { display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" },
   btnWhite:  { background: "#fff", color: "#2563eb", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" },
   btnOutline:{ border: "2px solid rgba(255,255,255,0.6)", color: "#fff", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" },
@@ -49,24 +49,72 @@ const s = {
 export default function Services() {
   return (
     <div style={s.page}>
+      <style>{`
+        @keyframes scroll-indicator {
+          0% { opacity: 1; transform: translate(-50%, 0); }
+          100% { opacity: 0; transform: translate(-50%, 20px); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
 
       {/* Hero */}
-      <section style={{
+      <section 
+        className="hero-section"
+        style={{
         ...s.hero,
         backgroundImage: 'url(/images/hero1.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        position: "relative",
+        minHeight: "70vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
       }}>
         <div style={s.heroWrap}>
-          <span style={s.heroTag}>End-to-End Healthcare Solutions</span>
-          <h2 style={s.heroH2}>More Than Just Equipment Supply</h2>
-          <p style={s.heroP}>
-            From consultation and procurement to installation, training, and long-term maintenance —
-            we support your facility at every step.
-          </p>
-          <div style={s.btnRow}>
-            <Link to="/contact"  style={s.btnWhite}>Request a Service</Link>
-            <Link to="/products" style={s.btnOutline}>Browse Products</Link>
+          <div className="hero-content">
+            <span style={s.heroTag}>End-to-End Healthcare Solutions</span>
+            <h2 style={s.heroH2}>More Than Just Equipment Supply</h2>
+            <p style={s.heroP}>
+              From consultation and procurement to installation, training, and long-term maintenance —
+              we support your facility at every step.
+            </p>
+            <div style={s.btnRow}>
+              <Link to="/contact" className="cta-button cta-button-primary" style={s.btnWhite}>Request a Service</Link>
+              <Link to="/products" className="cta-button cta-button-secondary" style={s.btnOutline}>Browse Products</Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div style={{
+          position: "absolute",
+          bottom: "40px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          animation: "float 2s ease-in-out infinite"
+        }}>
+          <div style={{
+            width: "30px",
+            height: "50px",
+            border: "2px solid rgba(255,255,255,0.5)",
+            borderRadius: "25px",
+            position: "relative"
+          }}>
+            <div style={{
+              width: "6px",
+              height: "10px",
+              background: "rgba(255,255,255,0.8)",
+              borderRadius: "3px",
+              position: "absolute",
+              top: "8px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              animation: "scroll-indicator 1.5s infinite"
+            }}></div>
           </div>
         </div>
       </section>
