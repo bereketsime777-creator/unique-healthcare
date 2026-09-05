@@ -112,6 +112,7 @@ export default function ContactUs() {
               fontWeight: 900, 
               fontSize: "clamp(28px, 4.5vw, 40px)", 
               margin: "0 0 12px",
+              lineHeight: 1.2,
               textShadow: "0 4px 20px rgba(0,0,0,0.3)"
             }}>Get In Touch</h2>
             <p style={{ 
@@ -119,11 +120,11 @@ export default function ContactUs() {
               fontSize: "15px", 
               lineHeight: 1.6, 
               margin: "0 auto 18px",
+              maxWidth: "600px",
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
-              Have a question about a product, need a bulk quote, or want technical support?
-              Our team is ready to help.
+              Questions about products, bulk quotes, or technical support? Our team is ready to help
             </p>
           </div>
         </div>

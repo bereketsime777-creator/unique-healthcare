@@ -75,18 +75,17 @@ export default function Services() {
         justifyContent: "center",
         padding: "40px 0 50px"
       }}>
-        <div style={s.heroWrap}>
+        <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
           <div className="hero-content">
-            <span style={{ ...s.heroTag, fontSize: "12px", letterSpacing: "3px", marginBottom: "14px" }}>End-to-End Healthcare Solutions</span>
-            <h2 style={{ ...s.heroH2, fontSize: "clamp(28px, 4.5vw, 40px)", margin: "0 0 12px" }}>More Than Just Equipment Supply</h2>
-            <p style={{ ...s.heroP, fontSize: "15px", lineHeight: 1.6, margin: "0 auto 18px" }}>
-              From consultation and procurement to installation, training, and long-term maintenance —
-              we support your facility at every step.
+            <span style={{ color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "14px", display: "block", opacity: 0.9 }}>
+              End-to-End Healthcare Solutions
+            </span>
+            <h2 style={{ color: "#ffffff", fontWeight: 900, fontSize: "clamp(28px, 4.5vw, 40px)", margin: "0 0 12px", lineHeight: 1.2, textShadow: "0 4px 20px rgba(0,0,0,0.3)" }}>
+              Professional Medical Services
+            </h2>
+            <p style={{ color: "#ffffff", fontSize: "15px", lineHeight: 1.6, margin: "0 auto 18px", maxWidth: "600px", opacity: 0.95, textShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
+              From consultation and delivery to installation and maintenance — complete support for your facility
             </p>
-            <div style={s.btnRow}>
-              <Link to="/contact" className="cta-button cta-button-primary" style={s.btnWhite}>Request a Service</Link>
-              <Link to="/products" className="cta-button cta-button-secondary" style={s.btnOutline}>Browse Products</Link>
-            </div>
           </div>
         </div>
 

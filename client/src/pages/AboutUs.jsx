@@ -87,7 +87,7 @@ export default function AboutUs() {
         alignItems: "center",
         justifyContent: "center"
       }}>
-        <div style={{ ...s.wrap, textAlign: "center", maxWidth: "800px" }}>
+        <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px", textAlign: "center" }}>
           <div className="hero-content">
             <p style={{ 
               color: "#fff", 
@@ -98,14 +98,15 @@ export default function AboutUs() {
               marginBottom: "14px",
               opacity: 0.9
             }}>
-              Your Trusted Healthcare Partner
+              About Unique Healthcare PLC
             </p>
             <h2 style={{ 
-              ...s.h2, 
               color: "#ffffff", 
+              fontWeight: 900,
               fontSize: "clamp(28px, 4.5vw, 40px)",
               textShadow: "0 4px 20px rgba(0,0,0,0.3)",
-              margin: "0 0 12px"
+              margin: "0 0 12px",
+              lineHeight: 1.2
             }}>
               Advancing Healthcare Across Ethiopia
             </h2>
@@ -114,12 +115,11 @@ export default function AboutUs() {
               fontSize: "15px", 
               lineHeight: 1.6, 
               margin: "0 auto 18px",
+              maxWidth: "600px",
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
-              Unique Healthcare PLC is a leading wholesale medical device distribution company committed
-              to supporting healthcare providers across Ethiopia with reliable, high-quality medical
-              equipment and healthcare solutions.
+              Leading wholesale medical device distributor committed to supporting healthcare providers nationwide
             </p>
           </div>
         </div>
