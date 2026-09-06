@@ -92,13 +92,13 @@ export default function Register() {
         </p>
 
         {/* Benefits list */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "center", width: "100%", maxWidth: "300px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px", width: "100%", maxWidth: "300px" }}>
           {benefits.map((b) => (
             <div key={b} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
               <div style={{ width: "22px", height: "22px", background: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "#fff", flexShrink: 0, marginTop: "1px", backdropFilter: "blur(10px)" }}>
                 ✓
               </div>
-              <span style={{ color: "#fff", fontSize: "13px", lineHeight: 1.5, textShadow: "0 1px 6px rgba(0,0,0,0.3)" }}>{b}</span>
+              <span style={{ color: "#fff", fontSize: "13px", lineHeight: 1.5, textShadow: "0 1px 6px rgba(0,0,0,0.3)", textAlign: "left" }}>{b}</span>
             </div>
           ))}
         </div>
