@@ -144,7 +144,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Intro ── */}
-      <section style={{ padding: "72px 0", background: "#fff" }}>
+      <section style={{ padding: "48px 0", background: "#fff" }}>
         <div style={s.wrap}>
           <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
             <p style={{ ...s.body, fontSize: "16px" }}>
@@ -157,7 +157,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Stats ── */}
-      <section style={{ background: "#1d4ed8", padding: "40px 0" }}>
+      <section style={{ background: "#1d4ed8", padding: "32px 0" }}>
         <div style={s.wrap}>
           <div className="stats-bar-grid">
             {stats.map((st, i) => (
@@ -174,9 +174,9 @@ export default function AboutUs() {
       </section>
 
       {/* ── Our Story ── */}
-      <section style={{ padding: "80px 0", background: "#f8fafc" }}>
+      <section style={{ padding: "56px 0", background: "#f8fafc" }}>
         <div style={s.wrap}>
-          <div className="responsive-grid-2col" style={{ gap: "64px" }}>
+          <div className="responsive-grid-2col" style={{ gap: "48px" }}>
             <div>
               <span style={s.tag}>Our Story</span>
               <h2 style={s.h2}>Built to Strengthen Ethiopia's Healthcare System</h2>
@@ -222,13 +222,13 @@ export default function AboutUs() {
       </section>
 
       {/* ── Mission & Vision ── */}
-      <section style={{ padding: "80px 0", background: "#fff" }}>
+      <section style={{ padding: "56px 0", background: "#fff" }}>
         <div style={s.wrap}>
           <div className="responsive-grid-2col">
 
             {/* Mission */}
-            <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: "20px", padding: "36px" }}>
-              <div style={{ width: "48px", height: "48px", background: "#2563eb", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+            <div style={{ background: "#eff6ff", border: "1.5px solid #bfdbfe", borderRadius: "20px", padding: "28px" }}>
+              <div style={{ width: "48px", height: "48px", background: "#2563eb", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px" }}>
                 <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
@@ -242,8 +242,8 @@ export default function AboutUs() {
             </div>
 
             {/* Vision */}
-            <div style={{ background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "36px" }}>
-              <div style={{ width: "48px", height: "48px", background: "#16a34a", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "20px" }}>
+            <div style={{ background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: "20px", padding: "28px" }}>
+              <div style={{ width: "48px", height: "48px", background: "#16a34a", borderRadius: "14px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "16px" }}>
                 <svg width="22" height="22" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -262,9 +262,9 @@ export default function AboutUs() {
       </section>
 
       {/* ── Values ── */}
-      <section style={{ padding: "80px 0", background: "#f8fafc" }}>
+      <section style={{ padding: "56px 0", background: "#f8fafc" }}>
         <div style={s.wrap}>
-          <div style={{ textAlign: "center", marginBottom: "52px" }}>
+          <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <span style={s.tag}>What We Stand For</span>
             <h2 style={{ ...s.h2, margin: 0 }}>Our Core Values</h2>
           </div>
@@ -287,9 +287,9 @@ export default function AboutUs() {
       </section>
 
       {/* ── Why Choose Us ── */}
-      <section style={{ padding: "80px 0", background: "#fff" }}>
+      <section style={{ padding: "56px 0", background: "#fff" }}>
         <div style={s.wrap}>
-          <div style={{ textAlign: "center", marginBottom: "52px" }}>
+          <div style={{ textAlign: "center", marginBottom: "40px" }}>
             <span style={s.tag}>Why Work With Us</span>
             <h2 style={{ ...s.h2, margin: 0 }}>Why Choose Unique Healthcare?</h2>
           </div>
@@ -313,7 +313,7 @@ export default function AboutUs() {
       </section>
 
       {/* ── Belief statement ── */}
-      <section style={{ padding: "60px 0", background: "#f8fafc", borderTop: "1px solid #f1f5f9" }}>
+      <section style={{ padding: "48px 0", background: "#f8fafc", borderTop: "1px solid #f1f5f9" }}>
         <div style={{ ...s.wrap, maxWidth: "760px", textAlign: "center" }}>
           <p style={{ color: "#1e3a8a", fontSize: "18px", lineHeight: 1.8, fontWeight: 500, fontStyle: "italic", margin: "0 0 6px" }}>
             "We believe that quality healthcare begins with access to the right technology."
@@ -329,7 +329,7 @@ export default function AboutUs() {
       <Testimonials />
 
       {/* ── CTA ── */}
-      <section style={{ background: "#1d4ed8", padding: "64px 0" }}>
+      <section style={{ background: "#1d4ed8", padding: "56px 0" }}>
         <div style={{ ...s.wrap, textAlign: "center" }}>
           <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "32px", margin: "0 0 12px" }}>
             Partner With Us
