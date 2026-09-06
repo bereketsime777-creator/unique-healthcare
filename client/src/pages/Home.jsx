@@ -474,6 +474,8 @@ function ProductCard({ product, onAdd, isAdded }) {
           borderRadius: "50px",
           display: "inline-block",
           marginBottom: "10px",
+          textTransform: "uppercase",
+          letterSpacing: "0.5px",
         }}>
           {product.category}
         </span>
@@ -482,10 +484,10 @@ function ProductCard({ product, onAdd, isAdded }) {
           <h3 style={{
             color: "#0f172a",
             fontWeight: 700,
-            fontSize: "14px",
+            fontSize: "15px",
             lineHeight: 1.4,
             margin: "0 0 6px",
-            minHeight: "40px",
+            minHeight: "42px",
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
@@ -496,7 +498,7 @@ function ProductCard({ product, onAdd, isAdded }) {
         </Link>
 
         {product.manufacturer && (
-          <p style={{ color: "#94a3b8", fontSize: "12px", margin: "0 0 12px" }}>{product.manufacturer}</p>
+          <p style={{ color: "#64748b", fontSize: "12px", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
         )}
 
         {product.priceType === 'quote' ? (

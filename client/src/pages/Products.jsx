@@ -333,13 +333,13 @@ function Products() {
                     </Link>
 
                   <div className="p-3">
-                      <p className="text-xs text-blue-600 font-semibold mb-1 truncate">{product.category}</p>
+                      <p className="text-xs text-blue-600 font-semibold mb-1 truncate uppercase" style={{ letterSpacing: "0.5px" }}>{product.category}</p>
                       <Link to={`/products/${product._id}`}>
-                        <h3 className="text-sm font-semibold text-gray-900 mb-1 hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] leading-snug">
+                        <h3 className="text-sm font-bold text-gray-900 mb-1 hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] leading-snug">
                           {product.name}
                         </h3>
                       </Link>
-                      <p className="text-xs text-gray-400 mb-2">{product.manufacturer}</p>
+                      <p className="text-xs text-gray-500 mb-2 font-medium">{product.manufacturer}</p>
 
                       <div className="flex items-center justify-between mb-3">
                         {product.priceType === 'quote' ? (
@@ -351,9 +351,9 @@ function Products() {
                             ETB {product.price?.toLocaleString()}
                           </p>
                         )}
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
                           product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                        }`}>
+                        }`} style={{ letterSpacing: "0.3px" }}>
                           {product.stock > 0 ? "In Stock" : "Out of Stock"}
                         </span>
                       </div>
