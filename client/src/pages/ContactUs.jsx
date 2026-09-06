@@ -124,7 +124,7 @@ export default function ContactUs() {
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
-              Questions about products, bulk quotes, or technical support? Our team is ready to help
+              Product inquiries, bulk quotes, or technical support — our team is ready to help
             </p>
           </div>
         </div>

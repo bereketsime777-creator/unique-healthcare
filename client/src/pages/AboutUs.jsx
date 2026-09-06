@@ -98,7 +98,7 @@ export default function AboutUs() {
               marginBottom: "14px",
               opacity: 0.9
             }}>
-              About Unique Healthcare PLC
+              About Unique Healthcare
             </p>
             <h2 style={{ 
               color: "#ffffff", 
@@ -108,7 +108,7 @@ export default function AboutUs() {
               margin: "0 0 12px",
               lineHeight: 1.2
             }}>
-              Advancing Healthcare Across Ethiopia
+              Healthcare Equipment Across Ethiopia
             </h2>
             <p style={{ 
               color: "#ffffff", 
@@ -119,7 +119,7 @@ export default function AboutUs() {
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
-              Leading wholesale medical device distributor committed to supporting healthcare providers nationwide
+              Wholesale medical device distributor supporting healthcare providers nationwide
             </p>
           </div>
         </div>
