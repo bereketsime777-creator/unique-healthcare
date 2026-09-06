@@ -80,10 +80,10 @@ export default function Login() {
         </div>
 
         {/* Tagline */}
-        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "32px", textAlign: "center", lineHeight: 1.25, margin: "0 0 16px" }}>
+        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "32px", textAlign: "center", lineHeight: 1.25, margin: "0 0 16px", textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
           Your Trusted Partner in<br />Hospital Equipment
         </h2>
-        <p style={{ color: "#bfdbfe", fontSize: "15px", textAlign: "center", lineHeight: 1.7, maxWidth: "320px", margin: "0 0 48px" }}>
+        <p style={{ color: "#fff", fontSize: "15px", textAlign: "center", lineHeight: 1.7, maxWidth: "320px", margin: "0 0 48px", textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
           High-quality certified medical equipment delivered with reliability across Ethiopia.
         </p>
 
@@ -95,9 +95,9 @@ export default function Login() {
             { val: "10+",  lbl: "Years Experience" },
             { val: "98%",  lbl: "Satisfaction" },
           ].map((s) => (
-            <div key={s.lbl} style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "14px", padding: "16px", textAlign: "center" }}>
-              <p style={{ color: "#fff", fontWeight: 900, fontSize: "24px", margin: "0 0 2px" }}>{s.val}</p>
-              <p style={{ color: "#bfdbfe", fontSize: "12px", margin: 0 }}>{s.lbl}</p>
+            <div key={s.lbl} style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: "14px", padding: "16px", textAlign: "center", backdropFilter: "blur(10px)" }}>
+              <p style={{ color: "#fff", fontWeight: 900, fontSize: "24px", margin: "0 0 2px", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>{s.val}</p>
+              <p style={{ color: "#fff", fontSize: "12px", margin: 0, textShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>{s.lbl}</p>
             </div>
           ))}
         </div>

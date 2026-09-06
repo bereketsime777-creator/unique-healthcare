@@ -83,10 +83,10 @@ export default function Register() {
           <img src="/logo.png" alt="Unique Healthcare" style={{ height: "38px", width: "auto", display: "block" }} />
         </div>
 
-        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "30px", lineHeight: 1.25, margin: "0 0 14px" }}>
+        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "30px", lineHeight: 1.25, margin: "0 0 14px", textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
           Join Unique Healthcare
         </h2>
-        <p style={{ color: "#bfdbfe", fontSize: "14px", lineHeight: 1.7, margin: "0 0 36px", maxWidth: "300px" }}>
+        <p style={{ color: "#fff", fontSize: "14px", lineHeight: 1.7, margin: "0 0 36px", maxWidth: "300px", textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
           Create your account and get access to Ethiopia&apos;s largest medical equipment catalog.
         </p>
 
@@ -94,10 +94,10 @@ export default function Register() {
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {benefits.map((b) => (
             <div key={b} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-              <div style={{ width: "22px", height: "22px", background: "rgba(255,255,255,0.2)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "#fff", flexShrink: 0, marginTop: "1px" }}>
+              <div style={{ width: "22px", height: "22px", background: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "#fff", flexShrink: 0, marginTop: "1px", backdropFilter: "blur(10px)" }}>
                 ✓
               </div>
-              <span style={{ color: "#dbeafe", fontSize: "13px", lineHeight: 1.5 }}>{b}</span>
+              <span style={{ color: "#fff", fontSize: "13px", lineHeight: 1.5, textShadow: "0 1px 6px rgba(0,0,0,0.3)" }}>{b}</span>
             </div>
           ))}
         </div>

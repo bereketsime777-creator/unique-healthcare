@@ -144,10 +144,10 @@ export default function AboutUs() {
       </section>
 
       {/* ── Intro ── */}
-      <section style={{ padding: "48px 0", background: "#fff" }}>
+      <section style={{ padding: "24px 0", background: "#fff" }}>
         <div style={s.wrap}>
           <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
-            <p style={{ ...s.body, fontSize: "16px" }}>
+            <p style={{ ...s.body, fontSize: "15px", margin: "0" }}>
               We work with hospitals, clinics, laboratories, pharmacies, medical institutions, and
               healthcare organizations to provide the equipment they need to deliver better, safer,
               and more efficient patient care.
@@ -157,16 +157,16 @@ export default function AboutUs() {
       </section>
 
       {/* ── Stats ── */}
-      <section style={{ background: "#1d4ed8", padding: "32px 0" }}>
+      <section style={{ background: "#1d4ed8", padding: "28px 0" }}>
         <div style={s.wrap}>
           <div className="stats-bar-grid">
             {stats.map((st, i) => (
               <div key={st.label} style={{
-                textAlign: "center", padding: "16px",
+                textAlign: "center", padding: "12px",
                 borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.2)" : "none",
               }}>
-                <p style={{ color: "#fff", fontWeight: 900, fontSize: "40px", margin: "0 0 4px" }}>{st.value}</p>
-                <p style={{ color: "#bfdbfe", fontSize: "13px", margin: 0, fontWeight: 500 }}>{st.label}</p>
+                <p style={{ color: "#fff", fontWeight: 900, fontSize: "36px", margin: "0 0 2px" }}>{st.value}</p>
+                <p style={{ color: "#bfdbfe", fontSize: "12px", margin: 0, fontWeight: 500 }}>{st.label}</p>
               </div>
             ))}
           </div>
