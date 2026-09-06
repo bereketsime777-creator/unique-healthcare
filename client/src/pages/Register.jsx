@@ -79,7 +79,7 @@ export default function Register() {
         <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "320px", height: "320px", background: "rgba(255,255,255,0.04)", borderRadius: "50%" }} />
         <div style={{ position: "absolute", bottom: "-80px", left: "-80px", width: "260px", height: "260px", background: "rgba(255,255,255,0.04)", borderRadius: "50%" }} />
 
-        <div style={{ background: "#fff", borderRadius: "16px", padding: "10px 18px", display: "inline-block", marginBottom: "40px", alignSelf: "flex-start" }}>
+        <div style={{ background: "#fff", borderRadius: "16px", padding: "10px 18px", display: "inline-block", marginBottom: "40px", alignSelf: "center" }}>
           <img src="/logo.png" alt="Unique Healthcare" style={{ height: "38px", width: "auto", display: "block" }} />
         </div>
 
