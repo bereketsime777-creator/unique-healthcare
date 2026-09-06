@@ -80,8 +80,8 @@ export default function Register() {
         <div style={{ position: "absolute", top: "-100px", right: "-100px", width: "320px", height: "320px", background: "rgba(255,255,255,0.04)", borderRadius: "50%" }} />
         <div style={{ position: "absolute", bottom: "-80px", left: "-80px", width: "260px", height: "260px", background: "rgba(255,255,255,0.04)", borderRadius: "50%" }} />
 
-        <div style={{ background: "#fff", borderRadius: "16px", padding: "10px 18px", display: "inline-block", marginBottom: "40px", alignSelf: "center" }}>
-          <img src="/logo.png" alt="Unique Healthcare" style={{ height: "38px", width: "auto", display: "block" }} />
+        <div style={{ background: "#fff", borderRadius: "16px", padding: "12px 24px", display: "inline-block", marginBottom: "40px", alignSelf: "center" }}>
+          <img src="/logo.png" alt="Unique Healthcare" style={{ height: "50px", width: "auto", display: "block" }} />
         </div>
 
         <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "30px", lineHeight: 1.25, margin: "0 0 14px", textShadow: "0 4px 20px rgba(0,0,0,0.5)", textAlign: "center" }}>

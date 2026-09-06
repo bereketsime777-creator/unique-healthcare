@@ -75,8 +75,8 @@ export default function Login() {
         <div style={{ position: "absolute", top: "40%", right: "-40px", width: "160px", height: "160px", background: "rgba(255,255,255,0.04)", borderRadius: "50%" }} />
 
         {/* Logo */}
-        <div style={{ background: "#fff", borderRadius: "16px", padding: "10px 18px", marginBottom: "40px" }}>
-          <img src="/logo.png" alt="Unique Healthcare" style={{ height: "40px", width: "auto", display: "block" }} />
+        <div style={{ background: "#fff", borderRadius: "16px", padding: "12px 24px", marginBottom: "40px" }}>
+          <img src="/logo.png" alt="Unique Healthcare" style={{ height: "50px", width: "auto", display: "block" }} />
         </div>
 
         {/* Tagline */}
