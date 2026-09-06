@@ -105,22 +105,11 @@ export default function AboutUs() {
               fontWeight: 900,
               fontSize: "clamp(28px, 4.5vw, 40px)",
               textShadow: "0 4px 20px rgba(0,0,0,0.3)",
-              margin: "0 0 12px",
+              margin: "0",
               lineHeight: 1.2
             }}>
               Healthcare Equipment Across Ethiopia
             </h2>
-            <p style={{ 
-              color: "#ffffff", 
-              fontSize: "15px", 
-              lineHeight: 1.6, 
-              margin: "0 auto 18px",
-              maxWidth: "600px",
-              opacity: 0.95,
-              textShadow: "0 2px 8px rgba(0,0,0,0.2)"
-            }}>
-              Wholesale medical device distributor supporting healthcare providers nationwide
-            </p>
           </div>
         </div>
 
