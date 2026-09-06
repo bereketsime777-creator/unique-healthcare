@@ -71,6 +71,7 @@ export default function Register() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
         padding: "56px 48px",
         position: "relative",
         overflow: "hidden",
@@ -83,15 +84,15 @@ export default function Register() {
           <img src="/logo.png" alt="Unique Healthcare" style={{ height: "38px", width: "auto", display: "block" }} />
         </div>
 
-        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "30px", lineHeight: 1.25, margin: "0 0 14px", textShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
+        <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "30px", lineHeight: 1.25, margin: "0 0 14px", textShadow: "0 4px 20px rgba(0,0,0,0.5)", textAlign: "center" }}>
           Join Unique Healthcare
         </h2>
-        <p style={{ color: "#fff", fontSize: "14px", lineHeight: 1.7, margin: "0 0 36px", maxWidth: "300px", textShadow: "0 2px 10px rgba(0,0,0,0.4)" }}>
+        <p style={{ color: "#fff", fontSize: "14px", lineHeight: 1.7, margin: "0 0 36px", maxWidth: "300px", textShadow: "0 2px 10px rgba(0,0,0,0.4)", textAlign: "center" }}>
           Create your account and get access to Ethiopia&apos;s largest medical equipment catalog.
         </p>
 
         {/* Benefits list */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "center", width: "100%", maxWidth: "300px" }}>
           {benefits.map((b) => (
             <div key={b} style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
               <div style={{ width: "22px", height: "22px", background: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", fontWeight: 700, color: "#fff", flexShrink: 0, marginTop: "1px", backdropFilter: "blur(10px)" }}>
