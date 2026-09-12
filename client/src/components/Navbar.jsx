@@ -6,20 +6,20 @@ import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import { t } from "../translations/translations";
 
-const navLinks = [
-  { label: "Home",       to: "/" },
-  { label: "Products",   to: "/products" },
-  { label: "Services",   to: "/services" },
-  { label: "About Us",   to: "/about" },
-  { label: "Contact Us", to: "/contact" },
-];
-
 export default function Navbar() {
   const navigate  = useNavigate();
   const location  = useLocation();
   const { cart }  = useCart();
   const { user, token, logout } = useAuth();
   const { language, toggleLanguage } = useLanguage();
+
+  const navLinks = [
+    { label: t(language, "nav.home"),     to: "/" },
+    { label: t(language, "nav.products"), to: "/products" },
+    { label: t(language, "nav.services"), to: "/services" },
+    { label: t(language, "nav.about"),    to: "/about" },
+    { label: t(language, "nav.contact"),  to: "/contact" },
+  ];
 
   const [searchOpen, setSearchOpen]   = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -107,6 +107,31 @@ export default function Navbar() {
 
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0, marginLeft: "auto" }}>
 
+            {/* Language Switcher */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="nav-icon-btn"
+              style={{
+                background: "rgba(37, 99, 235, 0.1)",
+                border: "1px solid #2563eb",
+                borderRadius: "8px",
+                padding: "6px 12px",
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "#2563eb",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                transition: "all 0.2s",
+              }}
+              title="Switch Language / ቋንቋ ቀይር"
+              onMouseEnter={(e) => e.target.style.background = "rgba(37, 99, 235, 0.15)"}
+              onMouseLeave={(e) => e.target.style.background = "rgba(37, 99, 235, 0.1)"}
+            >
+              🌐 {language === "en" ? "አማርኛ" : "English"}
+            </button>
+
             <button
               type="button"
               onClick={() => setSearchOpen((p) => !p)}
@@ -176,13 +201,13 @@ export default function Navbar() {
                         {user.role !== "admin" && (
                           <Link to="/my-orders" onClick={() => setDropOpen(false)}
                             style={{ display: "block", padding: "11px 16px", fontSize: "13px", color: "#374151", textDecoration: "none" }}>
-                            My Orders
+                            {t(language, "nav.myOrders")}
                           </Link>
                         )}
                         {user.role === "admin" && (
                           <Link to="/admin" onClick={() => setDropOpen(false)}
                             style={{ display: "block", padding: "11px 16px", fontSize: "13px", color: "#374151", textDecoration: "none" }}>
-                            Admin Panel
+                            {t(language, "nav.dashboard")}
                           </Link>
                         )}
                         <Link to="/change-password" onClick={() => setDropOpen(false)}
@@ -192,7 +217,7 @@ export default function Navbar() {
                         <div style={{ borderTop: "1px solid #f1f5f9" }}>
                           <button type="button" onClick={handleLogout}
                             style={{ width: "100%", textAlign: "left", padding: "11px 16px", fontSize: "13px", color: "#ef4444", background: "none", border: "none", cursor: "pointer", fontFamily: "inherit" }}>
-                            Logout
+                            {t(language, "nav.logout")}
                           </button>
                         </div>
                       </div>
