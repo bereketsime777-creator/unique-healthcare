@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiSearch, FiShoppingCart, FiMenu, FiX, FiPackage } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
 
 const navLinks = [
   { label: "Home",       to: "/" },
@@ -17,6 +19,7 @@ export default function Navbar() {
   const location  = useLocation();
   const { cart }  = useCart();
   const { user, token, logout } = useAuth();
+  const { language, toggleLanguage } = useLanguage();
 
   const [searchOpen, setSearchOpen]   = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
