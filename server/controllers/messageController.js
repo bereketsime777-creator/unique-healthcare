@@ -1,4 +1,5 @@
 const Message = require("../models/Message");
+const Product = require("../models/Product");
 const { generateProformaNumber } = require("../utils/proformaGenerator");
 const nodemailer = require("nodemailer");
 
@@ -7,7 +8,7 @@ const nodemailer = require("nodemailer");
 // ==============================
 const sendMessage = async (req, res) => {
   try {
-    const { name, email, phone, subject, message, requestType, organizationName, location, productId, productName, quantity } = req.body;
+    const { name, email, phone, subject, message, requestType, organizationName, location, productId, productName, quantity, products } = req.body;
 
     if (!name || !email || !subject || !message) {
       return res.status(400).json({ message: "All required fields must be filled." });
@@ -15,13 +16,40 @@ const sendMessage = async (req, res) => {
 
     // Validate proforma-specific fields
     if (requestType === "proforma") {
-      if (!organizationName || !location || !productName || !quantity) {
+      const hasProducts = (products && Array.isArray(products) && products.length > 0) || (productName && productId);
+      if (!organizationName || !location || !hasProducts) {
         return res.status(400).json({ 
-          message: "For proforma requests, organization, location, product, and quantity are required." 
+          message: "For proforma requests, organization, location, and at least one product are required." 
         });
       }
-      if (quantity < 1) {
-        return res.status(400).json({ message: "Quantity must be at least 1." });
+
+      // Validate products: if productId is provided, verify it exists in database
+      if (products && Array.isArray(products) && products.length > 0) {
+        for (const p of products) {
+          // Only validate if productId is provided (null is allowed for manually entered products)
+          if (p.productId) {
+            const productExists = await Product.findById(p.productId);
+            if (!productExists) {
+              return res.status(400).json({ 
+                message: `Product with ID ${p.productId} does not exist in our database.` 
+              });
+            }
+          }
+          // Validate product name is not empty
+          if (!p.productName || !p.productName.trim()) {
+            return res.status(400).json({ 
+              message: "All products must have a name." 
+            });
+          }
+        }
+      } else if (productId) {
+        // Legacy format: validate single product ID if provided
+        const productExists = await Product.findById(productId);
+        if (!productExists) {
+          return res.status(400).json({ 
+            message: `Product with ID ${productId} does not exist in our database.` 
+          });
+        }
       }
     }
 
@@ -45,11 +73,23 @@ const sendMessage = async (req, res) => {
       messageData.organizationName = organizationName;
       messageData.location = location;
       messageData.proformaNumber = proformaNumber;
-      messageData.product = {
-        productId: productId || null,
-        productName: productName,
-      };
-      messageData.quantity = parseInt(quantity) || 1;
+      
+      // Support both new multi-product format and legacy single-product format
+      if (products && Array.isArray(products) && products.length > 0) {
+        // New multi-product format
+        messageData.products = products.map(p => ({
+          productId: p.productId || null,
+          productName: p.productName,
+          quantity: parseInt(p.quantity) || 1,
+        }));
+      } else {
+        // Legacy single-product format (for backward compatibility)
+        messageData.product = {
+          productId: productId || null,
+          productName: productName,
+        };
+        messageData.quantity = parseInt(quantity) || 1;
+      }
     }
 
     const newMessage = await Message.create(messageData);
@@ -142,8 +182,20 @@ const replyToMessage = async (req, res) => {
                 <p style="color: #374151;">Thank you for submitting your proforma request <strong>${msg.proformaNumber}</strong>. Here is our reply:</p>
                 <div style="background: #eff6ff; padding: 16px; margin: 16px 0; border-radius: 4px; border-left: 4px solid #1a56db;">
                   <p style="color: #0f172a; margin: 0 0 8px;"><strong>Request Details:</strong></p>
-                  <p style="color: #374151; margin: 4px 0;">Product: ${msg.product?.productName || 'N/A'}</p>
-                  <p style="color: #374151; margin: 4px 0;">Quantity: ${msg.quantity}</p>
+          `;
+          
+          // Handle both new multi-product and legacy single-product formats
+          if (msg.products && Array.isArray(msg.products) && msg.products.length > 0) {
+            emailBody += `<p style="color: #374151; margin: 4px 0;"><strong>Products:</strong></p>`;
+            msg.products.forEach(p => {
+              emailBody += `<p style="color: #374151; margin: 4px 0; margin-left: 12px;">• ${p.productName} × ${p.quantity}</p>`;
+            });
+          } else {
+            emailBody += `<p style="color: #374151; margin: 4px 0;">Product: ${msg.product?.productName || 'N/A'}</p>
+                  <p style="color: #374151; margin: 4px 0;">Quantity: ${msg.quantity}</p>`;
+          }
+          
+          emailBody += `
                   <p style="color: #374151; margin: 4px 0;">Organization: ${msg.organizationName}</p>
                   <p style="color: #374151; margin: 4px 0;">Location: ${msg.location}</p>
                 </div>

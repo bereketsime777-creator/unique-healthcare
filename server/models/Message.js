@@ -58,6 +58,23 @@ const messageSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    products: [{
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        default: null,
+      },
+      productName: {
+        type: String,
+        default: "",
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+        min: 1,
+      },
+    }],
+    // Legacy single-product fields (for backward compatibility)
     product: {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
