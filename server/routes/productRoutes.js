@@ -23,7 +23,7 @@ router.post(
   "/",
   protect,
   adminOnly,
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }, { name: "pdf", maxCount: 1 }]),
   createProduct
 );
 
@@ -34,7 +34,7 @@ router.put(
   "/:id",
   protect,
   adminOnly,
-  upload.single("image"),
+  upload.fields([{ name: "image", maxCount: 1 }, { name: "pdf", maxCount: 1 }]),
   updateProduct
 );
 

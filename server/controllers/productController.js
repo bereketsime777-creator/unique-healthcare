@@ -29,8 +29,11 @@ const generateStorekeepingId = async () => {
 const createProduct = async (req, res) => {
   try {
     let imageUrl = "";
+    let pdfData = {};
 
-    if (req.file) {
+    // Handle image upload (from req.files when using .fields())
+    if (req.files && req.files.image) {
+      const imageFile = req.files.image[0];
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           { folder: "unique-healthcare-products" },
@@ -39,10 +42,40 @@ const createProduct = async (req, res) => {
             else resolve(result);
           }
         );
-        streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+        streamifier.createReadStream(imageFile.buffer).pipe(uploadStream);
       });
 
       imageUrl = result.secure_url;
+    }
+
+    // Handle PDF upload (from req.files)
+    if (req.files && req.files.pdf) {
+      const pdfFile = req.files.pdf[0];
+      
+      // Validate PDF file type
+      if (pdfFile.mimetype !== 'application/pdf') {
+        return res.status(400).json({ message: "Only PDF files are allowed for technical specifications" });
+      }
+
+      const pdfResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { 
+            folder: "unique-healthcare-products/specifications",
+            resource_type: "raw"
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        streamifier.createReadStream(pdfFile.buffer).pipe(uploadStream);
+      });
+
+      pdfData = {
+        url: pdfResult.secure_url,
+        publicId: pdfResult.public_id,
+        fileName: pdfFile.originalname,
+      };
     }
 
     // Auto-generate storekeeping ID if not provided
@@ -63,6 +96,7 @@ const createProduct = async (req, res) => {
       description: req.body.description,
       specifications: req.body.specifications,
       image: imageUrl,
+      technicalSpecificationPdf: pdfData,
     });
 
     res.status(201).json({
@@ -164,7 +198,9 @@ const updateProduct = async (req, res) => {
     if (req.body.specifications !== undefined) product.specifications = req.body.specifications;
     if (req.body.storekeepingId !== undefined) product.storekeepingId = req.body.storekeepingId;
 
-    if (req.file) {
+    // Handle image upload (from req.files when using .fields())
+    if (req.files && req.files.image) {
+      const imageFile = req.files.image[0];
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           { folder: "unique-healthcare-products" },
@@ -173,10 +209,45 @@ const updateProduct = async (req, res) => {
             else resolve(uploadResult);
           }
         );
-        streamifier.createReadStream(req.file.buffer).pipe(uploadStream);
+        streamifier.createReadStream(imageFile.buffer).pipe(uploadStream);
       });
 
       product.image = result.secure_url;
+    }
+
+    // Handle PDF upload (from req.files)
+    if (req.files && req.files.pdf) {
+      const pdfFile = req.files.pdf[0];
+      
+      // Validate PDF file type
+      if (pdfFile.mimetype !== 'application/pdf') {
+        return res.status(400).json({ message: "Only PDF files are allowed for technical specifications" });
+      }
+
+      const pdfResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { 
+            folder: "unique-healthcare-products/specifications",
+            resource_type: "raw"
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        streamifier.createReadStream(pdfFile.buffer).pipe(uploadStream);
+      });
+
+      product.technicalSpecificationPdf = {
+        url: pdfResult.secure_url,
+        publicId: pdfResult.public_id,
+        fileName: pdfFile.originalname,
+      };
+    }
+
+    // Handle PDF removal (if explicitly requested via body parameter)
+    if (req.body.removePdf === 'true') {
+      product.technicalSpecificationPdf = {};
     }
 
     await product.save();
