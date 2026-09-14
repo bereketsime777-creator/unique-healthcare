@@ -6,6 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { t } from "../translations/translations";
 import { useMetaTags } from "../hooks/useMetaTags";
 import { normalizeCategory } from "../constants/categories";
+import { getSafeOptimizedImage } from "../utils/imageOptimizer";
 
 function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -362,9 +363,10 @@ function Products() {
                       <div className="bg-gray-50 h-44 flex items-center justify-center overflow-hidden p-2">
                         {product.image && product.image.startsWith("http") ? (
                           <img
-                            src={product.image}
+                            src={getSafeOptimizedImage(product.image, 'card')}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
                             onError={(e) => {
                               e.target.style.display = "none";
                               e.target.nextSibling.style.display = "flex";

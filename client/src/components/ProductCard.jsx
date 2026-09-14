@@ -1,3 +1,5 @@
+import { getSafeOptimizedImage } from "../utils/imageOptimizer";
+
 function ProductCard({ product }) {
   return (
     <div
@@ -10,10 +12,11 @@ function ProductCard({ product }) {
     >
 
       <img
-        src={product.image || "https://via.placeholder.com/250"}
+        src={getSafeOptimizedImage(product.image, 'card') || "https://via.placeholder.com/250"}
         alt={product.name}
         width="100%"
         height="200"
+        loading="lazy"
         style={{
           objectFit: "cover",
           borderRadius: "8px",

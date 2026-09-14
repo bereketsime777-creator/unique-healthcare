@@ -6,6 +6,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { t } from "../translations/translations";
 import { categoryFilterUrl, normalizeCategory, CATEGORY_IMAGES } from "../constants/categories";
 import { useMetaTags } from "../hooks/useMetaTags";
+import { getSafeOptimizedImage } from "../utils/imageOptimizer";
 import NewsletterSignup from "../components/NewsletterSignup";
 import Testimonials from "../components/Testimonials";
 import "../styles/home-enhancements.css";
@@ -530,9 +531,10 @@ function ProductCard({ product, onAdd, isAdded }) {
       <Link to={`/products/${product._id}`} className="product-image-wrapper" style={{ display: "block", height: "220px", overflow: "hidden", background: "#f8fafc" }}>
         {hasImage ? (
           <img
-            src={product.image}
+            src={getSafeOptimizedImage(product.image, 'card')}
             alt={product.name}
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            loading="lazy"
             onError={() => setImgErr(true)}
           />
         ) : (

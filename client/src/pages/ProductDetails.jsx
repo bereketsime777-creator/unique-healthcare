@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
 import { useMetaTags, useJsonLd } from "../hooks/useMetaTags";
+import { getSafeOptimizedImage } from "../utils/imageOptimizer";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -162,7 +163,7 @@ function ProductDetails() {
             <div className="bg-gray-50 flex items-center justify-center p-8 min-h-[420px] border-r border-gray-100">
               {product.image && product.image.startsWith("http") ? (
                 <img
-                  src={product.image}
+                  src={getSafeOptimizedImage(product.image, 'detail')}
                   alt={product.name}
                   className="max-h-80 object-contain"
                   onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
