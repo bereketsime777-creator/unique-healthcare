@@ -52,6 +52,9 @@ function EditProduct() {
   const [currentImage, setCurrentImage] = useState("");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [currentPdf, setCurrentPdf] = useState(null);
+  const [pdf, setPdf] = useState(null);
+  const [pdfName, setPdfName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState({ text: "", type: "" });
@@ -71,6 +74,7 @@ function EditProduct() {
           description: p.description || "", specifications: p.specifications || "", priceType: p.priceType || "fixed",
         });
         setCurrentImage(p.image || "");
+        setCurrentPdf(p.technicalSpecificationPdf || null);
       })
       .catch(() => alert("Failed to load product"))
       .finally(() => setLoading(false));
@@ -91,20 +95,39 @@ function EditProduct() {
     setPreview(null);
   };
 
+  const handlePdfChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        setStatus({ text: "Only PDF files are allowed", type: "error" });
+        return;
+      }
+      setPdf(file);
+      setPdfName(file.name);
+      setStatus({ text: "", type: "" });
+    }
+  };
+
+  const clearPdf = () => {
+    setPdf(null);
+    setPdfName(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSaving(true);
-      if (image) {
-        const fd = new FormData();
-        Object.entries(form).forEach(([k, v]) => fd.append(k, v));
-        fd.append("image", image);
-        await API.put(`/products/${id}`, fd, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      } else {
-        await API.put(`/products/${id}`, form);
+      const fd = new FormData();
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+      if (image) fd.append("image", image);
+      if (pdf) fd.append("pdf", pdf);
+      if (currentPdf && !pdf && !pdfName) {
+        // PDF is being removed (current PDF exists but new PDF not added and pdfName cleared)
+        // No special action needed, just send without PDF
       }
+      await API.put(`/products/${id}`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       setStatus({ text: "Product updated successfully!", type: "success" });
       setTimeout(() => navigate("/admin/products"), 1200);
     } catch (err) {
@@ -331,6 +354,75 @@ function EditProduct() {
                 <p style={{ fontSize: "12px", color: "#94a3b8", textAlign: "center", marginTop: "8px" }}>
                   Click above to replace the current image
                 </p>
+              )}
+            </div>
+
+            {/* PDF Upload */}
+            <div style={cardStyle}>
+              <p style={sectionTitleStyle}>Technical Specification PDF</p>
+              <div
+                onClick={() => document.getElementById("editPdfInput").click()}
+                style={{
+                  border: "2px dashed #e2e8f0", borderRadius: "12px",
+                  padding: "16px", textAlign: "center", cursor: "pointer",
+                  transition: "border-color 0.15s",
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#2563eb"}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e2e8f0"}
+              >
+                {pdfName ? (
+                  <div>
+                    <div style={{ fontSize: "28px", marginBottom: "8px" }}>📄</div>
+                    <p style={{ fontSize: "14px", color: "#0f172a", margin: "0 0 4px", fontWeight: "500" }}>
+                      {pdfName}
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>
+                      (New PDF - will replace current)
+                    </p>
+                  </div>
+                ) : currentPdf?.fileName ? (
+                  <div>
+                    <div style={{ fontSize: "28px", marginBottom: "8px" }}>📄</div>
+                    <p style={{ fontSize: "14px", color: "#0f172a", margin: "0 0 4px", fontWeight: "500" }}>
+                      {currentPdf.fileName}
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>
+                      Click to replace
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{ padding: "32px 0" }}>
+                    <div style={{ fontSize: "36px", marginBottom: "8px" }}>📋</div>
+                    <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 4px" }}>
+                      Click to upload PDF
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#94a3b8", margin: 0 }}>
+                      PDF only (optional)
+                    </p>
+                  </div>
+                )}
+              </div>
+              <input id="editPdfInput" type="file" accept=".pdf"
+                onChange={handlePdfChange} style={{ display: "none" }} />
+              {pdfName && (
+                <button type="button" onClick={clearPdf}
+                  style={{
+                    width: "100%", marginTop: "8px", padding: "4px",
+                    fontSize: "12px", color: "#ef4444",
+                    background: "transparent", border: "none", cursor: "pointer",
+                  }}>
+                  Remove new PDF
+                </button>
+              )}
+              {!pdfName && currentPdf?.fileName && (
+                <button type="button" onClick={() => setCurrentPdf(null)}
+                  style={{
+                    width: "100%", marginTop: "8px", padding: "4px",
+                    fontSize: "12px", color: "#ef4444",
+                    background: "transparent", border: "none", cursor: "pointer",
+                  }}>
+                  Remove current PDF
+                </button>
               )}
             </div>
 

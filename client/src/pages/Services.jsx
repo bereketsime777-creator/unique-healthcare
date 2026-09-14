@@ -1,25 +1,7 @@
 import { Link } from "react-router-dom";
 import { PRIMARY_PHONE } from "../constants/contact";
-
-const services = [
-  { icon: "🔬", title: "Equipment Supply",          color: "#eff6ff", border: "#bfdbfe", desc: "We supply 500+ certified medical devices — diagnostic, surgical, monitoring, lab, and imaging — from globally recognised brands.", features: ["500+ products in catalog", "Genuine certified equipment", "Multiple global brands", "All healthcare categories"] },
-  { icon: "🚚", title: "Delivery & Logistics",      color: "#f0fdf4", border: "#bbf7d0", desc: "Fast, safe, and reliable delivery across Ethiopia. We handle packaging, transportation, and on-site delivery with care for fragile devices.", features: ["Delivery across Ethiopia", "Safe specialized packaging", "Real-time order tracking", "Express delivery available"] },
-  { icon: "🛠️", title: "Installation & Setup",     color: "#faf5ff", border: "#e9d5ff", desc: "Our certified technicians handle complete installation and commissioning — ensuring everything is correctly set up and calibrated from day one.", features: ["On-site installation", "Equipment calibration", "System integration", "Commissioning support"] },
-  { icon: "📚", title: "Training & Education",      color: "#fffbeb", border: "#fde68a", desc: "Hands-on training for medical staff and biomedical engineers on proper use and maintenance of all equipment we supply — in English and Amharic.", features: ["Hands-on staff training", "Biomedical engineer training", "English & Amharic sessions", "Certificate of completion"] },
-  { icon: "🔧", title: "Maintenance & Repair",      color: "#fff1f2", border: "#fecdd3", desc: "Scheduled preventive maintenance and emergency repair for all equipment we supply. Our technicians respond quickly to minimise downtime.", features: ["Preventive maintenance plans", "Emergency repair service", "Genuine spare parts", "Annual service contracts"] },
-  { icon: "💼", title: "Bulk & Tender Supply",      color: "#f0f9ff", border: "#bae6fd", desc: "We specialise in large-scale procurement for government hospitals, NGOs, and private healthcare groups — full tender documentation included.", features: ["Government tenders", "NGO procurement support", "Volume discounts", "Full documentation"] },
-  { icon: "📋", title: "Consultation & Planning",   color: "#ecfdf5", border: "#a7f3d0", desc: "Not sure what your facility needs? Our consultants will assess your requirements, recommend the right solutions, and help you plan within budget.", features: ["Needs assessment", "Equipment recommendations", "Budget planning", "Facility-specific advice"] },
-  { icon: "🛡️", title: "Warranty & After-Sales",   color: "#fff7ed", border: "#fed7aa", desc: "All products come with manufacturer warranty backed by our local after-sales team — spare parts, warranty claims, and ongoing technical support.", features: ["Manufacturer warranty", "Local warranty claims", "Spare parts availability", "Dedicated support team"] },
-];
-
-const process = [
-  { step: "01", title: "Contact Us",      desc: "Reach out via phone, email, or contact form with your requirements." },
-  { step: "02", title: "Consultation",    desc: "Our experts assess your needs and recommend the best solutions." },
-  { step: "03", title: "Quotation",       desc: "We provide a detailed quote with pricing, timeline, and terms." },
-  { step: "04", title: "Order & Delivery",desc: "Confirm order and we handle procurement, logistics, and delivery." },
-  { step: "05", title: "Installation",    desc: "Technicians install and commission the equipment at your facility." },
-  { step: "06", title: "Ongoing Support", desc: "Training, maintenance, and after-sales support long-term." },
-];
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
 
 const s = {
   page:      { background: "#fff", minHeight: "100vh" },
@@ -47,6 +29,28 @@ const s = {
 };
 
 export default function Services() {
+  const { language } = useLanguage();
+
+  const services = [
+    { icon: "🔬", titleKey: "services.equipmentSupply", color: "#eff6ff", border: "#bfdbfe", descKey: "services.equipmentDesc", features: ["500+ products in catalog", "Genuine certified equipment", "Multiple global brands", "All healthcare categories"] },
+    { icon: "🚚", titleKey: "services.delivery", color: "#f0fdf4", border: "#bbf7d0", descKey: "services.deliveryDesc", features: ["Delivery across Ethiopia", "Safe specialized packaging", "Real-time order tracking", "Express delivery available"] },
+    { icon: "🛠️", titleKey: "services.installation", color: "#faf5ff", border: "#e9d5ff", descKey: "services.installationDesc", features: ["On-site installation", "Equipment calibration", "System integration", "Commissioning support"] },
+    { icon: "📚", titleKey: "services.training", color: "#fffbeb", border: "#fde68a", descKey: "services.trainingDesc", features: ["Hands-on staff training", "Biomedical engineer training", "English & Amharic sessions", "Certificate of completion"] },
+    { icon: "🔧", titleKey: "services.maintenance", color: "#fff1f2", border: "#fecdd3", descKey: "services.maintenanceDesc", features: ["Preventive maintenance plans", "Emergency repair service", "Genuine spare parts", "Annual service contracts"] },
+    { icon: "💼", titleKey: "services.bulk", color: "#f0f9ff", border: "#bae6fd", descKey: "services.bulkDesc", features: ["Government tenders", "NGO procurement support", "Volume discounts", "Full documentation"] },
+    { icon: "📋", titleKey: "services.consultation", color: "#ecfdf5", border: "#a7f3d0", descKey: "services.consultationDesc", features: ["Needs assessment", "Equipment recommendations", "Budget planning", "Facility-specific advice"] },
+    { icon: "🛡️", titleKey: "services.warranty", color: "#fff7ed", border: "#fed7aa", descKey: "services.warrantyDesc", features: ["Manufacturer warranty", "Local warranty claims", "Spare parts availability", "Dedicated support team"] },
+  ];
+
+  const process = [
+    { step: "01", titleKey: "nav.contact", desc: "Reach out via phone, email, or contact form with your requirements." },
+    { step: "02", title: "Consultation", desc: "Our experts assess your needs and recommend the best solutions." },
+    { step: "03", title: "Quotation", desc: "We provide a detailed quote with pricing, timeline, and terms." },
+    { step: "04", title: "Order & Delivery", desc: "Confirm order and we handle procurement, logistics, and delivery." },
+    { step: "05", title: "Installation", desc: "Technicians install and commission the equipment at your facility." },
+    { step: "06", title: "Ongoing Support", desc: "Training, maintenance, and after-sales support long-term." },
+  ];
+
   return (
     <div style={s.page}>
       <style>{`
@@ -78,13 +82,13 @@ export default function Services() {
         <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
           <div className="hero-content">
             <span style={{ color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "14px", display: "block", opacity: 0.9 }}>
-              Complete Healthcare Solutions
+              {t(language, "services.heroTag")}
             </span>
             <h2 style={{ color: "#ffffff", fontWeight: 900, fontSize: "clamp(28px, 4.5vw, 40px)", margin: "0 0 12px", lineHeight: 1.2, textShadow: "0 4px 20px rgba(0,0,0,0.3)" }}>
-              Professional Medical Services
+              {t(language, "services.heroTitle")}
             </h2>
             <p style={{ color: "#ffffff", fontSize: "15px", lineHeight: 1.6, margin: "0 auto 18px", maxWidth: "600px", opacity: 0.95, textShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
-              Installation, training, and maintenance support for your healthcare facility
+              {t(language, "services.heroDesc")}
             </p>
           </div>
         </div>
@@ -123,20 +127,20 @@ export default function Services() {
       <section style={{ ...s.section, background: "#f8fafc" }}>
         <div style={s.wrap}>
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <span style={s.secTag}>What We Offer</span>
-            <h2 style={{ ...s.secH2, margin: "0 0 10px" }}>Our Complete Service Portfolio</h2>
-            <p style={s.secP}>Everything your healthcare facility needs — under one roof.</p>
+            <span style={s.secTag}>{t(language, "services.whatWeOffer")}</span>
+            <h2 style={{ ...s.secH2, margin: "0 0 10px" }}>{t(language, "services.ourServices")}</h2>
+            <p style={s.secP}>{t(language, "services.servicesDesc")}</p>
           </div>
           <div className="responsive-grid-2">
             {services.map((sv) => (
-              <div key={sv.title} style={{ background: sv.color, border: `1.5px solid ${sv.border}`, borderRadius: "20px", padding: "28px" }}>
+              <div key={sv.titleKey} style={{ background: sv.color, border: `1.5px solid ${sv.border}`, borderRadius: "20px", padding: "28px" }}>
                 <div style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
                   <div style={{ width: "56px", height: "56px", background: "#fff", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", flexShrink: 0, boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}>
                     {sv.icon}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "17px", margin: "0 0 8px" }}>{sv.title}</h3>
-                    <p style={{ color: "#475569", fontSize: "13px", lineHeight: 1.65, margin: "0 0 16px" }}>{sv.desc}</p>
+                    <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "17px", margin: "0 0 8px" }}>{t(language, sv.titleKey)}</h3>
+                    <p style={{ color: "#475569", fontSize: "13px", lineHeight: 1.65, margin: "0 0 16px" }}>{t(language, sv.descKey)}</p>
                     <div className="responsive-grid-form-2" style={{ gap: "6px" }}>
                       {sv.features.map((f) => (
                         <div key={f} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#475569" }}>
@@ -156,9 +160,9 @@ export default function Services() {
       <section style={{ ...s.section, background: "#fff" }}>
         <div style={s.wrap}>
           <div style={{ textAlign: "center", marginBottom: "52px" }}>
-            <span style={s.secTag}>Simple Process</span>
-            <h2 style={{ ...s.secH2, margin: "0 0 8px" }}>How It Works</h2>
-            <p style={s.secP}>Getting the right equipment for your facility is easy with us.</p>
+            <span style={s.secTag}>{t(language, "services.simpleProcess")}</span>
+            <h2 style={{ ...s.secH2, margin: "0 0 8px" }}>{t(language, "services.howItWorks")}</h2>
+            <p style={s.secP}>{t(language, "services.howDesc")}</p>
           </div>
           <div className="responsive-grid-6">
             {process.map((p, i) => (
@@ -166,7 +170,7 @@ export default function Services() {
                 <div style={{ width: "56px", height: "56px", background: "#2563eb", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: "16px", margin: "0 auto 14px" }}>
                   {p.step}
                 </div>
-                <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "13px", margin: "0 0 6px" }}>{p.title}</h3>
+                <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "13px", margin: "0 0 6px" }}>{p.titleKey ? t(language, p.titleKey) : p.title}</h3>
                 <p style={{ color: "#64748b", fontSize: "12px", lineHeight: 1.6, margin: 0 }}>{p.desc}</p>
               </div>
             ))}
@@ -178,7 +182,7 @@ export default function Services() {
       <section style={{ ...s.section, background: "#f8fafc" }}>
         <div style={s.wrap}>
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <span style={s.secTag}>Why Unique Healthcare</span>
+            <span style={s.secTag}>{t(language, "services.whatWeOffer")}</span>
             <h2 style={{ ...s.secH2, margin: 0 }}>The Difference We Make</h2>
           </div>
           <div className="responsive-grid-4">
@@ -201,10 +205,10 @@ export default function Services() {
       {/* CTA */}
       <section style={s.cta}>
         <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
-          <h2 style={s.ctaH2}>Need a Service? Let&apos;s Talk.</h2>
-          <p style={s.ctaP}>Contact our team today for a free consultation and service quote.</p>
+          <h2 style={s.ctaH2}>{t(language, "services.letsTalk")}</h2>
+          <p style={s.ctaP}>{t(language, "services.freeConsultation")}</p>
           <div style={s.btnRow}>
-            <Link to="/contact" style={s.btnWhite}>Contact Us</Link>
+            <Link to="/contact" style={s.btnWhite}>{t(language, "services.contactUs")}</Link>
             <a href={`tel:${PRIMARY_PHONE.tel}`} style={s.btnOutline}>📞 {PRIMARY_PHONE.display}</a>
           </div>
         </div>

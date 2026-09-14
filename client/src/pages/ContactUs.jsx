@@ -33,10 +33,23 @@ export default function ContactUs() {
     requestType: "general",
     organizationName: "",
     location: "",
+    contactPerson: "",
+    serviceType: "",
+    serialNumber: "",
+    purchaseDate: "",
+    preferredServiceDate: "",
+    serviceDescription: "",
+    serviceLocation: "",
   });
   
   // Multi-product state for proforma
   const [selectedProducts, setSelectedProducts] = useState([]);
+  
+  // After-sales equipment state
+  const [selectedEquipment, setSelectedEquipment] = useState({
+    equipmentProductId: null,
+    equipment: "",
+  });
   
   const [loading, setLoading]     = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -70,10 +83,17 @@ export default function ContactUs() {
     setForm({ ...form, [name]: value });
     setError("");
     
-    // When subject changes to proforma, switch to proforma mode
+    // When subject changes to proforma or service, switch request type accordingly
     if (name === "subject") {
       const isProforma = value.toLowerCase().includes("proforma");
-      setForm(prev => ({ ...prev, requestType: isProforma ? "proforma" : "general" }));
+      const isAfterSales = value.toLowerCase().includes("after-sales") || value.toLowerCase().includes("service");
+      if (isProforma) {
+        setForm(prev => ({ ...prev, requestType: "proforma" }));
+      } else if (isAfterSales) {
+        setForm(prev => ({ ...prev, requestType: "after_sales_service" }));
+      } else {
+        setForm(prev => ({ ...prev, requestType: "general" }));
+      }
     }
   };
 
@@ -113,14 +133,80 @@ export default function ContactUs() {
     setShowProductSearch(false);
   };
 
-  const removeProduct = (productId) => {
-    setSelectedProducts(selectedProducts.filter(p => p.productId !== productId));
+  const addManualProduct = (productName) => {
+    if (!productName || !productName.trim()) {
+      setError("Please enter a product name");
+      return;
+    }
+    
+    // Check if product name already selected (for manual products)
+    if (selectedProducts.some(p => p.productName.toLowerCase() === productName.trim().toLowerCase() && !p.productId)) {
+      setError("This product is already selected");
+      return;
+    }
+    
+    setSelectedProducts([...selectedProducts, {
+      productId: null,
+      productName: productName.trim(),
+      quantity: 1,
+    }]);
+    setProducts([]);
+    setProductSearch("");
+    setShowProductSearch(false);
   };
 
-  const updateProductQuantity = (productId, newQuantity) => {
+  // Equipment search and selection for after-sales
+  const handleEquipmentSearch = async (query) => {
+    setProductSearch(query);
+    if (query.length < 2) {
+      setProducts([]);
+      return;
+    }
+    try {
+      setSearchingProducts(true);
+      const res = await API.get("/products", { params: { search: query } });
+      setProducts(res.data.slice(0, 10));
+    } catch (err) {
+      console.error("Equipment search failed:", err);
+      setProducts([]);
+    } finally {
+      setSearchingProducts(false);
+    }
+  };
+
+  const selectEquipment = (product) => {
+    setSelectedEquipment({
+      equipmentProductId: product._id,
+      equipment: product.name,
+    });
+    setProducts([]);
+    setProductSearch("");
+    setShowProductSearch(false);
+  };
+
+  const enterManualEquipment = (equipmentName) => {
+    if (!equipmentName || !equipmentName.trim()) {
+      setError("Please enter equipment name");
+      return;
+    }
+    
+    setSelectedEquipment({
+      equipmentProductId: null,
+      equipment: equipmentName.trim(),
+    });
+    setProducts([]);
+    setProductSearch("");
+    setShowProductSearch(false);
+  };
+
+  const removeProduct = (index) => {
+    setSelectedProducts(selectedProducts.filter((_, i) => i !== index));
+  };
+
+  const updateProductQuantity = (index, newQuantity) => {
     const qty = Math.max(1, Math.min(999, parseInt(newQuantity) || 1));
-    setSelectedProducts(selectedProducts.map(p => 
-      p.productId === productId ? { ...p, quantity: qty } : p
+    setSelectedProducts(selectedProducts.map((p, i) => 
+      i === index ? { ...p, quantity: qty } : p
     ));
   };
 
@@ -132,6 +218,14 @@ export default function ContactUs() {
     if (form.requestType === "proforma") {
       if (!form.organizationName || !form.location || selectedProducts.length === 0) {
         setError("For proforma requests, please fill in organization, location, and select at least one product.");
+        return;
+      }
+    }
+
+    // Validate after-sales service fields
+    if (form.requestType === "after_sales_service") {
+      if (!form.contactPerson || !form.serviceType || !selectedEquipment.equipment || !form.serviceDescription || !form.serviceLocation) {
+        setError("For service requests, please fill in all required fields: contact person, service type, equipment, description, and location.");
         return;
       }
     }
@@ -152,9 +246,26 @@ export default function ContactUs() {
         payload.location = form.location;
         payload.products = selectedProducts;
       }
+
+      if (form.requestType === "after_sales_service") {
+        payload.contactPerson = form.contactPerson;
+        payload.organizationName = form.organizationName;
+        payload.serviceType = form.serviceType;
+        payload.equipment = selectedEquipment.equipment;
+        payload.equipmentProductId = selectedEquipment.equipmentProductId;
+        payload.serialNumber = form.serialNumber;
+        payload.purchaseDate = form.purchaseDate;
+        payload.preferredServiceDate = form.preferredServiceDate;
+        payload.serviceDescription = form.serviceDescription;
+        payload.serviceLocation = form.serviceLocation;
+      }
       
-      await API.post("/messages", payload);
+      const res = await API.post("/messages", payload);
       setSubmitted(true);
+      // Store service request number if available
+      if (form.requestType === "after_sales_service" && res.data.data?.serviceRequestNumber) {
+        setForm(prev => ({ ...prev, serviceRequestNumber: res.data.data.serviceRequestNumber }));
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send. Please try again.");
     } finally {
@@ -326,15 +437,26 @@ export default function ContactUs() {
               {submitted ? (
                 <div style={{ textAlign: "center", padding: "48px 0" }}>
                   <div style={{ fontSize: "56px", marginBottom: "16px" }}>✅</div>
-                  <h3 style={{ color: "#0f172a", fontWeight: 800, fontSize: "22px", margin: "0 0 8px" }}>Message Sent!</h3>
+                  <h3 style={{ color: "#0f172a", fontWeight: 800, fontSize: "22px", margin: "0 0 8px" }}>
+                    {form.requestType === "proforma" ? "Proforma Request Sent!" : form.requestType === "after_sales_service" ? "Service Request Submitted!" : "Message Sent!"}
+                  </h3>
                   <p style={{ color: "#64748b", fontSize: "14px", margin: "0 0 24px" }}>
-                    Thank you for reaching out. We will get back to you within 24 hours.
+                    {form.requestType === "after_sales_service" && form.serviceRequestNumber ? (
+                      <>Thank you for submitting your service request. Your SR# is <strong>{form.serviceRequestNumber}</strong>. We will contact you within 24 hours.</>
+                    ) : (
+                      <>Thank you for reaching out. We will get back to you within 24 hours.</>
+                    )}
                   </p>
                   <button
-                    onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", subject: "", message: "" }); }}
+                    onClick={() => { 
+                      setSubmitted(false); 
+                      setForm({ name: "", email: "", phone: "", subject: "", message: "", requestType: "general", organizationName: "", location: "", contactPerson: "", serviceType: "", serialNumber: "", purchaseDate: "", preferredServiceDate: "", serviceDescription: "", serviceLocation: "" }); 
+                      setSelectedProducts([]);
+                      setSelectedEquipment({ equipmentProductId: null, equipment: "" });
+                    }}
                     style={{ background: "#2563eb", color: "#fff", border: "none", borderRadius: "50px", padding: "12px 28px", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}
                   >
-                    Send Another Message
+                    Send Another Request
                   </button>
                 </div>
               ) : (
@@ -369,6 +491,7 @@ export default function ContactUs() {
                         <option>Request Proforma</option>
                         <option>Bulk / Wholesale Order</option>
                         <option>Request a Quote</option>
+                        <option>After-Sales Service Request</option>
                         <option>Technical Support</option>
                         <option>Order Status</option>
                         <option>Partnership Opportunity</option>
@@ -399,10 +522,11 @@ export default function ContactUs() {
                           <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "8px" }}>Selected Products *</label>
                           {selectedProducts.length > 0 ? (
                             <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
-                              {selectedProducts.map((p) => (
-                                <div key={p.productId} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", borderBottom: "1px solid #f1f5f9", justifyContent: "space-between" }}>
+                              {selectedProducts.map((p, idx) => (
+                                <div key={idx} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", borderBottom: idx < selectedProducts.length - 1 ? "1px solid #f1f5f9" : "none", justifyContent: "space-between" }}>
                                   <div style={{ flex: 1 }}>
-                                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#0f172a", margin: 0, marginBottom: "4px" }}>{p.productName}</p>
+                                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#0f172a", margin: 0, marginBottom: "2px" }}>{p.productName}</p>
+                                    {!p.productId && <p style={{ fontSize: "11px", color: "#94a3b8", margin: 0, fontStyle: "italic" }}>(manually entered)</p>}
                                   </div>
                                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                                     <input
@@ -410,13 +534,13 @@ export default function ContactUs() {
                                       min="1"
                                       max="999"
                                       value={p.quantity}
-                                      onChange={(e) => updateProductQuantity(p.productId, e.target.value)}
+                                      onChange={(e) => updateProductQuantity(idx, e.target.value)}
                                       placeholder="Qty"
                                       style={{ ...input, width: "60px", padding: "8px 12px", fontSize: "12px" }}
                                     />
                                     <button
                                       type="button"
-                                      onClick={() => removeProduct(p.productId)}
+                                      onClick={() => removeProduct(idx)}
                                       style={{ background: "#fff1f2", color: "#e11d48", border: "1px solid #fecdd3", padding: "8px 12px", borderRadius: "8px", cursor: "pointer", fontWeight: "600", fontSize: "12px", whiteSpace: "nowrap" }}
                                     >
                                       Remove
@@ -432,8 +556,9 @@ export default function ContactUs() {
                           )}
                         </div>
 
-                        {/* Add Product Button */}
+                        {/* Product Search/Entry Interface */}
                         <div style={{ marginBottom: "12px" }}>
+                          <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "8px" }}>Product *</label>
                           {!showProductSearch ? (
                             <button
                               type="button"
@@ -448,7 +573,7 @@ export default function ContactUs() {
                             <div style={{ position: "relative" }}>
                               <input
                                 type="text"
-                                placeholder="Search for a product..."
+                                placeholder="Search products or type product name..."
                                 value={productSearch}
                                 onChange={(e) => handleProductSearch(e.target.value)}
                                 autoFocus
@@ -472,17 +597,31 @@ export default function ContactUs() {
                                 </div>
                               )}
                               {productSearch && products.length === 0 && !searchingProducts && (
-                                <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", marginTop: "4px", padding: "12px 16px", fontSize: "13px", color: "#94a3b8", zIndex: 10 }}>
-                                  No products found
+                                <div style={{ marginTop: "8px", padding: "12px", background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "8px" }}>
+                                  <p style={{ fontSize: "13px", color: "#2563eb", margin: 0, marginBottom: "8px" }}>No matching products. You can add "{productSearch}" manually:</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => addManualProduct(productSearch)}
+                                    style={{ width: "100%", background: "#2563eb", color: "#fff", border: "none", padding: "10px", borderRadius: "8px", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}
+                                  >
+                                    Add "{productSearch}"
+                                  </button>
                                 </div>
                               )}
                               <div style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
                                 <button
                                   type="button"
+                                  onClick={() => { if (productSearch.trim()) { addManualProduct(productSearch); } else { setShowProductSearch(false); }}}
+                                  style={{ flex: 1, background: "#2563eb", color: "#fff", border: "none", borderRadius: "8px", padding: "8px", fontWeight: "600", fontSize: "12px", cursor: "pointer" }}
+                                >
+                                  {productSearch.trim() ? "Add as Manual Product" : "Done"}
+                                </button>
+                                <button
+                                  type="button"
                                   onClick={() => setShowProductSearch(false)}
                                   style={{ flex: 1, background: "#f1f5f9", color: "#64748b", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "8px", fontWeight: "600", fontSize: "12px", cursor: "pointer" }}
                                 >
-                                  Done
+                                  Cancel
                                 </button>
                               </div>
                             </div>
@@ -492,12 +631,151 @@ export default function ContactUs() {
                     </>
                   )}
 
+                  {/* After-Sales Service Request Fields */}
+                  {form.requestType === "after_sales_service" && (
+                    <>
+                      <div style={{ background: "#dbeafe", border: "1px solid #7dd3fc", borderRadius: "12px", padding: "16px", marginBottom: "16px" }}>
+                        <p style={{ fontSize: "12px", fontWeight: "700", color: "#0369a1", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>🔧 After-Sales Service Request</p>
+                        
+                        <div className="responsive-grid-form-2" style={{ gap: "12px", marginBottom: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Contact Person Name *</label>
+                            <input name="contactPerson" value={form.contactPerson} onChange={handleChange} required placeholder="e.g., Dr. Abebe Kebede" style={input} />
+                          </div>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Organization *</label>
+                            <input name="organizationName" value={form.organizationName} onChange={handleChange} required placeholder="e.g., Addis Ababa General Hospital" style={input} />
+                          </div>
+                        </div>
+
+                        <div className="responsive-grid-form-2" style={{ gap: "12px", marginBottom: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Service Type *</label>
+                            <select name="serviceType" value={form.serviceType} onChange={handleChange} required style={{ ...input }}>
+                              <option value="">Select service type</option>
+                              <option value="installation">Installation</option>
+                              <option value="maintenance">Maintenance</option>
+                              <option value="repair">Repair</option>
+                              <option value="troubleshooting">Troubleshooting</option>
+                              <option value="training">Training</option>
+                              <option value="other">Other</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Serial Number</label>
+                            <input name="serialNumber" value={form.serialNumber} onChange={handleChange} placeholder="e.g., SN-2024-1234" style={input} />
+                          </div>
+                        </div>
+
+                        {/* Equipment Search */}
+                        <div style={{ marginBottom: "12px" }}>
+                          <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "8px" }}>Equipment / Product *</label>
+                          {selectedEquipment.equipment ? (
+                            <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "10px", padding: "12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                              <p style={{ fontSize: "13px", fontWeight: "600", color: "#0f172a", margin: 0, marginBottom: "2px" }}>{selectedEquipment.equipment}</p>
+                              {!selectedEquipment.equipmentProductId && <p style={{ fontSize: "11px", color: "#94a3b8", margin: 0, fontStyle: "italic" }}>(manually entered)</p>}
+                              <button
+                                type="button"
+                                onClick={() => { setSelectedEquipment({ equipmentProductId: null, equipment: "" }); setProductSearch(""); setShowProductSearch(false); }}
+                                style={{ background: "#fff1f2", color: "#e11d48", border: "1px solid #fecdd3", padding: "6px 12px", borderRadius: "8px", cursor: "pointer", fontWeight: "600", fontSize: "12px" }}
+                              >
+                                Change
+                              </button>
+                            </div>
+                          ) : !showProductSearch ? (
+                            <button
+                              type="button"
+                              onClick={() => { setShowProductSearch(true); setProductSearch(""); }}
+                              style={{ width: "100%", background: "#fff", color: "#0369a1", border: "2px solid #0369a1", borderRadius: "10px", padding: "10px", fontWeight: "600", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = "#dbeafe"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; }}
+                            >
+                              + Select Equipment
+                            </button>
+                          ) : (
+                            <div style={{ position: "relative" }}>
+                              <input
+                                type="text"
+                                placeholder="Search equipment or type product name..."
+                                value={productSearch}
+                                onChange={(e) => handleEquipmentSearch(e.target.value)}
+                                autoFocus
+                                style={input}
+                              />
+                              {products.length > 0 && (
+                                <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", marginTop: "4px", zIndex: 10, maxHeight: "200px", overflowY: "auto", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+                                  {products.map((p) => (
+                                    <button
+                                      key={p._id}
+                                      type="button"
+                                      onClick={() => selectEquipment(p)}
+                                      style={{ width: "100%", textAlign: "left", padding: "12px 16px", border: "none", background: "transparent", cursor: "pointer", fontSize: "13px", borderBottom: "1px solid #f1f5f9", transition: "background 0.15s" }}
+                                      onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"}
+                                      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                                    >
+                                      <div style={{ fontWeight: "600", color: "#0f172a" }}>{p.name}</div>
+                                      <div style={{ fontSize: "12px", color: "#94a3b8" }}>{p.category}</div>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                              {productSearch && products.length === 0 && !searchingProducts && (
+                                <div style={{ marginTop: "8px", padding: "12px", background: "#dbeafe", border: "1px solid #7dd3fc", borderRadius: "8px" }}>
+                                  <p style={{ fontSize: "13px", color: "#0369a1", margin: 0, marginBottom: "8px" }}>No matching equipment. You can add "{productSearch}" manually:</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => enterManualEquipment(productSearch)}
+                                    style={{ width: "100%", background: "#0369a1", color: "#fff", border: "none", padding: "10px", borderRadius: "8px", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}
+                                  >
+                                    Add "{productSearch}"
+                                  </button>
+                                </div>
+                              )}
+                              <div style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
+                                <button
+                                  type="button"
+                                  onClick={() => { if (productSearch.trim()) { enterManualEquipment(productSearch); } else { setShowProductSearch(false); }}}
+                                  style={{ flex: 1, background: "#0369a1", color: "#fff", border: "none", borderRadius: "8px", padding: "8px", fontWeight: "600", fontSize: "12px", cursor: "pointer" }}
+                                >
+                                  {productSearch.trim() ? "Add as Manual Equipment" : "Done"}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => setShowProductSearch(false)}
+                                  style={{ flex: 1, background: "#f1f5f9", color: "#64748b", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "8px", fontWeight: "600", fontSize: "12px", cursor: "pointer" }}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="responsive-grid-form-2" style={{ gap: "12px", marginBottom: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Purchase Date</label>
+                            <input type="date" name="purchaseDate" value={form.purchaseDate} onChange={handleChange} style={input} />
+                          </div>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Preferred Service Date</label>
+                            <input type="date" name="preferredServiceDate" value={form.preferredServiceDate} onChange={handleChange} style={input} />
+                          </div>
+                        </div>
+
+                        <div style={{ marginBottom: "12px" }}>
+                          <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Service Location *</label>
+                          <input name="serviceLocation" value={form.serviceLocation} onChange={handleChange} required placeholder="e.g., Bole Sub-City, Addis Ababa" style={input} />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <div style={{ marginBottom: "24px" }}>
                     <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                      Message {form.requestType === "proforma" ? "(Optional)" : "*"}
+                      Message {(form.requestType === "proforma" || form.requestType === "after_sales_service") ? "(Optional)" : "*"}
                     </label>
-                    <textarea name="message" value={form.message} onChange={handleChange} required={form.requestType !== "proforma"} rows={6}
-                      placeholder={form.requestType === "proforma" ? "Additional details about your proforma request..." : "Tell us about your needs — what products you're looking for, your facility type, quantity required, etc."}
+                    <textarea name="message" value={form.message} onChange={handleChange} required={form.requestType === "general"} rows={6}
+                      placeholder={form.requestType === "proforma" ? "Additional details about your proforma request..." : form.requestType === "after_sales_service" ? "Detailed description of the service issue or requirement..." : "Tell us about your needs — what products you're looking for, your facility type, quantity required, etc."}
                       style={{ ...input, resize: "vertical", lineHeight: 1.6 }} />
                   </div>
 

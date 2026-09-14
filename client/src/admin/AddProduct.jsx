@@ -48,6 +48,11 @@ function AddProduct() {
     stock: "", description: "", specifications: "", priceType: "fixed",
   });
   const [image, setImage] = useState(null);
+  const [pdf, setPdf] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [pdfName, setPdfName] = useState(null);
+  const [status, setStatus] = useState({ text: "", type: "" });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Fetch categories when component mounts
@@ -59,15 +64,25 @@ function AddProduct() {
         console.error("Error fetching categories:", error);
       });
   }, []);
-  const [preview, setPreview] = useState(null);
-  const [status, setStatus] = useState({ text: "", type: "" });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) { setImage(file); setPreview(URL.createObjectURL(file)); }
+  };
+
+  const handlePdfChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        setStatus({ text: "Only PDF files are allowed", type: "error" });
+        return;
+      }
+      setPdf(file);
+      setPdfName(file.name);
+      setStatus({ text: "", type: "" });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -78,6 +93,7 @@ function AddProduct() {
       const fd = new FormData();
       Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
       if (image) fd.append("image", image);
+      if (pdf) fd.append("pdf", pdf);
       await API.post("/products", fd, { headers: { "Content-Type": "multipart/form-data" } });
       setStatus({ text: "Product added successfully!", type: "success" });
       setTimeout(() => navigate("/admin/products"), 1200);
@@ -293,6 +309,56 @@ function AddProduct() {
                     background: "transparent", border: "none", cursor: "pointer",
                   }}>
                   Remove image
+                </button>
+              )}
+            </div>
+
+            {/* PDF Upload */}
+            <div style={cardStyle}>
+              <p style={sectionTitleStyle}>Technical Specification PDF</p>
+              <div
+                onClick={() => document.getElementById("pdfInput").click()}
+                style={{
+                  border: "2px dashed #e2e8f0", borderRadius: "12px",
+                  padding: "16px", textAlign: "center", cursor: "pointer",
+                  transition: "border-color 0.15s",
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = "#2563eb"}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = "#e2e8f0"}
+              >
+                {pdfName ? (
+                  <div>
+                    <div style={{ fontSize: "28px", marginBottom: "8px" }}>📄</div>
+                    <p style={{ fontSize: "14px", color: "#0f172a", margin: "0 0 4px", fontWeight: "500" }}>
+                      {pdfName}
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#64748b", margin: 0 }}>
+                      Click to replace
+                    </p>
+                  </div>
+                ) : (
+                  <div style={{ padding: "32px 0" }}>
+                    <div style={{ fontSize: "36px", marginBottom: "8px" }}>📋</div>
+                    <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 4px" }}>
+                      Click to upload PDF
+                    </p>
+                    <p style={{ fontSize: "12px", color: "#94a3b8", margin: 0 }}>
+                      PDF only (optional)
+                    </p>
+                  </div>
+                )}
+              </div>
+              <input id="pdfInput" type="file" accept=".pdf"
+                onChange={handlePdfChange} style={{ display: "none" }} />
+              {pdfName && (
+                <button type="button"
+                  onClick={() => { setPdf(null); setPdfName(null); }}
+                  style={{
+                    width: "100%", marginTop: "8px", padding: "4px",
+                    fontSize: "12px", color: "#ef4444",
+                    background: "transparent", border: "none", cursor: "pointer",
+                  }}>
+                  Remove PDF
                 </button>
               )}
             </div>

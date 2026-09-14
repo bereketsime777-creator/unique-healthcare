@@ -1,56 +1,60 @@
 import { Link } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
 import Testimonials from "../components/Testimonials";
 
 const stats = [
-  { value: "200+", label: "Healthcare Clients" },
-  { value: "11",   label: "Regions Served" },
-  { value: "500+", label: "Products Supplied" },
+  { value: "200+", labelKey: "home.stats.hospitalsServed" },
+  { value: "11",   labelKey: "home.stats.yearsExperience" },
+  { value: "500+", labelKey: "home.stats.productsAvailable" },
   { value: "10+",  label: "Years of Service" },
 ];
 
-const values = [
+const valuesData = [
   {
-    title: "Integrity",
-    desc: "We conduct our business with honesty, transparency, and accountability.",
+    titleKey: "about.integrity",
+    descKey: "about.integrityDesc",
   },
   {
-    title: "Quality",
-    desc: "We are committed to providing dependable products that meet the needs and expectations of healthcare professionals.",
+    titleKey: "about.quality",
+    descKey: "about.qualityDesc",
   },
   {
-    title: "Partnership",
-    desc: "We build long-term relationships with our customers, suppliers, and partners through trust, communication, and reliable service.",
+    titleKey: "about.partnership",
+    descKey: "about.partnershipDesc",
   },
   {
-    title: "Service",
-    desc: "We go beyond product delivery by providing responsive support and solutions that help our customers succeed.",
+    titleKey: "about.service",
+    descKey: "about.serviceDesc",
   },
 ];
 
-const whyUs = [
+const whyUsData = [
   {
-    title: "Reliable Products",
-    desc: "Quality medical equipment sourced through trusted manufacturing and supply partners.",
+    titleKey: "about.reliableProducts",
+    descKey: "about.reliableDesc",
   },
   {
-    title: "Nationwide Reach",
-    desc: "Serving healthcare institutions across all regions of Ethiopia.",
+    titleKey: "about.nationwideReach",
+    descKey: "about.nationwideDesc",
   },
   {
-    title: "Professional Support",
-    desc: "Dedicated assistance to help customers identify and implement the right solutions.",
+    titleKey: "about.professionalSupport",
+    descKey: "about.supportDesc",
   },
   {
-    title: "Customer-Focused Service",
-    desc: "We listen to our customers and build solutions around their specific healthcare needs.",
+    titleKey: "about.customerFocused",
+    descKey: "about.customerDesc",
   },
   {
-    title: "Committed to Healthcare",
-    desc: "Our work is driven by one goal: helping strengthen healthcare delivery across Ethiopia.",
+    titleKey: "about.committedToHealth",
+    descKey: "about.healthDesc",
   },
 ];
 
 export default function AboutUs() {
+  const { language } = useLanguage();
+
   const s = {
     tag:   { color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "10px", display: "block" },
     h2:    { color: "#0f172a", fontWeight: 800, fontSize: "32px", lineHeight: 1.25, margin: "0 0 16px" },
@@ -98,7 +102,7 @@ export default function AboutUs() {
               marginBottom: "14px",
               opacity: 0.9
             }}>
-              About Unique Healthcare
+              {t(language, "about.pageTitle")}
             </p>
             <h2 style={{ 
               color: "#ffffff", 
@@ -108,7 +112,7 @@ export default function AboutUs() {
               margin: "0",
               lineHeight: 1.2
             }}>
-              Healthcare Equipment Across Ethiopia
+              {t(language, "about.heroTitle")}
             </h2>
           </div>
         </div>
@@ -148,9 +152,7 @@ export default function AboutUs() {
         <div style={s.wrap}>
           <div style={{ maxWidth: "760px", margin: "0 auto", textAlign: "center" }}>
             <p style={{ ...s.body, fontSize: "15px", margin: "0" }}>
-              We work with hospitals, clinics, laboratories, pharmacies, medical institutions, and
-              healthcare organizations to provide the equipment they need to deliver better, safer,
-              and more efficient patient care.
+              {t(language, "about.intro")}
             </p>
           </div>
         </div>
@@ -161,12 +163,14 @@ export default function AboutUs() {
         <div style={s.wrap}>
           <div className="stats-bar-grid">
             {stats.map((st, i) => (
-              <div key={st.label} style={{
+              <div key={st.value} style={{
                 textAlign: "center", padding: "12px",
                 borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.2)" : "none",
               }}>
                 <p style={{ color: "#fff", fontWeight: 900, fontSize: "36px", margin: "0 0 2px" }}>{st.value}</p>
-                <p style={{ color: "#bfdbfe", fontSize: "12px", margin: 0, fontWeight: 500 }}>{st.label}</p>
+                <p style={{ color: "#bfdbfe", fontSize: "12px", margin: 0, fontWeight: 500 }}>
+                  {st.labelKey ? t(language, st.labelKey) : st.label}
+                </p>
               </div>
             ))}
           </div>
@@ -178,41 +182,33 @@ export default function AboutUs() {
         <div style={s.wrap}>
           <div className="responsive-grid-2col" style={{ gap: "48px" }}>
             <div>
-              <span style={s.tag}>Our Story</span>
-              <h2 style={s.h2}>Built to Strengthen Ethiopia's Healthcare System</h2>
+              <span style={s.tag}>{t(language, "about.ourStory")}</span>
+              <h2 style={s.h2}>{t(language, "about.storyTitle")}</h2>
               <p style={s.body}>
-                Unique Healthcare PLC was established with a clear purpose: to contribute to the
-                advancement of Ethiopia's healthcare system by making dependable medical technology
-                more accessible.
+                {t(language, "about.storyP1")}
               </p>
               <p style={s.body}>
-                Over the years, we have built strong relationships with healthcare providers and
-                international manufacturers, enabling us to supply a wide range of medical products
-                to healthcare facilities across the country.
+                {t(language, "about.storyP2")}
               </p>
               <p style={{ ...s.body, marginBottom: 0 }}>
-                Our portfolio includes diagnostic equipment, surgical instruments, patient monitoring
-                systems, laboratory equipment, hospital supplies, and emergency medical products.
-                Beyond supplying products, we focus on providing dependable service, technical
-                support, and warranty assistance to help our customers get the most from their
-                investments.
+                {t(language, "about.storyP3")}
               </p>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {[
-                { icon: "🏥", title: "Who We Serve", desc: "Hospitals, clinics, laboratories, pharmacies, and healthcare organizations nationwide." },
-                { icon: "📦", title: "What We Supply", desc: "Diagnostic equipment, surgical instruments, monitoring systems, laboratory equipment, and emergency medical products." },
-                { icon: "🤝", title: "How We Work", desc: "We listen, understand your needs, and deliver practical solutions that support better healthcare outcomes." },
-                { icon: "🌍", title: "Our Reach", desc: "Serving healthcare institutions across all 11 regions of Ethiopia." },
+                { iconKey: "🏥", titleKey: "about.whoWeServe", descKey: "about.whoDesc" },
+                { iconKey: "📦", titleKey: "about.whatWeSupply", descKey: "about.whatDesc" },
+                { iconKey: "🤝", titleKey: "about.howWeWork", descKey: "about.howDesc" },
+                { iconKey: "🌍", titleKey: "about.ourReach", descKey: "about.reachDesc" },
               ].map((c) => (
-                <div key={c.title} style={{ ...s.card, display: "flex", gap: "16px", alignItems: "flex-start" }}>
+                <div key={c.titleKey} style={{ ...s.card, display: "flex", gap: "16px", alignItems: "flex-start" }}>
                   <div style={{ width: "44px", height: "44px", background: "#eff6ff", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", flexShrink: 0 }}>
-                    {c.icon}
+                    {c.iconKey}
                   </div>
                   <div>
-                    <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>{c.title}</p>
-                    <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.6, margin: 0 }}>{c.desc}</p>
+                    <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>{t(language, c.titleKey)}</p>
+                    <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.6, margin: 0 }}>{t(language, c.descKey)}</p>
                   </div>
                 </div>
               ))}
@@ -233,11 +229,9 @@ export default function AboutUs() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
               </div>
-              <span style={{ ...s.tag, color: "#2563eb" }}>Our Mission</span>
+              <span style={{ ...s.tag, color: "#2563eb" }}>{t(language, "about.mission")}</span>
               <p style={{ color: "#1e3a8a", fontSize: "15px", lineHeight: 1.8, margin: 0, fontWeight: 500 }}>
-                To make quality, reliable, and affordable medical technology accessible to healthcare
-                facilities across Ethiopia, helping healthcare professionals improve diagnosis,
-                treatment, and patient care.
+                {t(language, "about.missionText")}
               </p>
             </div>
 
@@ -249,11 +243,9 @@ export default function AboutUs() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </div>
-              <span style={{ ...s.tag, color: "#16a34a" }}>Our Vision</span>
+              <span style={{ ...s.tag, color: "#16a34a" }}>{t(language, "about.vision")}</span>
               <p style={{ color: "#14532d", fontSize: "15px", lineHeight: 1.8, margin: 0, fontWeight: 500 }}>
-                To contribute to a stronger Ethiopian healthcare system where every hospital, clinic,
-                and healthcare facility has access to reliable medical technology, regardless of
-                its location.
+                {t(language, "about.visionText")}
               </p>
             </div>
 
@@ -265,20 +257,20 @@ export default function AboutUs() {
       <section style={{ padding: "56px 0", background: "#f8fafc" }}>
         <div style={s.wrap}>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <span style={s.tag}>What We Stand For</span>
-            <h2 style={{ ...s.h2, margin: 0 }}>Our Core Values</h2>
+            <span style={s.tag}>{t(language, "about.whatWeStandFor")}</span>
+            <h2 style={{ ...s.h2, margin: 0 }}>{t(language, "about.coreValues")}</h2>
           </div>
           <div className="responsive-grid-4">
-            {values.map((v, i) => {
+            {valuesData.map((v, i) => {
               const colors = ["#2563eb", "#7c3aed", "#16a34a", "#d97706"];
               const bgs    = ["#eff6ff", "#f5f3ff", "#f0fdf4", "#fffbeb"];
               return (
-                <div key={v.title} style={{ ...s.card, textAlign: "center" }}>
+                <div key={v.titleKey} style={{ ...s.card, textAlign: "center" }}>
                   <div style={{ width: "52px", height: "52px", background: bgs[i], borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
                     <div style={{ width: "20px", height: "20px", background: colors[i], borderRadius: "4px" }} />
                   </div>
-                  <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "16px", margin: "0 0 10px" }}>{v.title}</h3>
-                  <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.7, margin: 0 }}>{v.desc}</p>
+                  <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "16px", margin: "0 0 10px" }}>{t(language, v.titleKey)}</h3>
+                  <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.7, margin: 0 }}>{t(language, v.descKey)}</p>
                 </div>
               );
             })}
@@ -290,21 +282,21 @@ export default function AboutUs() {
       <section style={{ padding: "56px 0", background: "#fff" }}>
         <div style={s.wrap}>
           <div style={{ textAlign: "center", marginBottom: "40px" }}>
-            <span style={s.tag}>Why Work With Us</span>
-            <h2 style={{ ...s.h2, margin: 0 }}>Why Choose Unique Healthcare?</h2>
+            <span style={s.tag}>{t(language, "about.whyChooseTitle")}</span>
+            <h2 style={{ ...s.h2, margin: 0 }}>{t(language, "about.whyChooseUs")}</h2>
           </div>
           <div className="responsive-grid-3">
-            {whyUs.map((w, i) => {
+            {whyUsData.map((w, i) => {
               const icons = ["✓", "→", "★", "◎", "♥"];
               return (
-                <div key={w.title} style={{ ...s.card, borderLeft: "4px solid #2563eb", paddingLeft: "24px" }}>
+                <div key={w.titleKey} style={{ ...s.card, borderLeft: "4px solid #2563eb", paddingLeft: "24px" }}>
                   <h3 style={{ color: "#0f172a", fontWeight: 700, fontSize: "16px", margin: "0 0 10px", display: "flex", alignItems: "center", gap: "10px" }}>
                     <span style={{ width: "26px", height: "26px", background: "#eff6ff", borderRadius: "8px", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#2563eb", fontSize: "12px", fontWeight: 900, flexShrink: 0 }}>
                       {icons[i]}
                     </span>
-                    {w.title}
+                    {t(language, w.titleKey)}
                   </h3>
-                  <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.7, margin: 0 }}>{w.desc}</p>
+                  <p style={{ color: "#64748b", fontSize: "13px", lineHeight: 1.7, margin: 0 }}>{t(language, w.descKey)}</p>
                 </div>
               );
             })}
@@ -316,11 +308,10 @@ export default function AboutUs() {
       <section style={{ padding: "48px 0", background: "#f8fafc", borderTop: "1px solid #f1f5f9" }}>
         <div style={{ ...s.wrap, maxWidth: "760px", textAlign: "center" }}>
           <p style={{ color: "#1e3a8a", fontSize: "18px", lineHeight: 1.8, fontWeight: 500, fontStyle: "italic", margin: "0 0 6px" }}>
-            "We believe that quality healthcare begins with access to the right technology."
+            "{t(language, "about.belief")}"
           </p>
           <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>
-            That's why we work closely with our customers to understand their needs and deliver
-            practical solutions that support better healthcare outcomes.
+            {t(language, "about.beliefDesc")}
           </p>
         </div>
       </section>
@@ -332,17 +323,17 @@ export default function AboutUs() {
       <section style={{ background: "#1d4ed8", padding: "56px 0" }}>
         <div style={{ ...s.wrap, textAlign: "center" }}>
           <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "32px", margin: "0 0 12px" }}>
-            Partner With Us
+            {t(language, "about.partnerWithUs")}
           </h2>
           <p style={{ color: "#bfdbfe", fontSize: "15px", margin: "0 0 32px" }}>
-            Let's work together to improve healthcare delivery across Ethiopia.
+            {t(language, "about.partnerDesc")}
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link to="/products" style={{ background: "#fff", color: "#1d4ed8", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
-              Browse Products
+              {t(language, "about.browseProducts")}
             </Link>
             <Link to="/contact" style={{ border: "2px solid rgba(255,255,255,0.6)", color: "#fff", padding: "13px 32px", borderRadius: "50px", fontWeight: 700, fontSize: "14px", textDecoration: "none" }}>
-              Contact Us
+              {t(language, "nav.contact")}
             </Link>
           </div>
         </div>

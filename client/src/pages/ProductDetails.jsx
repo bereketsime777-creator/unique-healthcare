@@ -330,10 +330,10 @@ function ProductDetails() {
           </div>
         </div>
 
-        {/* Tabs: Description / Specifications */}
+        {/* Tabs: Description / Specifications / PDF (if available) */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="flex border-b border-gray-200">
-            {["description", "specifications"].map((tab) => (
+            {["description", "specifications", ...(product.technicalSpecificationPdf?.url ? ["pdf"] : [])].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -343,7 +343,7 @@ function ProductDetails() {
                     : "text-gray-600 hover:text-blue-600"
                 }`}
               >
-                {tab}
+                {tab === "pdf" ? "Technical Specifications" : tab}
               </button>
             ))}
           </div>
@@ -352,11 +352,27 @@ function ProductDetails() {
               <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {product.description || "No description available for this product."}
               </p>
-            ) : (
+            ) : activeTab === "specifications" ? (
               <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {product.specifications || "No specifications available for this product."}
               </p>
-            )}
+            ) : activeTab === "pdf" && product.technicalSpecificationPdf?.url ? (
+              <div className="space-y-4">
+                <p className="text-gray-700">Technical Specifications PDF Document</p>
+                <a
+                  href={product.technicalSpecificationPdf.url}
+                  download={product.technicalSpecificationPdf.fileName || "technical-specifications.pdf"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-semibold transition-all shadow-md hover:shadow-lg"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2m0 0v-8m0 8H3m0 0h18" />
+                  </svg>
+                  Download {product.technicalSpecificationPdf.fileName ? `(${product.technicalSpecificationPdf.fileName})` : "PDF"}
+                </a>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

@@ -82,11 +82,13 @@ function Messages() {
   const filtered = messages.filter((m) => {
     if (filter === "all") return true;
     if (filter === "proforma") return m.requestType === "proforma";
-    if (filter === "general") return m.requestType !== "proforma";
+    if (filter === "after_sales") return m.requestType === "after_sales_service";
+    if (filter === "general") return m.requestType !== "proforma" && m.requestType !== "after_sales_service";
     return m.status === filter;
   });
   const unreadCount = messages.filter((m) => m.status === "unread").length;
   const proformaCount = messages.filter((m) => m.requestType === "proforma").length;
+  const afterSalesCount = messages.filter((m) => m.requestType === "after_sales_service").length;
 
   const filterBtnStyle = (active) => ({
     padding: "6px 14px",
@@ -136,9 +138,9 @@ function Messages() {
         {/* Filter tabs */}
         <div style={{ display: "flex", gap: "4px", background: "#f1f5f9",
           borderRadius: "12px", padding: "4px", flexWrap: "wrap" }}>
-          {["all", "proforma", "general", "unread", "read", "replied"].map((f) => (
+          {["all", "proforma", "after_sales", "general", "unread", "read", "replied"].map((f) => (
             <button key={f} onClick={() => setFilter(f)} style={filterBtnStyle(filter === f)}>
-              {f === "proforma" ? "📋 Proforma" : f === "general" ? "General" : f}
+              {f === "proforma" ? "📋 Proforma" : f === "after_sales" ? "🔧 After-Sales" : f === "general" ? "General" : f}
               {f === "unread" && unreadCount > 0 && (
                 <span style={{
                   marginLeft: "6px", background: "#2563eb", color: "#fff",
@@ -153,6 +155,14 @@ function Messages() {
                   fontSize: "11px", padding: "1px 6px", borderRadius: "999px",
                 }}>
                   {proformaCount}
+                </span>
+              )}
+              {f === "after_sales" && afterSalesCount > 0 && (
+                <span style={{
+                  marginLeft: "6px", background: "#0369a1", color: "#fff",
+                  fontSize: "11px", padding: "1px 6px", borderRadius: "999px",
+                }}>
+                  {afterSalesCount}
                 </span>
               )}
             </button>
@@ -227,12 +237,12 @@ function Messages() {
                     <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
                       {/* Avatar */}
                       <div style={{
-                        width: "40px", height: "40px", background: msg.requestType === "proforma" ? "#fef08a" : "#eff6ff",
+                        width: "40px", height: "40px", background: msg.requestType === "proforma" ? "#fef08a" : msg.requestType === "after_sales_service" ? "#cffafe" : "#eff6ff",
                         borderRadius: "50%", display: "flex", alignItems: "center",
-                        justifyContent: "center", color: msg.requestType === "proforma" ? "#ca8a04" : "#2563eb", fontWeight: "700",
+                        justifyContent: "center", color: msg.requestType === "proforma" ? "#ca8a04" : msg.requestType === "after_sales_service" ? "#0369a1" : "#2563eb", fontWeight: "700",
                         fontSize: "14px", flexShrink: 0,
                       }}>
-                        {msg.requestType === "proforma" ? "📋" : msg.name.charAt(0).toUpperCase()}
+                        {msg.requestType === "proforma" ? "📋" : msg.requestType === "after_sales_service" ? "🔧" : msg.name.charAt(0).toUpperCase()}
                       </div>
 
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -249,6 +259,11 @@ function Messages() {
                             {msg.requestType === "proforma" && (
                               <p style={{ fontSize: "11px", color: "#ca8a04", fontWeight: "600", margin: "1px 0 0" }}>
                                 PR #{msg.proformaNumber}
+                              </p>
+                            )}
+                            {msg.requestType === "after_sales_service" && (
+                              <p style={{ fontSize: "11px", color: "#0369a1", fontWeight: "600", margin: "1px 0 0" }}>
+                                SR #{msg.serviceRequestNumber}
                               </p>
                             )}
                           </div>
@@ -295,11 +310,11 @@ function Messages() {
               padding: "16px 24px", borderBottom: "1px solid #f1f5f9", flexShrink: 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <div style={{
-                  width: "40px", height: "40px", background: selected.requestType === "proforma" ? "#fef08a" : "#eff6ff",
+                  width: "40px", height: "40px", background: selected.requestType === "proforma" ? "#fef08a" : selected.requestType === "after_sales_service" ? "#cffafe" : "#eff6ff",
                   borderRadius: "50%", display: "flex", alignItems: "center",
-                  justifyContent: "center", color: selected.requestType === "proforma" ? "#ca8a04" : "#2563eb", fontWeight: "700", fontSize: "16px",
+                  justifyContent: "center", color: selected.requestType === "proforma" ? "#ca8a04" : selected.requestType === "after_sales_service" ? "#0369a1" : "#2563eb", fontWeight: "700", fontSize: "16px",
                 }}>
-                  {selected.requestType === "proforma" ? "📋" : selected.name.charAt(0).toUpperCase()}
+                  {selected.requestType === "proforma" ? "📋" : selected.requestType === "after_sales_service" ? "🔧" : selected.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <p style={{ fontWeight: "700", color: "#0f172a", margin: "0 0 2px", fontSize: "15px" }}>
@@ -307,6 +322,11 @@ function Messages() {
                     {selected.requestType === "proforma" && selected.proformaNumber && (
                       <span style={{ fontSize: "12px", color: "#ca8a04", fontWeight: "600", marginLeft: "8px" }}>
                         (PR #{selected.proformaNumber})
+                      </span>
+                    )}
+                    {selected.requestType === "after_sales_service" && selected.serviceRequestNumber && (
+                      <span style={{ fontSize: "12px", color: "#0369a1", fontWeight: "600", marginLeft: "8px" }}>
+                        (SR #{selected.serviceRequestNumber})
                       </span>
                     )}
                   </p>
@@ -417,6 +437,88 @@ function Messages() {
                 </div>
               )}
 
+              {/* After-Sales Service Details */}
+              {selected.requestType === "after_sales_service" && (
+                <div style={{ background: "#cffafe", border: "1px solid #a5f3fc", borderRadius: "12px", padding: "16px", marginBottom: "24px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                    <p style={{ fontSize: "11px", fontWeight: "700", color: "#0369a1", textTransform: "uppercase", letterSpacing: "0.08em", margin: 0 }}>
+                      🔧 Service Request Details
+                    </p>
+                    {selected.serviceStatus && (
+                      <span style={{
+                        fontSize: "11px", fontWeight: "600", padding: "4px 8px", borderRadius: "6px",
+                        background: selected.serviceStatus === "new" ? "#fef3c7" : selected.serviceStatus === "in_progress" ? "#bfdbfe" : selected.serviceStatus === "scheduled" ? "#c7d2fe" : selected.serviceStatus === "completed" ? "#dcfce7" : "#fee2e2",
+                        color: selected.serviceStatus === "new" ? "#92400e" : selected.serviceStatus === "in_progress" ? "#1e40af" : selected.serviceStatus === "scheduled" ? "#3730a3" : selected.serviceStatus === "completed" ? "#166534" : "#991b1b",
+                        textTransform: "capitalize"
+                      }}>
+                        {selected.serviceStatus}
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+                    {selected.contactPerson && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Contact Person</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.contactPerson}</p>
+                      </div>
+                    )}
+                    {selected.organizationName && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Organization</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.organizationName}</p>
+                      </div>
+                    )}
+                    {selected.equipment && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Equipment</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>
+                          {selected.equipment}
+                          {!selected.equipmentProductId && <span style={{ fontSize: "11px", color: "#64748b", marginLeft: "6px", fontStyle: "italic" }}>(manual)</span>}
+                        </p>
+                      </div>
+                    )}
+                    {selected.serviceType && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Service Type</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0, textTransform: "capitalize" }}>{selected.serviceType}</p>
+                      </div>
+                    )}
+                    {selected.serialNumber && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Serial Number</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.serialNumber}</p>
+                      </div>
+                    )}
+                    {selected.purchaseDate && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Purchase Date</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{new Date(selected.purchaseDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</p>
+                      </div>
+                    )}
+                    {selected.preferredServiceDate && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Preferred Service Date</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{new Date(selected.preferredServiceDate).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</p>
+                      </div>
+                    )}
+                    {selected.serviceLocation && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Service Location</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.serviceLocation}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {selected.serviceDescription && (
+                    <div>
+                      <p style={{ fontSize: "11px", color: "#0c4a6e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 6px" }}>Description</p>
+                      <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "400", margin: 0, lineHeight: "1.5", whiteSpace: "pre-wrap" }}>{selected.serviceDescription}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Original Message */}
               <div style={{ background: "#f8fafc", borderRadius: "12px", padding: "20px", marginBottom: "24px" }}>
                 <p style={{ fontSize: "11px", color: "#94a3b8", textTransform: "uppercase",
@@ -482,7 +584,7 @@ function Messages() {
                     value={reply}
                     onChange={(e) => { setReply(e.target.value); setReplySuccess(false); }}
                     rows="5"
-                    placeholder={`Write your reply to ${selected.name}${selected.requestType === "proforma" ? " regarding their proforma request" : ""}...`}
+                    placeholder={`Write your reply to ${selected.name}${selected.requestType === "proforma" ? " regarding their proforma request" : selected.requestType === "after_sales_service" ? " regarding their service request" : ""}...`}
                     required
                     style={inputStyle}
                     onFocus={(e) => e.currentTarget.style.borderColor = "#2563eb"}
