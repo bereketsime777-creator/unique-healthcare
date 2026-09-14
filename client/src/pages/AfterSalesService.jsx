@@ -197,7 +197,7 @@ export default function AfterSalesService() {
                 opacity: 0.9,
               }}
             >
-              🔧 After-Sales Support
+              After-Sales Support
             </p>
             <h2
               style={{

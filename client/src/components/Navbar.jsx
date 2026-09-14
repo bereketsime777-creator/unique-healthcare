@@ -19,7 +19,7 @@ export default function Navbar() {
     { label: t(language, "nav.services"), to: "/services" },
     { label: t(language, "nav.about"),    to: "/about" },
     { label: t(language, "nav.contact"),  to: "/contact" },
-    { label: "🔧 After-Sales Service",    to: "/after-sales-service" },
+    { label: "After-Sales Service",       to: "/after-sales-service" },
   ];
 
   const [searchOpen, setSearchOpen]   = useState(false);
@@ -154,7 +154,7 @@ export default function Navbar() {
               onMouseEnter={(e) => e.target.style.background = "rgba(37, 99, 235, 0.15)"}
               onMouseLeave={(e) => e.target.style.background = "rgba(37, 99, 235, 0.1)"}
             >
-              🌐 {language === "en" ? "አማርኛ" : "English"}
+              🌐 {language === "en" ? "En" : "አማ"}
             </button>
 
             <div className="navbar-auth-desktop">
