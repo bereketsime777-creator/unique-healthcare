@@ -19,6 +19,7 @@ export default function Navbar() {
     { label: t(language, "nav.services"), to: "/services" },
     { label: t(language, "nav.about"),    to: "/about" },
     { label: t(language, "nav.contact"),  to: "/contact" },
+    { label: "🔧 After-Sales Service",    to: "/after-sales-service" },
   ];
 
   const [searchOpen, setSearchOpen]   = useState(false);
@@ -274,11 +275,6 @@ export default function Navbar() {
                   {l.label}
                 </Link>
               ))}
-
-              <Link to="/after-sales-service" onClick={closeMobile}
-                className="nav-link" style={{ display: "block", marginTop: "8px", color: "#0369a1", fontWeight: 600 }}>
-                🔧 After-Sales Service
-              </Link>
 
               <div style={{ borderTop: "1px solid #f1f5f9", margin: "12px 0", paddingTop: "12px" }}>
                 {token && user ? (
