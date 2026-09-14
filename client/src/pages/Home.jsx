@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { t } from "../translations/translations";
 import { categoryFilterUrl, normalizeCategory, CATEGORY_IMAGES } from "../constants/categories";
+import { useMetaTags } from "../hooks/useMetaTags";
 import NewsletterSignup from "../components/NewsletterSignup";
 import Testimonials from "../components/Testimonials";
 import "../styles/home-enhancements.css";
@@ -20,6 +21,38 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [addedId, setAddedId] = useState(null);
+
+  // Get base URL for absolute URLs
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return process.env.VITE_FRONTEND_URL || 'https://unique-healthcare.vercel.app';
+  };
+
+  // Set home page meta tags
+  useMetaTags({
+    title: 'Unique Healthcare | Hospital Equipment & Medical Supplies in Ethiopia',
+    description: 'Ethiopia\'s trusted partner for certified hospital equipment, medical devices, and healthcare supplies. Serving 200+ hospitals nationwide with fast delivery and professional support.',
+    keywords: 'hospital equipment, medical supplies, healthcare devices, Ethiopia, diagnostic equipment, surgical instruments',
+    
+    // OpenGraph tags for social sharing
+    ogTitle: 'Unique Healthcare - Hospital Equipment & Medical Supplies',
+    ogDescription: 'Access 500+ certified medical products with fast delivery across Ethiopia. Trusted by 200+ hospitals.',
+    ogImage: `${getBaseUrl()}/logo.png`,
+    ogUrl: getBaseUrl(),
+    ogType: 'website',
+    ogSiteName: 'Unique Healthcare PLC',
+    
+    // Twitter Card tags
+    twitterCard: 'summary_large_image',
+    twitterTitle: 'Unique Healthcare | Hospital Equipment',
+    twitterDescription: 'Certified medical equipment and healthcare supplies for Ethiopia',
+    twitterImage: `${getBaseUrl()}/logo.png`,
+    
+    // Canonical URL
+    canonical: getBaseUrl(),
+  });
 
   useEffect(() => {
     // Fetch products and categories in parallel

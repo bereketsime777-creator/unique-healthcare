@@ -4,6 +4,7 @@ import API from "../services/api";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { t } from "../translations/translations";
+import { useMetaTags } from "../hooks/useMetaTags";
 import { normalizeCategory } from "../constants/categories";
 
 function Products() {
@@ -21,6 +22,40 @@ function Products() {
   const searchQuery = searchParams.get("search") || "";
   const categoryQuery = searchParams.get("category") || "";
   const [localSearch, setLocalSearch] = useState(searchQuery);
+
+  // Get base URL for absolute URLs
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return process.env.VITE_FRONTEND_URL || 'https://unique-healthcare.vercel.app';
+  };
+
+  // Set products page meta tags
+  useMetaTags({
+    title: categoryQuery ? `${categoryQuery} | Unique Healthcare` : 'Medical Equipment & Supplies | Unique Healthcare',
+    description: categoryQuery 
+      ? `Browse our range of ${categoryQuery.toLowerCase()} products from leading manufacturers. Fast delivery across Ethiopia.`
+      : 'Browse 500+ certified medical devices from globally recognized brands. Hospital equipment, surgical instruments, diagnostic tools and more.',
+    keywords: `${categoryQuery || 'medical equipment'}, healthcare supplies, ${categoryQuery || 'products'}, Ethiopia`,
+    
+    // OpenGraph tags
+    ogTitle: categoryQuery ? `${categoryQuery} Products | Unique Healthcare` : 'Medical Products | Unique Healthcare',
+    ogDescription: 'Browse our complete catalog of certified medical equipment and healthcare supplies',
+    ogImage: `${getBaseUrl()}/logo.png`,
+    ogUrl: `${getBaseUrl()}/products${categoryQuery ? `?category=${encodeURIComponent(categoryQuery)}` : ''}`,
+    ogType: 'website',
+    ogSiteName: 'Unique Healthcare PLC',
+    
+    // Twitter tags
+    twitterCard: 'summary',
+    twitterTitle: 'Medical Products | Unique Healthcare',
+    twitterDescription: 'Browse certified medical equipment and healthcare supplies',
+    twitterImage: `${getBaseUrl()}/logo.png`,
+    
+    // Canonical
+    canonical: `${getBaseUrl()}/products${categoryQuery ? `?category=${encodeURIComponent(categoryQuery)}` : ''}`,
+  });
 
   useEffect(() => {
     const fetchData = async () => {

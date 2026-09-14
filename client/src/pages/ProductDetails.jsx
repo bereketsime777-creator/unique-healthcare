@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
+import { useMetaTags, useJsonLd } from "../hooks/useMetaTags";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -14,12 +15,71 @@ function ProductDetails() {
   const [added, setAdded] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
 
+  // Get base URL for absolute OG URLs
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return process.env.VITE_FRONTEND_URL || 'https://unique-healthcare.vercel.app';
+  };
+
   useEffect(() => {
     API.get(`/products/${id}`)
       .then((r) => setProduct(r.data))
       .catch(console.log)
       .finally(() => setLoading(false));
   }, [id]);
+
+  // Update meta tags when product loads
+  useMetaTags({
+    title: product ? `${product.name} | Unique Healthcare PLC` : 'Product Details | Unique Healthcare PLC',
+    description: product?.description || 'Medical equipment from Unique Healthcare PLC',
+    keywords: product ? `${product.name}, ${product.category}, ${product.manufacturer || 'medical equipment'}` : 'medical equipment',
+    
+    // OpenGraph tags for social sharing
+    ogTitle: product?.name || 'Unique Healthcare Product',
+    ogDescription: product?.description?.substring(0, 160) || 'High-quality certified medical equipment from Unique Healthcare PLC',
+    ogImage: product?.image || `${getBaseUrl()}/logo.png`,
+    ogUrl: `${getBaseUrl()}/products/${id}`,
+    ogType: 'product',
+    ogSiteName: 'Unique Healthcare PLC',
+    
+    // Twitter Card tags
+    twitterCard: 'summary_large_image',
+    twitterTitle: product?.name || 'Unique Healthcare Product',
+    twitterDescription: product?.description?.substring(0, 200) || 'Medical equipment from Unique Healthcare',
+    twitterImage: product?.image || `${getBaseUrl()}/logo.png`,
+    
+    // Canonical URL
+    canonical: `${getBaseUrl()}/products/${id}`,
+  });
+
+  // Add JSON-LD structured data for Product schema
+  useJsonLd(product ? {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "description": product.description,
+    "image": product.image || `${getBaseUrl()}/logo.png`,
+    "brand": {
+      "@type": "Brand",
+      "name": "Unique Healthcare PLC"
+    },
+    "manufacturer": {
+      "@type": "Organization",
+      "name": product.manufacturer || "Unique Healthcare PLC"
+    },
+    "url": `${getBaseUrl()}/products/${id}`,
+    ...(product.priceType === 'fixed' && product.price ? {
+      "offers": {
+        "@type": "Offer",
+        "url": `${getBaseUrl()}/products/${id}`,
+        "priceCurrency": "ETB",
+        "price": product.price.toString(),
+        "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+      }
+    } : {})
+  } : null);
 
   const inCart = cart.find((i) => i._id === product?._id);
 
