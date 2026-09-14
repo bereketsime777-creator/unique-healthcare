@@ -1,5 +1,7 @@
 const express = require("express");
+
 const router = express.Router();
+
 const {
   getAllCategories,
   getActiveCategories,
@@ -7,15 +9,19 @@ const {
   updateCategory,
   deleteCategory,
 } = require("../controllers/categoryController");
-const { protect, admin } = require("../middleware/authMiddleware");
+
+const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 // Public routes
 router.get("/", getActiveCategories);
+
 router.get("/all", getAllCategories);
 
 // Admin routes
-router.post("/", protect, admin, createCategory);
-router.put("/:id", protect, admin, updateCategory);
-router.delete("/:id", protect, admin, deleteCategory);
+router.post("/", protect, adminOnly, createCategory);
+
+router.put("/:id", protect, adminOnly, updateCategory);
+
+router.delete("/:id", protect, adminOnly, deleteCategory);
 
 module.exports = router;
