@@ -33,16 +33,18 @@ export default function ContactUs() {
     requestType: "general",
     organizationName: "",
     location: "",
-    productId: productIdParam,
-    productName: productNameParam,
-    quantity: 1,
   });
+  
+  // Multi-product state for proforma
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  
   const [loading, setLoading]     = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError]         = useState("");
   const [products, setProducts]   = useState([]);
   const [searchingProducts, setSearchingProducts] = useState(false);
   const [productSearch, setProductSearch] = useState("");
+  const [showProductSearch, setShowProductSearch] = useState(false);
 
   useEffect(() => {
     if (subjectParam) {
@@ -53,12 +55,13 @@ export default function ContactUs() {
         requestType: isProforma ? "proforma" : "general",
       }));
     }
+    // If product passed from product page, add it to selected products
     if (productIdParam && productNameParam) {
-      setForm(prev => ({ 
-        ...prev, 
+      setSelectedProducts([{
         productId: productIdParam,
         productName: productNameParam,
-      }));
+        quantity: 1,
+      }]);
     }
   }, [subjectParam, productIdParam, productNameParam]);
 
@@ -93,14 +96,32 @@ export default function ContactUs() {
     }
   };
 
-  const selectProduct = (product) => {
-    setForm(prev => ({
-      ...prev,
+  const addProduct = (product) => {
+    // Check if product already selected
+    if (selectedProducts.some(p => p.productId === product._id)) {
+      setError("This product is already selected");
+      return;
+    }
+    
+    setSelectedProducts([...selectedProducts, {
       productId: product._id,
       productName: product.name,
-    }));
+      quantity: 1,
+    }]);
     setProducts([]);
     setProductSearch("");
+    setShowProductSearch(false);
+  };
+
+  const removeProduct = (productId) => {
+    setSelectedProducts(selectedProducts.filter(p => p.productId !== productId));
+  };
+
+  const updateProductQuantity = (productId, newQuantity) => {
+    const qty = Math.max(1, Math.min(999, parseInt(newQuantity) || 1));
+    setSelectedProducts(selectedProducts.map(p => 
+      p.productId === productId ? { ...p, quantity: qty } : p
+    ));
   };
 
   const handleSubmit = async (e) => {
@@ -109,8 +130,8 @@ export default function ContactUs() {
     
     // Validate proforma fields if needed
     if (form.requestType === "proforma") {
-      if (!form.organizationName || !form.location || !form.productName || form.quantity < 1) {
-        setError("For proforma requests, please fill in organization, location, product, and quantity.");
+      if (!form.organizationName || !form.location || selectedProducts.length === 0) {
+        setError("For proforma requests, please fill in organization, location, and select at least one product.");
         return;
       }
     }
@@ -129,9 +150,7 @@ export default function ContactUs() {
       if (form.requestType === "proforma") {
         payload.organizationName = form.organizationName;
         payload.location = form.location;
-        payload.productId = form.productId;
-        payload.productName = form.productName;
-        payload.quantity = parseInt(form.quantity) || 1;
+        payload.products = selectedProducts;
       }
       
       await API.post("/messages", payload);
@@ -375,19 +394,56 @@ export default function ContactUs() {
                           </div>
                         </div>
 
-                        {/* Product Selector */}
+                        {/* Selected Products List */}
                         <div style={{ marginBottom: "12px" }}>
-                          <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Product *</label>
-                          {form.productName ? (
-                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              <div style={{ ...input, padding: "12px 16px", flex: 1, background: "#f0fdf4", border: "1px solid #86efac", color: "#16a34a", fontWeight: "500" }}>
-                                ✓ {form.productName}
-                              </div>
-                              <button type="button" onClick={() => setForm(prev => ({ ...prev, productId: "", productName: "" }))}
-                                style={{ background: "#fff1f2", color: "#e11d48", border: "1px solid #fecdd3", padding: "12px 16px", borderRadius: "12px", cursor: "pointer", fontWeight: "600", fontSize: "13px" }}>
-                                Change
-                              </button>
+                          <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "8px" }}>Selected Products *</label>
+                          {selectedProducts.length > 0 ? (
+                            <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden" }}>
+                              {selectedProducts.map((p) => (
+                                <div key={p.productId} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px", borderBottom: "1px solid #f1f5f9", justifyContent: "space-between" }}>
+                                  <div style={{ flex: 1 }}>
+                                    <p style={{ fontSize: "13px", fontWeight: "600", color: "#0f172a", margin: 0, marginBottom: "4px" }}>{p.productName}</p>
+                                  </div>
+                                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      max="999"
+                                      value={p.quantity}
+                                      onChange={(e) => updateProductQuantity(p.productId, e.target.value)}
+                                      placeholder="Qty"
+                                      style={{ ...input, width: "60px", padding: "8px 12px", fontSize: "12px" }}
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => removeProduct(p.productId)}
+                                      style={{ background: "#fff1f2", color: "#e11d48", border: "1px solid #fecdd3", padding: "8px 12px", borderRadius: "8px", cursor: "pointer", fontWeight: "600", fontSize: "12px", whiteSpace: "nowrap" }}
+                                    >
+                                      Remove
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
+                          ) : (
+                            <p style={{ fontSize: "13px", color: "#64748b", fontStyle: "italic", margin: 0, padding: "12px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
+                              No products selected. Click the button below to add a product.
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Add Product Button */}
+                        <div style={{ marginBottom: "12px" }}>
+                          {!showProductSearch ? (
+                            <button
+                              type="button"
+                              onClick={() => { setShowProductSearch(true); setProductSearch(""); }}
+                              style={{ width: "100%", background: "#fff", color: "#2563eb", border: "2px solid #2563eb", borderRadius: "10px", padding: "10px", fontWeight: "600", fontSize: "13px", cursor: "pointer", transition: "all 0.15s" }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = "#eff6ff"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; }}
+                            >
+                              + Add Another Product
+                            </button>
                           ) : (
                             <div style={{ position: "relative" }}>
                               <input
@@ -395,6 +451,7 @@ export default function ContactUs() {
                                 placeholder="Search for a product..."
                                 value={productSearch}
                                 onChange={(e) => handleProductSearch(e.target.value)}
+                                autoFocus
                                 style={input}
                               />
                               {products.length > 0 && (
@@ -403,7 +460,7 @@ export default function ContactUs() {
                                     <button
                                       key={p._id}
                                       type="button"
-                                      onClick={() => selectProduct(p)}
+                                      onClick={() => addProduct(p)}
                                       style={{ width: "100%", textAlign: "left", padding: "12px 16px", border: "none", background: "transparent", cursor: "pointer", fontSize: "13px", borderBottom: "1px solid #f1f5f9", transition: "background 0.15s" }}
                                       onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"}
                                       onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
@@ -419,16 +476,17 @@ export default function ContactUs() {
                                   No products found
                                 </div>
                               )}
+                              <div style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
+                                <button
+                                  type="button"
+                                  onClick={() => setShowProductSearch(false)}
+                                  style={{ flex: 1, background: "#f1f5f9", color: "#64748b", border: "1px solid #e2e8f0", borderRadius: "8px", padding: "8px", fontWeight: "600", fontSize: "12px", cursor: "pointer" }}
+                                >
+                                  Done
+                                </button>
+                              </div>
                             </div>
                           )}
-                        </div>
-
-                        {/* Quantity */}
-                        <div className="responsive-grid-form-2" style={{ gap: "12px" }}>
-                          <div>
-                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Quantity *</label>
-                            <input type="number" name="quantity" value={form.quantity} onChange={handleChange} min="1" required style={input} />
-                          </div>
                         </div>
                       </div>
                     </>

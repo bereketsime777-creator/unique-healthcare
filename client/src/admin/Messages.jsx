@@ -378,7 +378,7 @@ function Messages() {
                   <p style={{ fontSize: "11px", fontWeight: "700", color: "#ca8a04", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "12px" }}>
                     📋 Proforma Request Details
                   </p>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
                     {selected.organizationName && (
                       <div>
                         <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Organization</p>
@@ -391,17 +391,27 @@ function Messages() {
                         <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.location}</p>
                       </div>
                     )}
-                    {selected.product?.productName && (
-                      <div>
-                        <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Product</p>
+                  </div>
+
+                  {/* Products - Handle both new multi-product and legacy single-product formats */}
+                  <div>
+                    <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 8px" }}>Products</p>
+                    {selected.products && Array.isArray(selected.products) && selected.products.length > 0 ? (
+                      <div style={{ background: "#fff", borderRadius: "8px", overflow: "hidden", border: "1px solid #fed7aa" }}>
+                        {selected.products.map((p, idx) => (
+                          <div key={idx} style={{ padding: "10px 12px", borderBottom: idx < selected.products.length - 1 ? "1px solid #fed7aa" : "none", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{p.productName}</p>
+                            <span style={{ fontSize: "12px", color: "#92400e", fontWeight: "600" }}>×{p.quantity}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : selected.product?.productName ? (
+                      <div style={{ background: "#fff", borderRadius: "8px", padding: "10px 12px", border: "1px solid #fed7aa", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.product.productName}</p>
+                        <span style={{ fontSize: "12px", color: "#92400e", fontWeight: "600" }}>×{selected.quantity || 1}</span>
                       </div>
-                    )}
-                    {selected.quantity && (
-                      <div>
-                        <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Quantity</p>
-                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.quantity} unit(s)</p>
-                      </div>
+                    ) : (
+                      <p style={{ fontSize: "13px", color: "#92400e", margin: 0 }}>No products</p>
                     )}
                   </div>
                 </div>
