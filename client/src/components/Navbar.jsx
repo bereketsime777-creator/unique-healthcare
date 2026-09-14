@@ -107,31 +107,6 @@ export default function Navbar() {
 
           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0, marginLeft: "auto" }}>
 
-            {/* Language Switcher */}
-            <button
-              type="button"
-              onClick={toggleLanguage}
-              className="nav-icon-btn"
-              style={{
-                background: "rgba(37, 99, 235, 0.1)",
-                border: "1px solid #2563eb",
-                borderRadius: "8px",
-                padding: "6px 12px",
-                fontSize: "13px",
-                fontWeight: 600,
-                color: "#2563eb",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-                transition: "all 0.2s",
-              }}
-              title="Switch Language / ቋንቋ ቀይር"
-              onMouseEnter={(e) => e.target.style.background = "rgba(37, 99, 235, 0.15)"}
-              onMouseLeave={(e) => e.target.style.background = "rgba(37, 99, 235, 0.1)"}
-            >
-              🌐 {language === "en" ? "አማርኛ" : "English"}
-            </button>
-
             <button
               type="button"
               onClick={() => setSearchOpen((p) => !p)}
@@ -161,6 +136,31 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+
+            {/* Language Switcher - Right next to account */}
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="nav-icon-btn"
+              style={{
+                background: "rgba(37, 99, 235, 0.1)",
+                border: "1px solid #2563eb",
+                borderRadius: "8px",
+                padding: "6px 12px",
+                fontSize: "13px",
+                fontWeight: 600,
+                color: "#2563eb",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
+                transition: "all 0.2s",
+              }}
+              title="Switch Language / ቋንቋ ቀይር"
+              onMouseEnter={(e) => e.target.style.background = "rgba(37, 99, 235, 0.15)"}
+              onMouseLeave={(e) => e.target.style.background = "rgba(37, 99, 235, 0.1)"}
+            >
+              🌐 {language === "en" ? "አማርኛ" : "English"}
+            </button>
 
             <div className="navbar-auth-desktop">
               {token && user ? (
