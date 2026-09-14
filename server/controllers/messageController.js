@@ -1,6 +1,7 @@
 const Message = require("../models/Message");
 const Product = require("../models/Product");
 const { generateProformaNumber } = require("../utils/proformaGenerator");
+const { generateServiceRequestNumber } = require("../utils/serviceRequestGenerator");
 const nodemailer = require("nodemailer");
 
 // ==============================
@@ -8,7 +9,7 @@ const nodemailer = require("nodemailer");
 // ==============================
 const sendMessage = async (req, res) => {
   try {
-    const { name, email, phone, subject, message, requestType, organizationName, location, productId, productName, quantity, products } = req.body;
+    const { name, email, phone, subject, message, requestType, organizationName, location, productId, productName, quantity, products, contactPerson, serviceType, equipment, equipmentProductId, serialNumber, purchaseDate, preferredServiceDate, serviceDescription, serviceLocation } = req.body;
 
     if (!name || !email || !subject || !message) {
       return res.status(400).json({ message: "All required fields must be filled." });
@@ -53,10 +54,35 @@ const sendMessage = async (req, res) => {
       }
     }
 
+    // Validate after-sales service fields
+    if (requestType === "after_sales_service") {
+      if (!contactPerson || !serviceType || !equipment || !serviceDescription || !serviceLocation) {
+        return res.status(400).json({ 
+          message: "For service requests, contact person, service type, equipment, service description, and location are required." 
+        });
+      }
+
+      // Validate equipment: if equipmentProductId is provided, verify it exists
+      if (equipmentProductId) {
+        const productExists = await Product.findById(equipmentProductId);
+        if (!productExists) {
+          return res.status(400).json({ 
+            message: `Equipment with ID ${equipmentProductId} does not exist in our database.` 
+          });
+        }
+      }
+    }
+
     // Generate proforma number if it's a proforma request
     let proformaNumber = null;
     if (requestType === "proforma") {
       proformaNumber = await generateProformaNumber();
+    }
+
+    // Generate service request number if it's an after-sales service request
+    let serviceRequestNumber = null;
+    if (requestType === "after_sales_service") {
+      serviceRequestNumber = await generateServiceRequestNumber();
     }
 
     const messageData = {
@@ -92,10 +118,25 @@ const sendMessage = async (req, res) => {
       }
     }
 
+    // Add after-sales service fields
+    if (requestType === "after_sales_service") {
+      messageData.organizationName = organizationName; // Use organization from contact person's org
+      messageData.serviceType = serviceType;
+      messageData.equipment = equipment;
+      messageData.equipmentProductId = equipmentProductId || null;
+      messageData.serialNumber = serialNumber || "";
+      messageData.purchaseDate = purchaseDate ? new Date(purchaseDate) : null;
+      messageData.preferredServiceDate = preferredServiceDate ? new Date(preferredServiceDate) : null;
+      messageData.serviceDescription = serviceDescription;
+      messageData.serviceLocation = serviceLocation;
+      messageData.serviceRequestNumber = serviceRequestNumber;
+      messageData.serviceStatus = "new";
+    }
+
     const newMessage = await Message.create(messageData);
 
     res.status(201).json({
-      message: requestType === "proforma" ? "Proforma request submitted successfully" : "Message sent successfully",
+      message: requestType === "proforma" ? "Proforma request submitted successfully" : requestType === "after_sales_service" ? "Service request submitted successfully" : "Message sent successfully",
       data: newMessage,
     });
   } catch (error) {
@@ -164,6 +205,8 @@ const replyToMessage = async (req, res) => {
         // Build email subject based on request type
         const emailSubject = msg.requestType === "proforma" 
           ? `Re: Proforma Request ${msg.proformaNumber} - ${msg.subject}`
+          : msg.requestType === "after_sales_service"
+          ? `Re: Service Request ${msg.serviceRequestNumber} - ${msg.subject}`
           : `Re: ${msg.subject}`;
 
         // Build email body based on request type
@@ -198,6 +241,18 @@ const replyToMessage = async (req, res) => {
           emailBody += `
                   <p style="color: #374151; margin: 4px 0;">Organization: ${msg.organizationName}</p>
                   <p style="color: #374151; margin: 4px 0;">Location: ${msg.location}</p>
+                </div>
+                `;
+        } else if (msg.requestType === "after_sales_service") {
+          emailBody += `
+                <p style="color: #374151;">Thank you for submitting your service request <strong>${msg.serviceRequestNumber}</strong>. Here is our reply:</p>
+                <div style="background: #eff6ff; padding: 16px; margin: 16px 0; border-radius: 4px; border-left: 4px solid #1a56db;">
+                  <p style="color: #0f172a; margin: 0 0 8px;"><strong>Service Details:</strong></p>
+                  <p style="color: #374151; margin: 4px 0;">Equipment: ${msg.equipment}</p>
+                  <p style="color: #374151; margin: 4px 0;">Service Type: ${msg.serviceType}</p>
+                  <p style="color: #374151; margin: 4px 0;">Location: ${msg.serviceLocation}</p>
+                  ${msg.serialNumber ? `<p style="color: #374151; margin: 4px 0;">Serial Number: ${msg.serialNumber}</p>` : ''}
+                  <p style="color: #374151; margin: 4px 0;">Status: ${msg.serviceStatus}</p>
                 </div>
                 `;
         } else {
