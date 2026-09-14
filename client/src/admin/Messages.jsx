@@ -79,8 +79,14 @@ function Messages() {
     }
   };
 
-  const filtered = messages.filter((m) => filter === "all" || m.status === filter);
+  const filtered = messages.filter((m) => {
+    if (filter === "all") return true;
+    if (filter === "proforma") return m.requestType === "proforma";
+    if (filter === "general") return m.requestType !== "proforma";
+    return m.status === filter;
+  });
   const unreadCount = messages.filter((m) => m.status === "unread").length;
+  const proformaCount = messages.filter((m) => m.requestType === "proforma").length;
 
   const filterBtnStyle = (active) => ({
     padding: "6px 14px",
@@ -129,16 +135,24 @@ function Messages() {
 
         {/* Filter tabs */}
         <div style={{ display: "flex", gap: "4px", background: "#f1f5f9",
-          borderRadius: "12px", padding: "4px" }}>
-          {["all", "unread", "read", "replied"].map((f) => (
+          borderRadius: "12px", padding: "4px", flexWrap: "wrap" }}>
+          {["all", "proforma", "general", "unread", "read", "replied"].map((f) => (
             <button key={f} onClick={() => setFilter(f)} style={filterBtnStyle(filter === f)}>
-              {f}
+              {f === "proforma" ? "📋 Proforma" : f === "general" ? "General" : f}
               {f === "unread" && unreadCount > 0 && (
                 <span style={{
                   marginLeft: "6px", background: "#2563eb", color: "#fff",
                   fontSize: "11px", padding: "1px 6px", borderRadius: "999px",
                 }}>
                   {unreadCount}
+                </span>
+              )}
+              {f === "proforma" && proformaCount > 0 && (
+                <span style={{
+                  marginLeft: "6px", background: "#2563eb", color: "#fff",
+                  fontSize: "11px", padding: "1px 6px", borderRadius: "999px",
+                }}>
+                  {proformaCount}
                 </span>
               )}
             </button>
@@ -213,24 +227,31 @@ function Messages() {
                     <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
                       {/* Avatar */}
                       <div style={{
-                        width: "40px", height: "40px", background: "#eff6ff",
+                        width: "40px", height: "40px", background: msg.requestType === "proforma" ? "#fef08a" : "#eff6ff",
                         borderRadius: "50%", display: "flex", alignItems: "center",
-                        justifyContent: "center", color: "#2563eb", fontWeight: "700",
+                        justifyContent: "center", color: msg.requestType === "proforma" ? "#ca8a04" : "#2563eb", fontWeight: "700",
                         fontSize: "14px", flexShrink: 0,
                       }}>
-                        {msg.name.charAt(0).toUpperCase()}
+                        {msg.requestType === "proforma" ? "📋" : msg.name.charAt(0).toUpperCase()}
                       </div>
 
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
                           gap: "8px", marginBottom: "2px" }}>
-                          <p style={{
-                            fontSize: "14px", fontWeight: msg.status === "unread" ? "700" : "600",
-                            color: msg.status === "unread" ? "#0f172a" : "#374151",
-                            margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                          }}>
-                            {msg.name}
-                          </p>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{
+                              fontSize: "14px", fontWeight: msg.status === "unread" ? "700" : "600",
+                              color: msg.status === "unread" ? "#0f172a" : "#374151",
+                              margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                            }}>
+                              {msg.name}
+                            </p>
+                            {msg.requestType === "proforma" && (
+                              <p style={{ fontSize: "11px", color: "#ca8a04", fontWeight: "600", margin: "1px 0 0" }}>
+                                PR #{msg.proformaNumber}
+                              </p>
+                            )}
+                          </div>
                           <span style={{
                             fontSize: "11px", fontWeight: "600",
                             padding: "2px 8px", borderRadius: "999px",
@@ -246,7 +267,7 @@ function Messages() {
                         </p>
                         <p style={{ fontSize: "12px", color: "#94a3b8",
                           margin: "0 0 4px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {msg.message}
+                          {msg.message || (msg.requestType === "proforma" ? `Quantity: ${msg.quantity}` : "No message")}
                         </p>
                         <p style={{ fontSize: "11px", color: "#cbd5e1", margin: 0 }}>
                           {new Date(msg.createdAt).toLocaleDateString("en-US",
@@ -274,15 +295,20 @@ function Messages() {
               padding: "16px 24px", borderBottom: "1px solid #f1f5f9", flexShrink: 0 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                 <div style={{
-                  width: "40px", height: "40px", background: "#eff6ff",
+                  width: "40px", height: "40px", background: selected.requestType === "proforma" ? "#fef08a" : "#eff6ff",
                   borderRadius: "50%", display: "flex", alignItems: "center",
-                  justifyContent: "center", color: "#2563eb", fontWeight: "700", fontSize: "16px",
+                  justifyContent: "center", color: selected.requestType === "proforma" ? "#ca8a04" : "#2563eb", fontWeight: "700", fontSize: "16px",
                 }}>
-                  {selected.name.charAt(0).toUpperCase()}
+                  {selected.requestType === "proforma" ? "📋" : selected.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <p style={{ fontWeight: "700", color: "#0f172a", margin: "0 0 2px", fontSize: "15px" }}>
                     {selected.name}
+                    {selected.requestType === "proforma" && selected.proformaNumber && (
+                      <span style={{ fontSize: "12px", color: "#ca8a04", fontWeight: "600", marginLeft: "8px" }}>
+                        (PR #{selected.proformaNumber})
+                      </span>
+                    )}
                   </p>
                   <p style={{ fontSize: "12px", color: "#94a3b8", margin: 0 }}>
                     {selected.email}{selected.phone ? ` · ${selected.phone}` : ""}
@@ -345,6 +371,41 @@ function Messages() {
                     { hour: "2-digit", minute: "2-digit" })}
                 </p>
               </div>
+
+              {/* Proforma Details */}
+              {selected.requestType === "proforma" && (
+                <div style={{ background: "#fef3c7", border: "1px solid #fcd34d", borderRadius: "12px", padding: "16px", marginBottom: "24px" }}>
+                  <p style={{ fontSize: "11px", fontWeight: "700", color: "#ca8a04", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "12px" }}>
+                    📋 Proforma Request Details
+                  </p>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                    {selected.organizationName && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Organization</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.organizationName}</p>
+                      </div>
+                    )}
+                    {selected.location && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Location</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.location}</p>
+                      </div>
+                    )}
+                    {selected.product?.productName && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Product</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.product.productName}</p>
+                      </div>
+                    )}
+                    {selected.quantity && (
+                      <div>
+                        <p style={{ fontSize: "11px", color: "#92400e", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "600", margin: "0 0 4px" }}>Quantity</p>
+                        <p style={{ fontSize: "13px", color: "#0f172a", fontWeight: "500", margin: 0 }}>{selected.quantity} unit(s)</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Original Message */}
               <div style={{ background: "#f8fafc", borderRadius: "12px", padding: "20px", marginBottom: "24px" }}>
@@ -411,7 +472,7 @@ function Messages() {
                     value={reply}
                     onChange={(e) => { setReply(e.target.value); setReplySuccess(false); }}
                     rows="5"
-                    placeholder={`Write your reply to ${selected.name}...`}
+                    placeholder={`Write your reply to ${selected.name}${selected.requestType === "proforma" ? " regarding their proforma request" : ""}...`}
                     required
                     style={inputStyle}
                     onFocus={(e) => e.currentTarget.style.borderColor = "#2563eb"}

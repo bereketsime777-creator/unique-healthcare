@@ -37,6 +37,43 @@ const messageSchema = new mongoose.Schema(
     repliedAt: {
       type: Date,
     },
+    // Proforma-specific fields (optional, only populated for proforma requests)
+    requestType: {
+      type: String,
+      enum: ["general", "proforma"],
+      default: "general",
+    },
+    organizationName: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    location: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    proformaNumber: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    product: {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        default: null,
+      },
+      productName: {
+        type: String,
+        default: "",
+      },
+    },
+    quantity: {
+      type: Number,
+      default: 1,
+      min: 1,
+    },
   },
   {
     timestamps: true,

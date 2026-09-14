@@ -420,7 +420,7 @@ function Products() {
                         </Link>
                         {product.priceType === 'quote' ? (
                           <Link
-                            to="/contact?subject=Request a Quote"
+                            to={`/contact?subject=Request Proforma&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
                             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
                             style={{ color: '#ffffff' }}
                           >

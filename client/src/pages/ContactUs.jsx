@@ -21,29 +21,120 @@ const trust = [
 export default function ContactUs() {
   const [searchParams] = useSearchParams();
   const subjectParam = searchParams.get("subject") || "";
+  const productIdParam = searchParams.get("productId") || "";
+  const productNameParam = searchParams.get("productName") || "";
   
-  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: subjectParam, message: "" });
+  const [form, setForm] = useState({ 
+    name: "", 
+    email: "", 
+    phone: "", 
+    subject: subjectParam, 
+    message: "",
+    requestType: "general",
+    organizationName: "",
+    location: "",
+    productId: productIdParam,
+    productName: productNameParam,
+    quantity: 1,
+  });
   const [loading, setLoading]     = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError]         = useState("");
+  const [products, setProducts]   = useState([]);
+  const [searchingProducts, setSearchingProducts] = useState(false);
+  const [productSearch, setProductSearch] = useState("");
 
   useEffect(() => {
     if (subjectParam) {
-      setForm(prev => ({ ...prev, subject: subjectParam }));
+      const isProforma = subjectParam.toLowerCase().includes("proforma");
+      setForm(prev => ({ 
+        ...prev, 
+        subject: subjectParam,
+        requestType: isProforma ? "proforma" : "general",
+      }));
     }
-  }, [subjectParam]);
+    if (productIdParam && productNameParam) {
+      setForm(prev => ({ 
+        ...prev, 
+        productId: productIdParam,
+        productName: productNameParam,
+      }));
+    }
+  }, [subjectParam, productIdParam, productNameParam]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
     setError("");
+    
+    // When subject changes to proforma, switch to proforma mode
+    if (name === "subject") {
+      const isProforma = value.toLowerCase().includes("proforma");
+      setForm(prev => ({ ...prev, requestType: isProforma ? "proforma" : "general" }));
+    }
+  };
+
+  // Fetch products for autocomplete
+  const handleProductSearch = async (query) => {
+    setProductSearch(query);
+    if (query.length < 2) {
+      setProducts([]);
+      return;
+    }
+    try {
+      setSearchingProducts(true);
+      const res = await API.get("/products", { params: { search: query } });
+      setProducts(res.data.slice(0, 10));
+    } catch (err) {
+      console.error("Product search failed:", err);
+      setProducts([]);
+    } finally {
+      setSearchingProducts(false);
+    }
+  };
+
+  const selectProduct = (product) => {
+    setForm(prev => ({
+      ...prev,
+      productId: product._id,
+      productName: product.name,
+    }));
+    setProducts([]);
+    setProductSearch("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    
+    // Validate proforma fields if needed
+    if (form.requestType === "proforma") {
+      if (!form.organizationName || !form.location || !form.productName || form.quantity < 1) {
+        setError("For proforma requests, please fill in organization, location, product, and quantity.");
+        return;
+      }
+    }
+    
     try {
       setLoading(true);
-      await API.post("/messages", form);
+      const payload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
+        requestType: form.requestType,
+      };
+      
+      if (form.requestType === "proforma") {
+        payload.organizationName = form.organizationName;
+        payload.location = form.location;
+        payload.productId = form.productId;
+        payload.productName = form.productName;
+        payload.quantity = parseInt(form.quantity) || 1;
+      }
+      
+      await API.post("/messages", payload);
       setSubmitted(true);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to send. Please try again.");
@@ -256,6 +347,7 @@ export default function ContactUs() {
                       <select name="subject" value={form.subject} onChange={handleChange} required style={{ ...input }}>
                         <option value="">Select a subject</option>
                         <option>Product Inquiry</option>
+                        <option>Request Proforma</option>
                         <option>Bulk / Wholesale Order</option>
                         <option>Request a Quote</option>
                         <option>Technical Support</option>
@@ -266,10 +358,88 @@ export default function ContactUs() {
                     </div>
                   </div>
 
+                  {/* Proforma-specific fields */}
+                  {form.requestType === "proforma" && (
+                    <>
+                      <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "12px", padding: "16px", marginBottom: "16px" }}>
+                        <p style={{ fontSize: "12px", fontWeight: "700", color: "#2563eb", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>📋 Proforma Request Details</p>
+                        
+                        <div className="responsive-grid-form-2" style={{ gap: "12px", marginBottom: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Organization / Hospital / Clinic *</label>
+                            <input name="organizationName" value={form.organizationName} onChange={handleChange} required placeholder="e.g., Addis Ababa General Hospital" style={input} />
+                          </div>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Delivery Location *</label>
+                            <input name="location" value={form.location} onChange={handleChange} required placeholder="e.g., Bole Sub-City, Addis Ababa" style={input} />
+                          </div>
+                        </div>
+
+                        {/* Product Selector */}
+                        <div style={{ marginBottom: "12px" }}>
+                          <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Product *</label>
+                          {form.productName ? (
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <div style={{ ...input, padding: "12px 16px", flex: 1, background: "#f0fdf4", border: "1px solid #86efac", color: "#16a34a", fontWeight: "500" }}>
+                                ✓ {form.productName}
+                              </div>
+                              <button type="button" onClick={() => setForm(prev => ({ ...prev, productId: "", productName: "" }))}
+                                style={{ background: "#fff1f2", color: "#e11d48", border: "1px solid #fecdd3", padding: "12px 16px", borderRadius: "12px", cursor: "pointer", fontWeight: "600", fontSize: "13px" }}>
+                                Change
+                              </button>
+                            </div>
+                          ) : (
+                            <div style={{ position: "relative" }}>
+                              <input
+                                type="text"
+                                placeholder="Search for a product..."
+                                value={productSearch}
+                                onChange={(e) => handleProductSearch(e.target.value)}
+                                style={input}
+                              />
+                              {products.length > 0 && (
+                                <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", marginTop: "4px", zIndex: 10, maxHeight: "200px", overflowY: "auto", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+                                  {products.map((p) => (
+                                    <button
+                                      key={p._id}
+                                      type="button"
+                                      onClick={() => selectProduct(p)}
+                                      style={{ width: "100%", textAlign: "left", padding: "12px 16px", border: "none", background: "transparent", cursor: "pointer", fontSize: "13px", borderBottom: "1px solid #f1f5f9", transition: "background 0.15s" }}
+                                      onMouseEnter={(e) => e.currentTarget.style.background = "#f8fafc"}
+                                      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                                    >
+                                      <div style={{ fontWeight: "600", color: "#0f172a" }}>{p.name}</div>
+                                      <div style={{ fontSize: "12px", color: "#94a3b8" }}>{p.category}</div>
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                              {productSearch && products.length === 0 && !searchingProducts && (
+                                <div style={{ position: "absolute", top: "100%", left: 0, right: 0, background: "#fff", border: "1px solid #e2e8f0", borderRadius: "12px", marginTop: "4px", padding: "12px 16px", fontSize: "13px", color: "#94a3b8", zIndex: 10 }}>
+                                  No products found
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Quantity */}
+                        <div className="responsive-grid-form-2" style={{ gap: "12px" }}>
+                          <div>
+                            <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Quantity *</label>
+                            <input type="number" name="quantity" value={form.quantity} onChange={handleChange} min="1" required style={input} />
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <div style={{ marginBottom: "24px" }}>
-                    <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>Message *</label>
-                    <textarea name="message" value={form.message} onChange={handleChange} required rows={6}
-                      placeholder="Tell us about your needs — what products you're looking for, your facility type, quantity required, etc."
+                    <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
+                      Message {form.requestType === "proforma" ? "(Optional)" : "*"}
+                    </label>
+                    <textarea name="message" value={form.message} onChange={handleChange} required={form.requestType !== "proforma"} rows={6}
+                      placeholder={form.requestType === "proforma" ? "Additional details about your proforma request..." : "Tell us about your needs — what products you're looking for, your facility type, quantity required, etc."}
                       style={{ ...input, resize: "vertical", lineHeight: 1.6 }} />
                   </div>
 

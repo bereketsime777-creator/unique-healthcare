@@ -1,4 +1,5 @@
 const Message = require("../models/Message");
+const { generateProformaNumber } = require("../utils/proformaGenerator");
 const nodemailer = require("nodemailer");
 
 // ==============================
@@ -6,22 +7,55 @@ const nodemailer = require("nodemailer");
 // ==============================
 const sendMessage = async (req, res) => {
   try {
-    const { name, email, phone, subject, message } = req.body;
+    const { name, email, phone, subject, message, requestType, organizationName, location, productId, productName, quantity } = req.body;
 
     if (!name || !email || !subject || !message) {
       return res.status(400).json({ message: "All required fields must be filled." });
     }
 
-    const newMessage = await Message.create({
+    // Validate proforma-specific fields
+    if (requestType === "proforma") {
+      if (!organizationName || !location || !productName || !quantity) {
+        return res.status(400).json({ 
+          message: "For proforma requests, organization, location, product, and quantity are required." 
+        });
+      }
+      if (quantity < 1) {
+        return res.status(400).json({ message: "Quantity must be at least 1." });
+      }
+    }
+
+    // Generate proforma number if it's a proforma request
+    let proformaNumber = null;
+    if (requestType === "proforma") {
+      proformaNumber = await generateProformaNumber();
+    }
+
+    const messageData = {
       name,
       email,
       phone,
       subject,
       message,
-    });
+      requestType: requestType || "general",
+    };
+
+    // Add proforma-specific fields
+    if (requestType === "proforma") {
+      messageData.organizationName = organizationName;
+      messageData.location = location;
+      messageData.proformaNumber = proformaNumber;
+      messageData.product = {
+        productId: productId || null,
+        productName: productName,
+      };
+      messageData.quantity = parseInt(quantity) || 1;
+    }
+
+    const newMessage = await Message.create(messageData);
 
     res.status(201).json({
-      message: "Message sent successfully",
+      message: requestType === "proforma" ? "Proforma request submitted successfully" : "Message sent successfully",
       data: newMessage,
     });
   } catch (error) {
@@ -87,11 +121,13 @@ const replyToMessage = async (req, res) => {
           },
         });
 
-        await transporter.sendMail({
-          from: `"Unique Healthcare" <${process.env.EMAIL_USER}>`,
-          to: msg.email,
-          subject: `Re: ${msg.subject}`,
-          html: `
+        // Build email subject based on request type
+        const emailSubject = msg.requestType === "proforma" 
+          ? `Re: Proforma Request ${msg.proformaNumber} - ${msg.subject}`
+          : `Re: ${msg.subject}`;
+
+        // Build email body based on request type
+        let emailBody = `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <div style="background: #1a56db; padding: 20px; text-align: center;">
                 <h2 style="color: white; margin: 0;">Unique Healthcare</h2>
@@ -99,7 +135,26 @@ const replyToMessage = async (req, res) => {
               </div>
               <div style="padding: 30px; background: #f8fafc;">
                 <p style="color: #374151;">Dear <strong>${msg.name}</strong>,</p>
+                `;
+
+        if (msg.requestType === "proforma") {
+          emailBody += `
+                <p style="color: #374151;">Thank you for submitting your proforma request <strong>${msg.proformaNumber}</strong>. Here is our reply:</p>
+                <div style="background: #eff6ff; padding: 16px; margin: 16px 0; border-radius: 4px; border-left: 4px solid #1a56db;">
+                  <p style="color: #0f172a; margin: 0 0 8px;"><strong>Request Details:</strong></p>
+                  <p style="color: #374151; margin: 4px 0;">Product: ${msg.product?.productName || 'N/A'}</p>
+                  <p style="color: #374151; margin: 4px 0;">Quantity: ${msg.quantity}</p>
+                  <p style="color: #374151; margin: 4px 0;">Organization: ${msg.organizationName}</p>
+                  <p style="color: #374151; margin: 4px 0;">Location: ${msg.location}</p>
+                </div>
+                `;
+        } else {
+          emailBody += `
                 <p style="color: #374151;">Thank you for contacting us. Here is our reply to your message regarding <strong>"${msg.subject}"</strong>:</p>
+                `;
+        }
+
+        emailBody += `
                 <div style="background: white; border-left: 4px solid #1a56db; padding: 16px; margin: 20px 0; border-radius: 4px;">
                   <p style="color: #1e293b; margin: 0; white-space: pre-wrap;">${reply}</p>
                 </div>
@@ -115,7 +170,13 @@ const replyToMessage = async (req, res) => {
                 </p>
               </div>
             </div>
-          `,
+          `;
+
+        await transporter.sendMail({
+          from: `"Unique Healthcare" <${process.env.EMAIL_USER}>`,
+          to: msg.email,
+          subject: emailSubject,
+          html: emailBody,
         });
 
         console.log("Reply email sent to:", msg.email);
