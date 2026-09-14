@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import API from "../services/api";
-import { FaWhatsapp, FaPhone, FaArrowUp } from "react-icons/fa";
+import { FaWhatsapp, FaArrowUp } from "react-icons/fa";
 import { CONTACT } from "../constants/contact";
 
 export default function FloatingButtons() {
@@ -70,7 +70,6 @@ export default function FloatingButtons() {
   // Extract phone number and remove + for WhatsApp URL
   const phoneNumber = CONTACT.phones[0].tel.replace(/\+/g, "");
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
-  const callUrl = `tel:${CONTACT.phones[0].tel}`;
 
   // Common button styles
   const baseButtonStyle = {
@@ -99,17 +98,11 @@ export default function FloatingButtons() {
       boxShadow: "0 4px 12px rgba(37, 211, 102, 0.4)",
       bottom: "24px",
     },
-    call: {
-      ...baseButtonStyle,
-      background: "#2563eb",
-      boxShadow: "0 4px 12px rgba(37, 99, 235, 0.4)",
-      bottom: "92px",
-    },
     backToTop: {
       ...baseButtonStyle,
       background: "#8b5cf6",
       boxShadow: "0 4px 12px rgba(139, 92, 246, 0.4)",
-      bottom: "160px",
+      bottom: "92px",
       opacity: showBackToTop ? 1 : 0,
       pointerEvents: showBackToTop ? "auto" : "none",
       transition: "all 0.3s ease",
@@ -149,22 +142,6 @@ export default function FloatingButtons() {
         <FaWhatsapp style={getIconStyle("whatsapp")} />
       </a>
 
-      {/* Call Button */}
-      <a
-        href={callUrl}
-        aria-label="Call Unique Healthcare"
-        title="Call us"
-        style={{
-          ...buttonStyles.call,
-          position: "fixed",
-          right: "24px",
-        }}
-        onMouseEnter={() => setHoveredButton("call")}
-        onMouseLeave={() => setHoveredButton(null)}
-      >
-        <FaPhone style={getIconStyle("call")} />
-      </a>
-
       {/* Back-to-Top Button */}
       <button
         onClick={handleBackToTop}
@@ -185,7 +162,6 @@ export default function FloatingButtons() {
       <style>{`
         @media (max-width: 768px) {
           [aria-label="Chat with Unique Healthcare on WhatsApp"],
-          [aria-label="Call Unique Healthcare"],
           [aria-label="Back to top"] {
             width: 48px !important;
             height: 48px !important;
@@ -198,18 +174,13 @@ export default function FloatingButtons() {
             bottom: 20px !important;
           }
 
-          [aria-label="Call Unique Healthcare"] {
-            bottom: 80px !important;
-          }
-
           [aria-label="Back to top"] {
-            bottom: 140px !important;
+            bottom: 80px !important;
           }
         }
 
         @media (max-width: 480px) {
           [aria-label="Chat with Unique Healthcare on WhatsApp"],
-          [aria-label="Call Unique Healthcare"],
           [aria-label="Back to top"] {
             width: 44px !important;
             height: 44px !important;
@@ -221,12 +192,8 @@ export default function FloatingButtons() {
             bottom: 16px !important;
           }
 
-          [aria-label="Call Unique Healthcare"] {
-            bottom: 72px !important;
-          }
-
           [aria-label="Back to top"] {
-            bottom: 128px !important;
+            bottom: 72px !important;
           }
         }
       `}</style>
