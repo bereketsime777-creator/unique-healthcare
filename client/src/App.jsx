@@ -32,6 +32,7 @@ import EditProduct from "./admin/EditProduct";
 import ManageOrders from "./admin/ManageOrders";
 import OrderDetails from "./admin/OrderDetails";
 import Messages from "./admin/Messages";
+import ManageCategories from "./admin/ManageCategories";
 
 // Scroll to top on every navigation
 function ScrollToTop() {
@@ -89,6 +90,7 @@ function Layout() {
           <Route path="products" element={<ManageProducts />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="edit-product/:id" element={<EditProduct />} />
+          <Route path="categories" element={<ManageCategories />} />
           <Route path="orders" element={<ManageOrders />} />
           <Route path="orders/:id" element={<OrderDetails />} />
           <Route path="messages" element={<Messages />} />

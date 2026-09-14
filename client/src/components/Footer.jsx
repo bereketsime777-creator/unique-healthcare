@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { FiMapPin, FiPhone, FiMail, FiClock, FiArrowRight } from "react-icons/fi";
 import { FaTelegramPlane, FaWhatsapp } from "react-icons/fa";
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
 import { getFooterShopLinks } from "../constants/categories";
 import { CONTACT } from "../constants/contact";
 import NewsletterSignup from "./NewsletterSignup";
@@ -8,18 +10,18 @@ import NewsletterSignup from "./NewsletterSignup";
 const shop = getFooterShopLinks();
 
 const pages = [
-  { label: "Home",       to: "/" },
-  { label: "Products",   to: "/products" },
-  { label: "Services",   to: "/services" },
-  { label: "About Us",   to: "/about" },
-  { label: "Contact Us", to: "/contact" },
+  { key: "nav.home", to: "/" },
+  { key: "nav.products", to: "/products" },
+  { key: "nav.services", to: "/services" },
+  { key: "nav.about", to: "/about" },
+  { key: "nav.contact", to: "/contact" },
 ];
 
 const account = [
-  { label: "My Cart",    to: "/cart" },
-  { label: "My Orders",  to: "/my-orders" },
-  { label: "Register",   to: "/register" },
-  { label: "Login",      to: "/login" },
+  { key: "nav.cart", to: "/cart" },
+  { key: "nav.myOrders", to: "/my-orders" },
+  { key: "nav.register", to: "/register" },
+  { key: "nav.login", to: "/login" },
 ];
 
 const socials = [
@@ -28,12 +30,13 @@ const socials = [
 ];
 
 const legal = [
-  { label: "Privacy Policy", to: "/privacy" },
-  { label: "Terms of Service", to: "/terms" },
-  { label: "Refund Policy", to: "/refund" },
+  { key: "footer.privacy", to: "/privacy" },
+  { key: "footer.terms", to: "/terms" },
+  { key: "footer.refund", to: "/refund" },
 ];
 
 export default function Footer() {
+  const { language } = useLanguage();
   const lnk = { color: "#dbeafe", fontSize: "13px", textDecoration: "none", lineHeight: "2", transition: "color 0.15s" };
 
   return (
@@ -44,10 +47,10 @@ export default function Footer() {
         <div className="page-wrap" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "20px", flexWrap: "wrap" }}>
           <div>
             <p style={{ color: "#fff", fontWeight: 700, fontSize: "18px", margin: "0 0 2px" }}>
-              Subscribe for exclusive updates
+              {t(language, "footer.newsletter")}
             </p>
             <p style={{ color: "#dbeafe", fontSize: "14px", margin: 0 }}>
-              New arrivals, special offers, and healthcare news.
+              {t(language, "footer.newsletterDesc")}
             </p>
           </div>
           <NewsletterSignup variant="footer" />
@@ -93,23 +96,23 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Shop</h4>
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "1.5px" }}>{t(language, "footer.shop")}</h4>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {shop.map((l) => <Link key={l.label} to={l.to} style={lnk}>{l.label}</Link>)}
             </div>
           </div>
 
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Pages</h4>
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "1.5px" }}>{t(language, "footer.pages")}</h4>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              {pages.map((l) => <Link key={l.label} to={l.to} style={lnk}>{l.label}</Link>)}
+              {pages.map((l) => <Link key={l.key} to={l.to} style={lnk}>{t(language, l.key)}</Link>)}
             </div>
           </div>
 
           <div>
-            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "1.5px" }}>Account</h4>
+            <h4 style={{ color: "#fff", fontWeight: 700, fontSize: "14px", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "1.5px" }}>{t(language, "footer.account")}</h4>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              {account.map((l) => <Link key={l.label} to={l.to} style={lnk}>{l.label}</Link>)}
+              {account.map((l) => <Link key={l.key} to={l.to} style={lnk}>{t(language, l.key)}</Link>)}
             </div>
           </div>
 
@@ -137,7 +140,7 @@ export default function Footer() {
             </div>
 
             <Link to="/contact" className="btn btn-white" style={{ marginTop: "16px", padding: "8px 18px", fontSize: "13px" }}>
-              Get a Quote <FiArrowRight size={13} />
+              {t(language, "footer.getQuote")} <FiArrowRight size={13} />
             </Link>
           </div>
 
@@ -148,12 +151,12 @@ export default function Footer() {
       <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "14px 0" }}>
         <div className="page-wrap" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
           <p style={{ color: "#ffffff", fontSize: "12px", margin: 0 }}>
-            © 2026 Unique Healthcare. All Rights Reserved.
+            © 2026 Unique Healthcare. {t(language, "footer.allRights")}
           </p>
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
-            {legal.map((t) => (
-              <Link key={t.to} to={t.to} style={{ color: "#ffffff", fontSize: "12px", textDecoration: "none" }}>
-                {t.label}
+            {legal.map((item) => (
+              <Link key={item.to} to={item.to} style={{ color: "#ffffff", fontSize: "12px", textDecoration: "none" }}>
+                {t(language, item.key)}
               </Link>
             ))}
           </div>

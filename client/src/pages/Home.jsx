@@ -2,41 +2,39 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
-import { categoryFilterUrl, getHomeCategoryBanners, normalizeCategory } from "../constants/categories";
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
+import { categoryFilterUrl, normalizeCategory, CATEGORY_IMAGES } from "../constants/categories";
 import NewsletterSignup from "../components/NewsletterSignup";
 import Testimonials from "../components/Testimonials";
 import "../styles/home-enhancements.css";
 
 const HERO_BG = "/images/hero1.png";
-const categories = getHomeCategoryBanners();
 
 const brands = ["Mindray", "Drager", "Philips", "Siemens Healthineers", "EDAN", "Getinge", "GE Healthcare", "Stryker"];
-
-const stats = [
-  { value: "200+", label: "Hospitals Served" },
-  { value: "500+", label: "Products Available" },
-  { value: "10+",  label: "Years Experience" },
-  { value: "15+",  label: "Global Brands" },
-];
-
-const features = [
-  { icon: "🏅", title: "100% Genuine Products",    desc: "Every product certified and sourced from globally recognized manufacturers." },
-  { icon: "🚚", title: "Fast & Reliable Delivery", desc: "Nationwide delivery across Ethiopia with specialized safe packaging." },
-  { icon: "🛠️", title: "Expert After-Sales Support", desc: "Installation, training, and ongoing technical support on every purchase." },
-  { icon: "💰", title: "Competitive Pricing",       desc: "Best pricing with bulk discounts for hospitals and institutions." },
-];
 
 export default function Home() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const [products, setProducts]   = useState([]);
-  const [addedId, setAddedId]     = useState(null);
+  const { language } = useLanguage();
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [addedId, setAddedId] = useState(null);
 
   useEffect(() => {
-    API.get("/products").then((r) => setProducts(r.data.map((p) => ({
-      ...p,
-      category: normalizeCategory(p.category),
-    })))).catch(() => {});
+    // Fetch products and categories in parallel
+    Promise.all([
+      API.get("/products"),
+      API.get("/categories")
+    ])
+      .then(([productsRes, categoriesRes]) => {
+        setProducts(productsRes.data.map((p) => ({
+          ...p,
+          category: normalizeCategory(p.category),
+        })));
+        setCategories(categoriesRes.data.slice(0, 4)); // Show first 4 categories
+      })
+      .catch(() => {});
   }, []);
 
   const handleAdd = (product) => {
@@ -46,7 +44,37 @@ export default function Home() {
   };
 
   const featured = products.slice(0, 4);
-  const latest   = products.length > 4 ? products.slice(4, 8) : products.slice(0, 4);
+  const latest = products.length > 4 ? products.slice(4, 8) : products.slice(0, 4);
+
+  const stats = [
+    { value: "200+", label: t(language, "home.stats.hospitalsServed") },
+    { value: "500+", label: t(language, "home.stats.productsAvailable") },
+    { value: "10+", label: t(language, "home.stats.yearsExperience") },
+    { value: "15+", label: t(language, "home.stats.globalBrands") },
+  ];
+
+  const features = [
+    { 
+      icon: "🏅", 
+      title: t(language, "home.features.genuine"), 
+      desc: t(language, "home.features.genuineDesc") 
+    },
+    { 
+      icon: "🚚", 
+      title: t(language, "home.features.delivery"), 
+      desc: t(language, "home.features.deliveryDesc") 
+    },
+    { 
+      icon: "🛠️", 
+      title: t(language, "home.features.support"), 
+      desc: t(language, "home.features.supportDesc") 
+    },
+    { 
+      icon: "💰", 
+      title: t(language, "home.features.pricing"), 
+      desc: t(language, "home.features.pricingDesc") 
+    },
+  ];
 
   return (
     <div>
@@ -82,7 +110,7 @@ export default function Home() {
               marginBottom: "24px",
               opacity: 0.9
             }}>
-              Trusted by 200+ Hospitals Across Ethiopia
+              {t(language, "home.heroTag")}
             </p>
 
             <h1 style={{ 
@@ -93,12 +121,12 @@ export default function Home() {
               marginBottom: "24px",
               textShadow: "0 4px 20px rgba(0,0,0,0.3)"
             }}>
-              Your Trusted Partner in<br />
+              {t(language, "home.heroTitle")}<br />
               <span style={{
                 color: "#1e40af",
                 display: "inline-block",
                 textShadow: "0 2px 4px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)"
-              }}>Hospital Equipment</span>
+              }}>{t(language, "home.heroTitleBold")}</span>
             </h1>
 
             <p style={{ 
@@ -111,7 +139,7 @@ export default function Home() {
               opacity: 0.95,
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
-              High-quality certified medical equipment delivered with reliability<br />and professional support across Ethiopia
+              {t(language, "home.heroDesc")}
             </p>
 
             <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
@@ -130,7 +158,7 @@ export default function Home() {
                   gap: "8px",
                 }}
               >
-                Explore Products
+                {t(language, "home.exploreProducts")}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -148,7 +176,7 @@ export default function Home() {
                   display: "inline-block",
                 }}
               >
-                Contact Us
+                {t(language, "home.contactUs")}
               </Link>
             </div>
           </div>
@@ -205,19 +233,23 @@ export default function Home() {
       {/* CATEGORY BANNERS */}
       <section className="section-pad" style={{ background: "#fff" }}>
         <div className="page-wrap">
-          <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "6px" }}>Browse by Category</p>
+          <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "6px" }}>
+            {t(language, "home.browseCategory")}
+          </p>
           <div className="section-header">
-            <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>Shop by Equipment Type</h2>
+            <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>
+              {t(language, "home.shopByType")}
+            </h2>
             <Link to="/products" style={{ color: "#2563eb", fontWeight: 600, fontSize: "14px", textDecoration: "none" }}>
-              View all →
+              {t(language, "home.viewAll")} →
             </Link>
           </div>
 
           <div className="responsive-grid-4" style={{ gap: "16px" }}>
             {categories.map((cat) => (
               <div
-                key={cat.label}
-                onClick={() => navigate(categoryFilterUrl(cat.label))}
+                key={cat._id}
+                onClick={() => navigate(categoryFilterUrl(cat.name))}
                 className="category-card"
                 style={{
                   height: "200px",
@@ -226,8 +258,8 @@ export default function Home() {
                 }}
               >
                 <img
-                  src={cat.bg}
-                  alt={cat.label}
+                  src={cat.image || CATEGORY_IMAGES[cat.name] || "/images/hero1.png"}
+                  alt={cat.name}
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   onError={(e) => { e.target.parentElement.style.background = "#1e40af"; e.target.style.display = "none"; }}
                 />
@@ -240,7 +272,7 @@ export default function Home() {
                   background: "linear-gradient(to top, rgba(0,0,0,0.65), transparent)",
                 }} />
                 <div className="category-card-content" style={{ position: "absolute", bottom: "16px", left: "16px" }}>
-                  <p style={{ color: "#fff", fontWeight: 700, fontSize: "15px", margin: "0 0 8px" }}>{cat.label}</p>
+                  <p style={{ color: "#fff", fontWeight: 700, fontSize: "15px", margin: "0 0 8px" }}>{cat.name}</p>
                   <span style={{
                     background: "#2563eb",
                     color: "#fff",
@@ -249,7 +281,7 @@ export default function Home() {
                     padding: "5px 14px",
                     borderRadius: "50px",
                   }}>
-                    Shop now
+                    {t(language, "home.shopNow")}
                   </span>
                 </div>
               </div>
@@ -263,11 +295,15 @@ export default function Home() {
         <div className="page-wrap">
           <div className="section-header" style={{ marginBottom: "32px" }}>
             <div>
-              <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>Top Picks</p>
-              <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>Featured Products</h2>
+              <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>
+                {t(language, "home.topPicks")}
+              </p>
+              <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>
+                {t(language, "home.featuredProducts")}
+              </h2>
             </div>
             <Link to="/products" style={{ color: "#2563eb", fontWeight: 600, fontSize: "14px", textDecoration: "none" }}>
-              View all →
+              {t(language, "home.viewAll")} →
             </Link>
           </div>
 
@@ -291,10 +327,14 @@ export default function Home() {
       <section className="section-pad" style={{ background: "#fff" }}>
         <div className="page-wrap">
           <div style={{ textAlign: "center", marginBottom: "48px" }}>
-            <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>Why Us</p>
-            <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: "0 0 10px" }}>Why Choose Unique Healthcare?</h2>
+            <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>
+              {t(language, "home.whyUs")}
+            </p>
+            <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: "0 0 10px" }}>
+              {t(language, "home.whyChoose")}
+            </h2>
             <p style={{ color: "#64748b", fontSize: "15px", maxWidth: "480px", margin: "0 auto" }}>
-              We go beyond just supply - we are your long-term healthcare equipment partner.
+              {t(language, "home.whyDesc")}
             </p>
           </div>
           <div className="responsive-grid-4" style={{ gap: "24px" }}>
@@ -333,11 +373,15 @@ export default function Home() {
           <div className="page-wrap">
             <div className="section-header" style={{ marginBottom: "32px" }}>
               <div>
-                <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>Just Added</p>
-                <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>Latest Products</h2>
+                <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>
+                  {t(language, "home.justAdded")}
+                </p>
+                <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: 0 }}>
+                  {t(language, "home.latestProducts")}
+                </h2>
               </div>
               <Link to="/products" style={{ color: "#2563eb", fontWeight: 600, fontSize: "14px", textDecoration: "none" }}>
-                View all →
+                {t(language, "home.viewAll")} →
               </Link>
             </div>
             <div className="responsive-grid-4">
@@ -353,12 +397,14 @@ export default function Home() {
       <section style={{ background: "#fff", borderTop: "1px solid #f1f5f9", padding: "56px 0" }}>
         <div className="page-wrap">
           <div style={{ textAlign: "center", marginBottom: "36px" }}>
-            <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>Partners</p>
+            <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "12px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "8px" }}>
+              {t(language, "home.partners")}
+            </p>
             <h2 style={{ color: "#0f172a", fontWeight: 800, fontSize: "28px", margin: "0 0 8px" }}>
-              Discover Our Brands
+              {t(language, "home.discoverBrands")}
             </h2>
             <p style={{ color: "#64748b", fontSize: "14px" }}>
-              Official distributor of top global medical equipment manufacturers
+              {t(language, "home.brandsDesc")}
             </p>
           </div>
           <div className="responsive-grid-8">
@@ -387,10 +433,10 @@ export default function Home() {
       >
         <div className="page-wrap" style={{ textAlign: "center" }}>
           <h2 style={{ color: "#fff", fontWeight: 900, fontSize: "clamp(26px, 5vw, 38px)", marginBottom: "12px" }}>
-            Ready to Equip Your Facility?
+            {t(language, "home.readyTitle")}
           </h2>
           <p style={{ color: "#fff", fontSize: "16px", marginBottom: "32px", opacity: 0.9 }}>
-            Browse 500+ certified medical products or contact us for a custom quote.
+            {t(language, "home.readyDesc")}
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link to="/products" className="cta-button" style={{
@@ -402,7 +448,7 @@ export default function Home() {
               fontSize: "14px",
               textDecoration: "none",
             }}>
-              Shop Now
+              {t(language, "home.shopNow")}
             </Link>
             <Link to="/contact" className="cta-button" style={{
               background: "rgba(255,255,255,0.15)",
@@ -414,7 +460,7 @@ export default function Home() {
               fontSize: "14px",
               textDecoration: "none",
             }}>
-              Contact Us
+              {t(language, "home.contactUs")}
             </Link>
           </div>
         </div>
@@ -436,6 +482,7 @@ export default function Home() {
 
 /* PRODUCT CARD */
 function ProductCard({ product, onAdd, isAdded }) {
+  const { language } = useLanguage();
   const [imgErr, setImgErr] = useState(false);
   const hasImage = product.image && product.image.startsWith("http") && !imgErr;
 
@@ -504,7 +551,7 @@ function ProductCard({ product, onAdd, isAdded }) {
         {product.priceType === 'quote' ? (
           <div style={{ marginBottom: "14px" }}>
             <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "14px", margin: 0 }}>
-              Price on Request
+              {t(language, "products.priceOnRequest")}
             </p>
           </div>
         ) : (
@@ -531,7 +578,7 @@ function ProductCard({ product, onAdd, isAdded }) {
               transition: "background 0.2s",
             }}
           >
-            Request a Quote
+            {t(language, "products.requestQuote")}
           </Link>
         ) : (
           <button
@@ -550,7 +597,7 @@ function ProductCard({ product, onAdd, isAdded }) {
               transition: "background 0.2s",
             }}
           >
-            {isAdded ? "✓  Added to Cart" : product.stock === 0 ? "Out of Stock" : "Add to Cart"}
+            {isAdded ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
           </button>
         )}
       </div>

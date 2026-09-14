@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
-import { PRODUCT_CATEGORIES } from "../constants/categories";
 
 const inputStyle = {
   width: "100%",
@@ -43,11 +42,23 @@ const sectionTitleStyle = {
 
 function AddProduct() {
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     storekeepingId: "", name: "", category: "", manufacturer: "", model: "", price: "",
     stock: "", description: "", specifications: "", priceType: "fixed",
   });
   const [image, setImage] = useState(null);
+
+  useEffect(() => {
+    // Fetch categories when component mounts
+    API.get("/categories")
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
   const [preview, setPreview] = useState(null);
   const [status, setStatus] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(false);
@@ -140,7 +151,11 @@ function AddProduct() {
                     <select name="category" value={formData.category} onChange={handleChange}
                       required style={inputStyle} onFocus={focusInput} onBlur={blurInput}>
                       <option value="">Select category</option>
-                      {PRODUCT_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                      {categories.map((c) => (
+                        <option key={c._id} value={c.name}>
+                          {c.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>

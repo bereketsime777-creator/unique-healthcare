@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
-import { PRODUCT_CATEGORIES, normalizeCategory } from "../constants/categories";
+import { normalizeCategory } from "../constants/categories";
 
 const inputStyle = {
   width: "100%",
@@ -44,6 +44,7 @@ const sectionTitleStyle = {
 function EditProduct() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]);
   const [form, setForm] = useState({
     storekeepingId: "", name: "", category: "", manufacturer: "", model: "", price: "",
     stock: "", description: "", specifications: "", priceType: "fixed",
@@ -56,9 +57,14 @@ function EditProduct() {
   const [status, setStatus] = useState({ text: "", type: "" });
 
   useEffect(() => {
-    API.get(`/products/${id}`)
-      .then((r) => {
-        const p = r.data;
+    // Fetch categories and product in parallel
+    Promise.all([
+      API.get("/categories"),
+      API.get(`/products/${id}`)
+    ])
+      .then(([categoriesRes, productRes]) => {
+        setCategories(categoriesRes.data);
+        const p = productRes.data;
         setForm({
           storekeepingId: p.storekeepingId || "", name: p.name || "", category: normalizeCategory(p.category) || "", manufacturer: p.manufacturer || "",
           model: p.model || "", price: p.price || "", stock: p.stock || "",
@@ -184,7 +190,11 @@ function EditProduct() {
                     <select name="category" value={form.category} onChange={handleChange}
                       required style={inputStyle} onFocus={focusInput} onBlur={blurInput}>
                       <option value="">Select category</option>
-                      {PRODUCT_CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                      {categories.map((c) => (
+                        <option key={c._id} value={c.name}>
+                          {c.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>

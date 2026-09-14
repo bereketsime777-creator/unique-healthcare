@@ -2,13 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/api";
 import { useCart } from "../context/CartContext";
-import { PRODUCT_CATEGORIES, normalizeCategory } from "../constants/categories";
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
+import { normalizeCategory } from "../constants/categories";
 
 function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { addToCart } = useCart();
+  const { language } = useLanguage();
 
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addedId, setAddedId] = useState(null);
   const [sortBy, setSortBy] = useState("default");
@@ -19,26 +23,38 @@ function Products() {
   const [localSearch, setLocalSearch] = useState(searchQuery);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const params = {};
-        if (searchQuery) params.search = searchQuery;
-        if (categoryQuery) params.category = categoryQuery;
-        const res = await API.get("/products", { params });
+        
+        // Fetch categories and products in parallel
+        const [categoriesRes, productsRes] = await Promise.all([
+          API.get("/categories"),
+          (() => {
+            const params = {};
+            if (searchQuery) params.search = searchQuery;
+            if (categoryQuery) params.category = categoryQuery;
+            return API.get("/products", { params });
+          })()
+        ]);
+
+        setCategories(categoriesRes.data);
         setProducts(
-          res.data.map((p) => ({
+          productsRes.data.map((p) => ({
             ...p,
             category: normalizeCategory(p.category),
           }))
         );
-      } catch {
+      } catch (error) {
+        console.error("Error fetching data:", error);
         setProducts([]);
+        setCategories([]);
       } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
+    
+    fetchData();
   }, [searchQuery, categoryQuery]);
 
   const handleSearch = (e) => {
@@ -120,7 +136,7 @@ function Products() {
               marginBottom: "14px",
               opacity: 0.9
             }}>
-              Browse Our Complete Catalog
+              {t(language, "products.browseTag")}
             </p>
             <h1 style={{ 
               color: "#ffffff", 
@@ -130,7 +146,7 @@ function Products() {
               lineHeight: 1.2,
               textShadow: "0 4px 20px rgba(0,0,0,0.3)"
             }}>
-              {categoryQuery || "Premium Medical Equipment"}
+              {categoryQuery || t(language, "products.allProducts")}
             </h1>
             <p style={{ 
               color: "#ffffff", 
@@ -142,14 +158,14 @@ function Products() {
               textShadow: "0 2px 8px rgba(0,0,0,0.2)"
             }}>
               {categoryQuery 
-                ? `Explore our range of ${categoryQuery.toLowerCase()} products from leading manufacturers`
-                : "500+ certified medical devices from globally recognized brands"}
+                ? t(language, "products.categoryDesc").replace("{category}", categoryQuery.toLowerCase())
+                : t(language, "products.defaultDesc")}
             </p>
             {categoryQuery && (
               <div className="flex items-center gap-2 justify-center text-sm" style={{ color: "#ffffff", opacity: 0.9 }}>
-                <Link to="/" style={{ color: "#ffffff", textDecoration: "none" }}>Home</Link>
+                <Link to="/" style={{ color: "#ffffff", textDecoration: "none" }}>{t(language, "nav.home")}</Link>
                 <span>/</span>
-                <Link to="/products" style={{ color: "#ffffff", textDecoration: "none" }}>Products</Link>
+                <Link to="/products" style={{ color: "#ffffff", textDecoration: "none" }}>{t(language, "nav.products")}</Link>
                 <span>/</span>
                 <span style={{ fontWeight: 600 }}>{categoryQuery}</span>
               </div>
@@ -192,7 +208,7 @@ function Products() {
         <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 mb-6">
           <input
             type="text"
-            placeholder="Search products, brands or categories..."
+            placeholder={t(language, "products.search")}
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
             className="flex-1 border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"
@@ -201,7 +217,7 @@ function Products() {
             type="submit"
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-md text-sm font-semibold transition-colors"
           >
-            Search
+            {t(language, "products.searchButton")}
           </button>
           {(searchQuery || categoryQuery) && (
             <button
@@ -209,7 +225,7 @@ function Products() {
               onClick={() => { setLocalSearch(""); setSearchParams({}); }}
               className="border border-gray-300 text-gray-600 hover:bg-gray-100 px-4 py-2.5 rounded-md text-sm transition-colors"
             >
-              Clear
+              {t(language, "products.clear")}
             </button>
           )}
         </form>
@@ -222,12 +238,12 @@ function Products() {
               onClick={() => setFiltersOpen((p) => !p)}
               className="products-filter-toggle w-full mb-3 bg-blue-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold"
             >
-              {filtersOpen ? "Hide Categories ✕" : "Show Categories ☰"}
+              {filtersOpen ? t(language, "products.hideCategories") : t(language, "products.showCategories")}
             </button>
             <div className={`products-sidebar-inner ${filtersOpen ? "" : "collapsed"}`}>
             <div className="bg-white rounded-xl border border-gray-200 overflow-hidden md:block">
               <div className="bg-blue-600 text-white px-4 py-3 font-semibold text-sm">
-                Categories
+                {t(language, "products.categories")}
               </div>
               <div className="p-2">
                 <button
@@ -238,19 +254,19 @@ function Products() {
                       : "text-gray-700 hover:bg-gray-50"
                   }`}
                 >
-                  All Products
+                  {t(language, "products.allProductsFilter")}
                 </button>
-                {PRODUCT_CATEGORIES.map((cat) => (
+                {categories.map((cat) => (
                   <button
-                    key={cat}
-                    onClick={() => handleCategory(cat)}
+                    key={cat._id || cat.name}
+                    onClick={() => handleCategory(cat.name)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                      categoryQuery === cat
+                      categoryQuery === cat.name
                         ? "bg-blue-50 text-blue-600 font-semibold"
                         : "text-gray-700 hover:bg-gray-50"
                     }`}
                   >
-                    {cat}
+                    {cat.name}
                   </button>
                 ))}
               </div>
@@ -263,17 +279,17 @@ function Products() {
             {/* Results bar */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
               <p className="text-sm text-gray-500">
-                {loading ? "Loading..." : `${products.length} product${products.length !== 1 ? "s" : ""} found`}
+                {loading ? t(language, "products.loading") : t(language, "products.productsFound").replace("{count}", products.length)}
               </p>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-full sm:w-auto"
               >
-                <option value="default">Sort: Default</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="newest">Newest First</option>
+                <option value="default">{t(language, "products.sortDefault")}</option>
+                <option value="price-asc">{t(language, "products.sortPriceAsc")}</option>
+                <option value="price-desc">{t(language, "products.sortPriceDesc")}</option>
+                <option value="newest">{t(language, "products.sortNewest")}</option>
               </select>
             </div>
 
@@ -291,13 +307,13 @@ function Products() {
             ) : products.length === 0 ? (
               <div className="bg-white rounded-xl border border-gray-200 p-16 text-center">
                 <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">No products found</h3>
-                <p className="text-gray-500 mb-4">Try adjusting your search or filter</p>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{t(language, "products.noProducts")}</h3>
+                <p className="text-gray-500 mb-4">{t(language, "products.noProductsDesc")}</p>
                 <button
                   onClick={() => { setLocalSearch(""); setSearchParams({}); }}
                   className="bg-blue-600 text-white px-6 py-2 rounded-md text-sm font-semibold"
                 >
-                  Clear Filters
+                  {t(language, "products.clearFilters")}
                 </button>
               </div>
             ) : (
@@ -363,7 +379,7 @@ function Products() {
                           to={`/products/${product._id}`}
                           className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
                         >
-                          Details
+                          {t(language, "products.details")}
                         </Link>
                         {product.priceType === 'quote' ? (
                           <Link
@@ -371,7 +387,7 @@ function Products() {
                             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
                             style={{ color: '#ffffff' }}
                           >
-                            Request Quote
+                            {t(language, "products.requestQuote")}
                           </Link>
                         ) : (
                           <button
@@ -385,7 +401,7 @@ function Products() {
                                 : "bg-blue-600 hover:bg-blue-700 text-white"
                             }`}
                           >
-                            {addedId === product._id ? "✓ Added" : "Add to Cart"}
+                            {addedId === product._id ? `✓ ${t(language, "products.added")}` : t(language, "products.addToCart")}
                           </button>
                         )}
                       </div>

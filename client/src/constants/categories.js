@@ -1,6 +1,30 @@
-export const PRODUCT_CATEGORIES = [
+import API from "../services/api";
+
+// Dynamic category fetching
+let cachedCategories = [];
+let categoriesPromise = null;
+
+export const fetchCategories = async () => {
+  if (categoriesPromise) return categoriesPromise;
+  
+  categoriesPromise = API.get("/categories")
+    .then((response) => {
+      cachedCategories = response.data.map(cat => cat.name);
+      return cachedCategories;
+    })
+    .catch(() => {
+      // Fallback to hardcoded categories if API fails
+      cachedCategories = FALLBACK_CATEGORIES;
+      return cachedCategories;
+    });
+    
+  return categoriesPromise;
+};
+
+// Fallback categories (used if API fails)
+const FALLBACK_CATEGORIES = [
   "Diagnostic Equipment",
-  "Patient Care Equipment",
+  "Patient Care Equipment", 
   "Monitoring Devices",
   "Surgical Instruments",
   "Laboratory Equipment",
@@ -8,6 +32,9 @@ export const PRODUCT_CATEGORIES = [
   "Disposables & Consumables",
   "Furniture & Fixtures",
 ];
+
+// Get cached categories or fallback
+export const PRODUCT_CATEGORIES = cachedCategories.length > 0 ? cachedCategories : FALLBACK_CATEGORIES;
 
 export const CATEGORY_IMAGES = {
   "Diagnostic Equipment": "/images/category-diagnostic.jpg",
@@ -19,7 +46,7 @@ export const CATEGORY_IMAGES = {
 /** Categories highlighted on the home page (with banner images when available). */
 export const HOME_FEATURED_CATEGORIES = [
   "Diagnostic Equipment",
-  "Surgical Instruments",
+  "Surgical Instruments", 
   "Monitoring Devices",
   "Laboratory Equipment",
 ];
