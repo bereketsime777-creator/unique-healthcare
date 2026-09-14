@@ -103,7 +103,6 @@ export default function FloatingButtons() {
       background: "#60a5fa",
       boxShadow: "0 4px 12px rgba(96, 165, 250, 0.4)",
       bottom: "92px",
-      borderRadius: "8px",
       opacity: showBackToTop ? 1 : 0,
       pointerEvents: showBackToTop ? "auto" : "none",
       transition: "all 0.3s ease",
