@@ -140,7 +140,7 @@ function Messages() {
           borderRadius: "12px", padding: "4px", flexWrap: "wrap" }}>
           {["all", "proforma", "after_sales", "general", "unread", "read", "replied"].map((f) => (
             <button key={f} onClick={() => setFilter(f)} style={filterBtnStyle(filter === f)}>
-              {f === "proforma" ? "📋 Proforma" : f === "after_sales" ? "🔧 After-Sales" : f === "general" ? "General" : f}
+              {f === "proforma" ? "📋 Proforma" : f === "after_sales" ? "After-Sales" : f === "general" ? "General" : f}
               {f === "unread" && unreadCount > 0 && (
                 <span style={{
                   marginLeft: "6px", background: "#2563eb", color: "#fff",
@@ -242,7 +242,7 @@ function Messages() {
                         justifyContent: "center", color: msg.requestType === "proforma" ? "#ca8a04" : msg.requestType === "after_sales_service" ? "#0369a1" : "#2563eb", fontWeight: "700",
                         fontSize: "14px", flexShrink: 0,
                       }}>
-                        {msg.requestType === "proforma" ? "📋" : msg.requestType === "after_sales_service" ? "🔧" : msg.name.charAt(0).toUpperCase()}
+                        {msg.requestType === "proforma" ? "📋" : msg.requestType === "after_sales_service" ? "AS" : msg.name.charAt(0).toUpperCase()}
                       </div>
 
                       <div style={{ flex: 1, minWidth: 0 }}>
@@ -314,7 +314,7 @@ function Messages() {
                   borderRadius: "50%", display: "flex", alignItems: "center",
                   justifyContent: "center", color: selected.requestType === "proforma" ? "#ca8a04" : selected.requestType === "after_sales_service" ? "#0369a1" : "#2563eb", fontWeight: "700", fontSize: "16px",
                 }}>
-                  {selected.requestType === "proforma" ? "📋" : selected.requestType === "after_sales_service" ? "🔧" : selected.name.charAt(0).toUpperCase()}
+                  {selected.requestType === "proforma" ? "📋" : selected.requestType === "after_sales_service" ? "AS" : selected.name.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <p style={{ fontWeight: "700", color: "#0f172a", margin: "0 0 2px", fontSize: "15px" }}>
@@ -442,7 +442,7 @@ function Messages() {
                 <div style={{ background: "#cffafe", border: "1px solid #a5f3fc", borderRadius: "12px", padding: "16px", marginBottom: "24px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
                     <p style={{ fontSize: "11px", fontWeight: "700", color: "#0369a1", textTransform: "uppercase", letterSpacing: "0.08em", margin: 0 }}>
-                      🔧 Service Request Details
+                      Service Request Details
                     </p>
                     {selected.serviceStatus && (
                       <span style={{
