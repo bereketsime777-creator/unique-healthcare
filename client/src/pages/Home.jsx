@@ -13,7 +13,17 @@ import "../styles/home-enhancements.css";
 
 const HERO_BG = "/images/hero1.png";
 
-const brands = ["Mindray", "Drager", "Philips", "Siemens Healthineers", "EDAN", "Getinge", "GE Healthcare", "Stryker"];
+const brands = [
+  { name: "Fluke Biomedical", image: "/images/brands/Fluke Biomedical.jpg" },
+  { name: "GHz Optik", image: "/images/brands/GHz Optik.png" },
+  { name: "Guangdong Biolight Co. LTD", image: "/images/brands/Guangdong Biolight Co. LTD.png" },
+  { name: "Guangzhou Wondfo Biotech", image: "/images/brands/Guangzhou Wondfo Biotech.png" },
+  { name: "IDPRT", image: "/images/brands/IDPRT.jpg" },
+  { name: "K Star", image: "/images/brands/K Star.jpg" },
+  { name: "Phoenix Medical Systems", image: "/images/brands/Phoenix Medical Systems.jpg" },
+  { name: "SakoMed", image: "/images/brands/SakoMed.jpg" },
+  { name: "Seca GMBH", image: "/images/brands/Seca GMBH.png" },
+];
 
 export default function Home() {
   const navigate = useNavigate();
@@ -488,14 +498,44 @@ export default function Home() {
           </div>
           <div className="responsive-grid-8">
             {brands.map((b) => (
-              <div key={b} className="brand-badge" style={{
+              <div key={b.name} className="brand-badge" style={{
                 background: "#f8fafc",
                 border: "1.5px solid #e2e8f0",
                 borderRadius: "12px",
                 padding: "14px 8px",
                 textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "140px",
+                transition: "all 0.2s",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#2563eb";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(37, 99, 235, 0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "#e2e8f0";
+                e.currentTarget.style.boxShadow = "none";
               }}>
-                <span style={{ color: "#475569", fontWeight: 700, fontSize: "12px" }}>{b}</span>
+                <img 
+                  src={b.image} 
+                  alt={b.name}
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "80px",
+                    marginBottom: "8px",
+                    objectFit: "contain"
+                  }}
+                  onError={(e) => {
+                    e.target.style.display = "none";
+                  }}
+                />
+                <span style={{ color: "#475569", fontWeight: 700, fontSize: "12px", textAlign: "center", lineHeight: 1.4 }}>
+                  {b.name}
+                </span>
               </div>
             ))}
           </div>
