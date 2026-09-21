@@ -152,15 +152,10 @@ export default function Home() {
               fontWeight: 900, 
               fontSize: "clamp(36px, 6vw, 72px)", 
               lineHeight: 1.1, 
-              marginBottom: "24px",
+              marginBottom: "32px",
               textShadow: "0 4px 20px rgba(0,0,0,0.3)"
             }}>
-              {t(language, "home.heroTitle")}<br />
-              <span style={{
-                color: "#1e40af",
-                display: "inline-block",
-                textShadow: "0 2px 4px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)"
-              }}>{t(language, "home.heroTitleBold")}</span>
+              {t(language, "home.heroTitle")}
             </h1>
 
             <p style={{ 
@@ -176,9 +171,56 @@ export default function Home() {
               {t(language, "home.heroDesc")}
             </p>
 
+            {/* Trust Badges */}
+            <div style={{ 
+              display: "flex", 
+              gap: "16px", 
+              justifyContent: "center", 
+              flexWrap: "wrap",
+              marginBottom: "40px",
+              flexDirection: "row"
+            }}>
+              <div style={{
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.25)",
+                borderRadius: "50px",
+                padding: "8px 16px",
+                color: "#fff",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}>
+                ✓ {t(language, "home.trustBadge1")}
+              </div>
+              <div style={{
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.25)",
+                borderRadius: "50px",
+                padding: "8px 16px",
+                color: "#fff",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}>
+                ✓ {t(language, "home.trustBadge2")}
+              </div>
+              <div style={{
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(10px)",
+                border: "1px solid rgba(255,255,255,0.25)",
+                borderRadius: "50px",
+                padding: "8px 16px",
+                color: "#fff",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}>
+                ✓ {t(language, "home.trustBadge3")}
+              </div>
+            </div>
+
             <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link
-                to="/products"
+                to="/contact?subject=Request a Quote"
                 className="cta-button cta-button-primary"
                 style={{
                   color: "#fff",
@@ -190,15 +232,16 @@ export default function Home() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "8px",
+                  background: "#2563eb",
                 }}
               >
-                {t(language, "home.exploreProducts")}
+                {t(language, "home.requestQuote")}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </Link>
               <Link
-                to="/contact"
+                to="/products"
                 className="cta-button cta-button-secondary"
                 style={{
                   color: "#fff",
@@ -208,9 +251,11 @@ export default function Home() {
                   fontSize: "16px",
                   textDecoration: "none",
                   display: "inline-block",
+                  background: "rgba(255,255,255,0.15)",
+                  border: "2px solid rgba(255,255,255,0.3)",
                 }}
               >
-                {t(language, "home.contactUs")}
+                {t(language, "home.exploreProducts")}
               </Link>
             </div>
           </div>
