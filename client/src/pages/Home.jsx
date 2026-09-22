@@ -99,22 +99,22 @@ export default function Home() {
 
   const features = [
     { 
-      icon: "🏅", 
+      icon: "🚀", 
       title: t(language, "home.features.genuine"), 
       desc: t(language, "home.features.genuineDesc") 
     },
     { 
-      icon: "🚚", 
+      icon: "🔧", 
       title: t(language, "home.features.delivery"), 
       desc: t(language, "home.features.deliveryDesc") 
     },
     { 
-      icon: "🛠️", 
+      icon: "💰", 
       title: t(language, "home.features.support"), 
       desc: t(language, "home.features.supportDesc") 
     },
     { 
-      icon: "💰", 
+      icon: "📈", 
       title: t(language, "home.features.pricing"), 
       desc: t(language, "home.features.pricingDesc") 
     },
