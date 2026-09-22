@@ -91,10 +91,10 @@ export default function Home() {
   const latest = products.length > 4 ? products.slice(4, 8) : products.slice(0, 4);
 
   const stats = [
-    { value: "200+", label: t(language, "home.stats.hospitalsServed") },
-    { value: "500+", label: t(language, "home.stats.productsAvailable") },
-    { value: "10+", label: t(language, "home.stats.yearsExperience") },
-    { value: "15+", label: t(language, "home.stats.globalBrands") },
+    { value: "50+", label: t(language, "home.stats.hospitalsServed") },
+    { value: "400+", label: t(language, "home.stats.productsAvailable") },
+    { value: "5+", label: t(language, "home.stats.yearsExperience") },
+    { value: "10+", label: t(language, "home.stats.globalBrands") },
   ];
 
   const features = [
