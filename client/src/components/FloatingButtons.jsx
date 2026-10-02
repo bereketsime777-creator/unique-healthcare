@@ -73,16 +73,16 @@ export default function FloatingButtons() {
 
   // Common button styles
   const baseButtonStyle = {
-    width: "56px",
-    height: "56px",
+    width: "48px",
+    height: "48px",
     borderRadius: "50%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     color: "#fff",
-    fontSize: "24px",
+    fontSize: "20px",
     zIndex: 50,
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.12)",
     transition: "all 0.3s ease",
     textDecoration: "none",
     border: "none",
@@ -95,14 +95,14 @@ export default function FloatingButtons() {
     whatsapp: {
       ...baseButtonStyle,
       background: "#25d366",
-      boxShadow: "0 4px 12px rgba(37, 211, 102, 0.4)",
-      bottom: "24px",
+      boxShadow: "0 2px 8px rgba(37, 211, 102, 0.25)",
+      bottom: "20px",
     },
     backToTop: {
       ...baseButtonStyle,
       background: "#60a5fa",
-      boxShadow: "0 4px 12px rgba(96, 165, 250, 0.4)",
-      bottom: "92px",
+      boxShadow: "0 2px 8px rgba(96, 165, 250, 0.25)",
+      bottom: "76px",
       opacity: showBackToTop ? 1 : 0,
       pointerEvents: showBackToTop ? "auto" : "none",
       transition: "all 0.3s ease",
@@ -163,19 +163,19 @@ export default function FloatingButtons() {
         @media (max-width: 768px) {
           [aria-label="Chat with Unique Healthcare on WhatsApp"],
           [aria-label="Back to top"] {
-            width: 48px !important;
-            height: 48px !important;
-            font-size: 20px !important;
+            width: 44px !important;
+            height: 44px !important;
+            font-size: 18px !important;
             bottom: auto !important;
             right: 20px !important;
           }
 
           [aria-label="Chat with Unique Healthcare on WhatsApp"] {
-            bottom: 20px !important;
+            bottom: 18px !important;
           }
 
           [aria-label="Back to top"] {
-            bottom: 80px !important;
+            bottom: 70px !important;
           }
         }
 
@@ -193,7 +193,7 @@ export default function FloatingButtons() {
           }
 
           [aria-label="Back to top"] {
-            bottom: 72px !important;
+            bottom: 68px !important;
           }
         }
       `}</style>

@@ -24,6 +24,34 @@ function Products() {
   const categoryQuery = searchParams.get("category") || "";
   const [localSearch, setLocalSearch] = useState(searchQuery);
 
+  // Improved search filtering logic - searches across multiple fields
+  const performClientSearch = (products, searchTerm, selectedCategory) => {
+    if (!searchTerm && !selectedCategory) {
+      return products;
+    }
+
+    return products.filter((product) => {
+      // Check category filter
+      const categoryMatch = !selectedCategory || product.category === selectedCategory;
+      
+      if (!categoryMatch) return false;
+
+      // If no search term, category match is enough
+      if (!searchTerm) return true;
+
+      // Normalize search term for comparison
+      const normalizedSearch = searchTerm.toLowerCase().trim();
+
+      // Search across multiple fields
+      return (
+        product.name.toLowerCase().includes(normalizedSearch) ||
+        product.category.toLowerCase().includes(normalizedSearch) ||
+        (product.manufacturer && product.manufacturer.toLowerCase().includes(normalizedSearch)) ||
+        (product.model && product.model.toLowerCase().includes(normalizedSearch))
+      );
+    });
+  };
+
   // Get base URL for absolute URLs
   const getBaseUrl = () => {
     if (typeof window !== 'undefined') {
@@ -116,20 +144,45 @@ function Products() {
   };
 
   const sortedProducts = useMemo(() => {
-    const list = [...products];
+    // First apply search + category filtering
+    const filtered = performClientSearch(products, localSearch, categoryQuery);
+    
+    // Then apply sorting
+    const list = [...filtered];
     switch (sortBy) {
+      case "name-asc":
+        return list.sort((a, b) => 
+          (a.name || "").toLowerCase().localeCompare((b.name || "").toLowerCase())
+        );
+      case "name-desc":
+        return list.sort((a, b) => 
+          (b.name || "").toLowerCase().localeCompare((a.name || "").toLowerCase())
+        );
       case "price-asc":
-        return list.sort((a, b) => (a.price || 0) - (b.price || 0));
+        // Sort by price, with "Price on Request" products at the end
+        return list.sort((a, b) => {
+          const aPrice = a.priceType === 'quote' ? Infinity : (a.price || 0);
+          const bPrice = b.priceType === 'quote' ? Infinity : (b.price || 0);
+          return aPrice - bPrice;
+        });
       case "price-desc":
-        return list.sort((a, b) => (b.price || 0) - (a.price || 0));
+        // Sort by price descending, with "Price on Request" products at the end
+        return list.sort((a, b) => {
+          const aPrice = a.priceType === 'quote' ? -Infinity : (a.price || 0);
+          const bPrice = b.priceType === 'quote' ? -Infinity : (b.price || 0);
+          return bPrice - aPrice;
+        });
       case "newest":
         return list.sort(
           (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
         );
       default:
-        return list;
+        // Default: show newest first (by creation date)
+        return list.sort(
+          (a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+        );
     }
-  }, [products, sortBy]);
+  }, [products, localSearch, categoryQuery, sortBy]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -240,30 +293,60 @@ function Products() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Search Bar */}
-        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 mb-6">
-          <input
-            type="text"
-            placeholder={t(language, "products.search")}
-            value={localSearch}
-            onChange={(e) => setLocalSearch(e.target.value)}
-            className="flex-1 border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-md text-sm font-semibold transition-colors"
-          >
-            {t(language, "products.searchButton")}
-          </button>
-          {(searchQuery || categoryQuery) && (
-            <button
-              type="button"
-              onClick={() => { setLocalSearch(""); setSearchParams({}); }}
-              className="border border-gray-300 text-gray-600 hover:bg-gray-100 px-4 py-2.5 rounded-md text-sm transition-colors"
-            >
-              {t(language, "products.clear")}
-            </button>
-          )}
+        {/* Search Bar with improved UX */}
+        <form onSubmit={handleSearch} className="mb-6">
+          <div className="flex flex-col gap-2 sm:gap-2">
+            {/* Search input with integrated clear button */}
+            <div className="flex-1 relative">
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  placeholder={t(language, "products.search")}
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  aria-label="Search products by name, category, manufacturer, or model"
+                />
+                {localSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setLocalSearch("")}
+                    className="absolute right-3 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                    title="Clear search"
+                    aria-label="Clear search input"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="4" y1="4" x2="12" y2="12" />
+                      <line x1="12" y1="4" x2="4" y2="12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+            
+            {/* Search and Clear buttons - flex row to keep them together */}
+            <div className="flex gap-2 sm:gap-2">
+              <button
+                type="submit"
+                className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2.5 rounded-md text-sm font-semibold transition-colors"
+              >
+                {t(language, "products.searchButton")}
+              </button>
+              
+              {/* Clear all filters button - only show if filters are active */}
+              {(searchQuery || categoryQuery) && (
+                <button
+                  type="button"
+                  onClick={() => { setLocalSearch(""); setSearchParams({}); }}
+                  className="flex-1 sm:flex-none border border-gray-300 text-gray-600 hover:bg-gray-100 px-4 py-2.5 rounded-md text-sm transition-colors"
+                  title="Clear all search and category filters"
+                  aria-label="Clear all filters"
+                >
+                  {t(language, "products.clear")}
+                </button>
+              )}
+            </div>
+          </div>
         </form>
 
         <div className="products-layout">
@@ -272,88 +355,127 @@ function Products() {
             <button
               type="button"
               onClick={() => setFiltersOpen((p) => !p)}
-              className="products-filter-toggle w-full mb-3 bg-blue-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold"
+              className="products-filter-toggle w-full mb-3 bg-blue-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+              aria-expanded={filtersOpen}
+              aria-controls="category-list"
             >
               {filtersOpen ? t(language, "products.hideCategories") : t(language, "products.showCategories")}
             </button>
             <div className={`products-sidebar-inner ${filtersOpen ? "" : "collapsed"}`}>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden md:block">
-              <div className="bg-blue-600 text-white px-4 py-3 font-semibold text-sm">
-                {t(language, "products.categories")}
-              </div>
-              <div className="p-2">
-                <button
-                  onClick={() => handleCategory("")}
-                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                    !categoryQuery
-                      ? "bg-blue-50 text-blue-600 font-semibold"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  {t(language, "products.allProductsFilter")}
-                </button>
-                {categories.map((cat) => (
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden md:block">
+                <div className="bg-blue-600 text-white px-4 py-3 font-semibold text-sm">
+                  {t(language, "products.categories")}
+                </div>
+                <div id="category-list" className="p-2 space-y-1">
                   <button
-                    key={cat._id || cat.name}
-                    onClick={() => handleCategory(cat.name)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                      categoryQuery === cat.name
-                        ? "bg-blue-50 text-blue-600 font-semibold"
-                        : "text-gray-700 hover:bg-gray-50"
+                    onClick={() => {
+                      handleCategory("");
+                      // Auto-close mobile sidebar after selection
+                      if (window.innerWidth <= 768) {
+                        setFiltersOpen(false);
+                      }
+                    }}
+                    className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all duration-200 font-medium ${
+                      !categoryQuery
+                        ? "bg-blue-50 text-blue-600 font-semibold border-l-4 border-l-blue-600"
+                        : "text-gray-700 hover:bg-gray-50 border-l-4 border-l-transparent"
                     }`}
+                    aria-current={!categoryQuery ? "true" : "false"}
                   >
-                    {cat.name}
+                    {t(language, "products.allProductsFilter")}
                   </button>
-                ))}
+                  {categories.map((cat) => (
+                    <button
+                      key={cat._id || cat.name}
+                      onClick={() => {
+                        handleCategory(cat.name);
+                        // Auto-close mobile sidebar after selection
+                        if (window.innerWidth <= 768) {
+                          setFiltersOpen(false);
+                        }
+                      }}
+                      className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all duration-200 font-medium ${
+                        categoryQuery === cat.name
+                          ? "bg-blue-50 text-blue-600 font-semibold border-l-4 border-l-blue-600"
+                          : "text-gray-700 hover:bg-gray-50 border-l-4 border-l-transparent"
+                      }`}
+                      aria-current={categoryQuery === cat.name ? "true" : "false"}
+                      title={cat.name}
+                    >
+                      <span className="break-words">{cat.name}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
             </div>
           </aside>
 
           {/* ── Product Grid ── */}
           <div className="flex-1">
             {/* Results bar */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+            <div className="flex flex-col gap-3 mb-4">
               <p className="text-sm text-gray-500">
-                {loading ? t(language, "products.loading") : t(language, "products.productsFound").replace("{count}", products.length)}
+                {loading 
+                  ? t(language, "products.loading") 
+                  : t(language, "products.productsFound").replace("{count}", sortedProducts.length)}
               </p>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 w-full sm:w-auto"
-              >
-                <option value="default">{t(language, "products.sortDefault")}</option>
-                <option value="price-asc">{t(language, "products.sortPriceAsc")}</option>
-                <option value="price-desc">{t(language, "products.sortPriceDesc")}</option>
-                <option value="newest">{t(language, "products.sortNewest")}</option>
-              </select>
+              <div className="flex items-center gap-2 flex-wrap">
+                <label htmlFor="sort-select" className="text-sm font-medium text-gray-700 whitespace-nowrap">
+                  Sort by:
+                </label>
+                <select
+                  id="sort-select"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 flex-1 sm:flex-none"
+                  aria-label="Sort products by"
+                >
+                  <option value="default">{t(language, "products.sortNewest")}</option>
+                  <option value="name-asc">{t(language, "products.sortNameAsc")}</option>
+                  <option value="name-desc">{t(language, "products.sortNameDesc")}</option>
+                  <option value="price-asc">{t(language, "products.sortPriceAsc")}</option>
+                  <option value="price-desc">{t(language, "products.sortPriceDesc")}</option>
+                </select>
+              </div>
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="bg-white rounded-xl p-4 animate-pulse">
-                    <div className="bg-gray-200 h-40 rounded-lg mb-3" />
+                    <div className="bg-gray-200 h-32 sm:h-40 rounded-lg mb-3" />
                     <div className="bg-gray-200 h-4 rounded mb-2" />
                     <div className="bg-gray-200 h-3 rounded w-2/3 mb-3" />
                     <div className="bg-gray-200 h-8 rounded" />
                   </div>
                 ))}
               </div>
-            ) : products.length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-16 text-center">
-                <div className="text-5xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{t(language, "products.noProducts")}</h3>
-                <p className="text-gray-500 mb-4">{t(language, "products.noProductsDesc")}</p>
+            ) : sortedProducts.length === 0 ? (
+              <div className="bg-white rounded-xl border border-gray-200 p-12 sm:p-16 text-center">
+                <div className="text-4xl sm:text-5xl mb-4">🔍</div>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">
+                  {searchQuery || categoryQuery 
+                    ? t(language, "products.noProducts")
+                    : t(language, "products.noProducts")}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-500 mb-6">
+                  {searchQuery && categoryQuery
+                    ? `No products match "${searchQuery}" in ${categoryQuery}. Try a different search or category.`
+                    : searchQuery
+                    ? `No products match "${searchQuery}". Try a different search term.`
+                    : categoryQuery
+                    ? `No products found in ${categoryQuery}. Browse other categories.`
+                    : t(language, "products.noProductsDesc")}
+                </p>
                 <button
                   onClick={() => { setLocalSearch(""); setSearchParams({}); }}
-                  className="bg-blue-600 text-white px-6 py-2 rounded-md text-sm font-semibold"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-md text-sm font-semibold transition-colors"
                 >
                   {t(language, "products.clearFilters")}
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                 {sortedProducts.map((product) => (
                   <div
                     key={product._id}
@@ -368,7 +490,7 @@ function Products() {
                     }}
                   >
                     <Link to={`/products/${product._id}`}>
-                      <div style={{ background: "#f8fafc", height: "220px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", padding: "8px" }}>
+                      <div style={{ background: "#f8fafc", height: "clamp(140px, 30vw, 220px)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", padding: "8px" }}>
                         {product.image && product.image.startsWith("http") ? (
                           <img
                             src={getSafeOptimizedImage(product.image, 'card')}
@@ -384,18 +506,18 @@ function Products() {
                         <div
                           style={{ display: product.image && product.image.startsWith("http") ? "none" : "flex", width: "100%", height: "100%", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#eff6ff,#e0f2fe)" }}
                         >
-                          <span style={{ fontSize: "48px" }}>🏥</span>
+                          <span style={{ fontSize: "clamp(32px, 8vw, 48px)" }}>🏥</span>
                           <span style={{ color: "#93c5fd", fontSize: "11px", fontWeight: 600, marginTop: "8px" }}>Medical Equipment</span>
                         </div>
                       </div>
                     </Link>
 
-                  <div style={{ padding: "16px", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <div style={{ padding: "clamp(12px, 3vw, 16px)", display: "flex", flexDirection: "column", flex: 1 }}>
                       <Link to={`/products/${product._id}`} style={{ textDecoration: "none" }}>
                         <h3 style={{
                           color: "#0f172a",
                           fontWeight: 700,
-                          fontSize: "15px",
+                          fontSize: "clamp(13px, 3.5vw, 15px)",
                           lineHeight: 1.4,
                           margin: "0 0 8px",
                           minHeight: "42px",
@@ -411,7 +533,7 @@ function Products() {
                       <span style={{
                         background: "#eff6ff",
                         color: "#2563eb",
-                        fontSize: "11px",
+                        fontSize: "clamp(10px, 2.5vw, 11px)",
                         fontWeight: 700,
                         padding: "3px 10px",
                         borderRadius: "50px",
@@ -429,83 +551,63 @@ function Products() {
                       </span>
 
                       {product.manufacturer && (
-                        <p style={{ color: "#64748b", fontSize: "12px", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
+                        <p style={{ color: "#64748b", fontSize: "clamp(11px, 2.5vw, 12px)", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
                       )}
 
                       {product.priceType === 'quote' ? (
                         <div style={{ marginBottom: "14px" }}>
-                          <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "14px", margin: 0 }}>
+                          <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "clamp(12px, 3vw, 14px)", margin: 0 }}>
                             {t(language, "products.priceOnRequest")}
                           </p>
                         </div>
                       ) : (
-                        <p style={{ color: "#2563eb", fontWeight: 800, fontSize: "18px", margin: "0 0 14px" }}>
+                        <p style={{ color: "#2563eb", fontWeight: 800, fontSize: "clamp(16px, 4vw, 18px)", margin: "0 0 14px" }}>
                           ETB {product.price?.toLocaleString()}
                         </p>
                       )}
 
-                      <div style={{ display: "flex", gap: "8px", marginTop: "auto" }}>
+                      {product.priceType === 'quote' ? (
                         <Link
-                          to={`/products/${product._id}`}
+                          to={`/contact?subject=Request a Quote&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
                           style={{
-                            flex: 1,
                             display: "block",
-                            padding: "11px",
+                            width: "100%",
+                            padding: "clamp(9px, 2.5vw, 11px)",
                             borderRadius: "50px",
-                            border: "1.5px solid #2563eb",
+                            border: "none",
                             fontWeight: 700,
-                            fontSize: "13px",
+                            fontSize: "clamp(12px, 3vw, 13px)",
                             textAlign: "center",
                             textDecoration: "none",
-                            background: "#fff",
-                            color: "#2563eb",
+                            background: "#2563eb",
+                            color: "#fff",
                             transition: "background 0.2s",
+                            marginTop: "auto",
                           }}
                         >
-                          {t(language, "products.details")}
+                          {t(language, "products.requestQuote")}
                         </Link>
-                        {product.priceType === 'quote' ? (
-                          <Link
-                            to={`/contact?subject=Request a Quote&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
-                            style={{
-                              flex: 1,
-                              display: "block",
-                              width: "100%",
-                              padding: "11px",
-                              borderRadius: "50px",
-                              border: "none",
-                              fontWeight: 700,
-                              fontSize: "13px",
-                              textAlign: "center",
-                              textDecoration: "none",
-                              background: "#2563eb",
-                              color: "#fff",
-                              transition: "background 0.2s",
-                            }}
-                          >
-                            {t(language, "products.requestQuote")}
-                          </Link>
-                        ) : (
-                          <button
-                            onClick={(e) => handleAddToCart(product, e)}
-                            disabled={product.stock === 0}
-                            style={{
-                              flex: 1,
-                              padding: "11px",
-                              borderRadius: "50px",
-                              border: "none",
-                              fontWeight: 700,
-                              fontSize: "13px",
-                              cursor: product.stock === 0 ? "not-allowed" : "pointer",
-                              background: addedId === product._id ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
-                              color: product.stock === 0 ? "#94a3b8" : "#fff",
-                              transition: "background 0.2s",
-                            }}
-                          >
-                            {addedId === product._id ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
-                          </button>
-                        )}
-                      </div>
+                      ) : (
+                        <button
+                          onClick={(e) => handleAddToCart(product, e)}
+                          disabled={product.stock === 0}
+                          style={{
+                            width: "100%",
+                            padding: "clamp(9px, 2.5vw, 11px)",
+                            borderRadius: "50px",
+                            border: "none",
+                            fontWeight: 700,
+                            fontSize: "clamp(12px, 3vw, 13px)",
+                            cursor: product.stock === 0 ? "not-allowed" : "pointer",
+                            background: addedId === product._id ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
+                            color: product.stock === 0 ? "#94a3b8" : "#fff",
+                            transition: "background 0.2s",
+                            marginTop: "auto",
+                          }}
+                        >
+                          {addedId === product._id ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

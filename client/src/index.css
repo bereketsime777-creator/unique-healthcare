@@ -205,6 +205,37 @@ a { text-decoration: none; color: inherit; }
   flex-shrink: 0;
 }
 
+/* Category button styling improvements */
+#category-list {
+  display: flex;
+  flex-direction: column;
+}
+
+#category-list button {
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.4;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+#category-list button[aria-current="true"] {
+  animation: slideIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0.8;
+    transform: translateX(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .admin-stat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
