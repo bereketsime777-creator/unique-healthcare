@@ -493,7 +493,6 @@ export default function ContactUs() {
                         <option>Product Inquiry</option>
                         <option>Request Proforma</option>
                         <option>Bulk / Wholesale Order</option>
-                        <option>Request a Quote</option>
                         <option>After-Sales Service Request</option>
                         <option>Technical Support</option>
                         <option>Order Status</option>
