@@ -386,12 +386,12 @@ function Products() {
                     </Link>
 
                   <div className="p-3 flex flex-col flex-1">
-                      <p className="text-xs text-blue-600 font-semibold mb-1 uppercase leading-snug" style={{ letterSpacing: "0.5px", height: "2.5rem", overflow: "hidden" }}>{product.category}</p>
                       <Link to={`/products/${product._id}`}>
-                        <h3 className="text-sm font-bold text-gray-900 mb-1 hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] leading-snug">
+                        <h3 className="text-sm font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] leading-snug">
                           {product.name}
                         </h3>
                       </Link>
+                      <p className="text-xs text-blue-600 font-semibold mb-2 uppercase leading-snug" style={{ letterSpacing: "0.5px", height: "2.5rem", overflow: "hidden" }}>{product.category}</p>
                       <p className="text-xs text-gray-500 mb-2 font-medium">{product.manufacturer}</p>
 
                       <div className="flex items-center justify-between mb-3">

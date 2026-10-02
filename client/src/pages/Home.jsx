@@ -611,6 +611,9 @@ function ProductCard({ product, onAdd, isAdded }) {
       borderRadius: "16px",
       overflow: "hidden",
       border: "1.5px solid #f1f5f9",
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
     }}>
       {/* Image */}
       <Link to={`/products/${product._id}`} className="product-image-wrapper" style={{ display: "block", height: "220px", overflow: "hidden", background: "#f8fafc" }}>
@@ -618,7 +621,7 @@ function ProductCard({ product, onAdd, isAdded }) {
           <img
             src={getSafeOptimizedImage(product.image, 'card')}
             alt={product.name}
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
             loading="lazy"
             onError={() => setImgErr(true)}
           />
@@ -631,29 +634,14 @@ function ProductCard({ product, onAdd, isAdded }) {
       </Link>
 
       {/* Info */}
-      <div style={{ padding: "16px" }}>
-        <span style={{
-          background: "#eff6ff",
-          color: "#2563eb",
-          fontSize: "11px",
-          fontWeight: 700,
-          padding: "3px 10px",
-          borderRadius: "50px",
-          display: "inline-block",
-          marginBottom: "10px",
-          textTransform: "uppercase",
-          letterSpacing: "0.5px",
-        }}>
-          {product.category}
-        </span>
-
+      <div style={{ padding: "16px", display: "flex", flexDirection: "column", flex: 1 }}>
         <Link to={`/products/${product._id}`} style={{ textDecoration: "none" }}>
           <h3 style={{
             color: "#0f172a",
             fontWeight: 700,
             fontSize: "15px",
             lineHeight: 1.4,
-            margin: "0 0 6px",
+            margin: "0 0 8px",
             minHeight: "42px",
             display: "-webkit-box",
             WebkitLineClamp: 2,
@@ -663,6 +651,26 @@ function ProductCard({ product, onAdd, isAdded }) {
             {product.name}
           </h3>
         </Link>
+
+        <span style={{
+          background: "#eff6ff",
+          color: "#2563eb",
+          fontSize: "11px",
+          fontWeight: 700,
+          padding: "3px 10px",
+          borderRadius: "50px",
+          display: "inline-block",
+          marginBottom: "8px",
+          textTransform: "uppercase",
+          letterSpacing: "0.5px",
+          height: "2.5rem",
+          overflow: "hidden",
+          lineHeight: 1.2,
+          alignContent: "center",
+          maxWidth: "100%",
+        }}>
+          {product.category}
+        </span>
 
         {product.manufacturer && (
           <p style={{ color: "#64748b", fontSize: "12px", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
@@ -696,6 +704,7 @@ function ProductCard({ product, onAdd, isAdded }) {
               background: "#2563eb",
               color: "#fff",
               transition: "background 0.2s",
+              marginTop: "auto",
             }}
           >
             {t(language, "products.requestQuote")}
@@ -715,6 +724,7 @@ function ProductCard({ product, onAdd, isAdded }) {
               background: isAdded ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
               color: product.stock === 0 ? "#94a3b8" : "#fff",
               transition: "background 0.2s",
+              marginTop: "auto",
             }}
           >
             {isAdded ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
