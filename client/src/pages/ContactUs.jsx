@@ -64,7 +64,7 @@ export default function ContactUs() {
 
   useEffect(() => {
     if (subjectParam) {
-      const isProforma = subjectParam.toLowerCase().includes("proforma");
+      const isProforma = subjectParam.toLowerCase().includes("proforma") || subjectParam.toLowerCase().includes("quote");
       setForm(prev => ({ 
         ...prev, 
         subject: subjectParam,
@@ -491,7 +491,7 @@ export default function ContactUs() {
                       <select name="subject" value={form.subject} onChange={handleChange} required style={{ ...input }}>
                         <option value="">Select a subject</option>
                         <option>Product Inquiry</option>
-                        <option>Request Proforma</option>
+                        <option>Request a Quote</option>
                         <option>Bulk / Wholesale Order</option>
                         <option>After-Sales Service Request</option>
                         <option>Technical Support</option>
