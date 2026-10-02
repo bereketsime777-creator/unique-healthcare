@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import API from "../services/api";
 import { CONTACT } from "../constants/contact";
+import { useLanguage } from "../context/LanguageContext";
+import { t } from "../translations/translations";
 
 const info = [
   { icon: "📍", title: "Our Office", lines: CONTACT.address.lines },
@@ -20,6 +22,7 @@ const trust = [
 
 export default function ContactUs() {
   const [searchParams] = useSearchParams();
+  const { language } = useLanguage();
   const subjectParam = searchParams.get("subject") || "";
   const productIdParam = searchParams.get("productId") || "";
   const productNameParam = searchParams.get("productName") || "";
@@ -504,7 +507,7 @@ export default function ContactUs() {
                   {form.requestType === "proforma" && (
                     <>
                       <div style={{ background: "#eff6ff", border: "1px solid #bfdbfe", borderRadius: "12px", padding: "16px", marginBottom: "16px" }}>
-                        <p style={{ fontSize: "12px", fontWeight: "700", color: "#2563eb", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>📋 Proforma Request Details</p>
+                        <p style={{ fontSize: "12px", fontWeight: "700", color: "#2563eb", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>📋 {t(language, "contact.proformaDetails")}</p>
                         
                         <div className="responsive-grid-form-2" style={{ gap: "12px", marginBottom: "12px" }}>
                           <div>
