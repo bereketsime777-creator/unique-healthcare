@@ -357,7 +357,7 @@ function Products() {
                 {sortedProducts.map((product) => (
                   <div
                     key={product._id}
-                    className="bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow overflow-hidden group"
+                    className="bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow overflow-hidden group flex flex-col h-full"
                   >
                     <Link to={`/products/${product._id}`}>
                       <div className="bg-gray-50 h-44 flex items-center justify-center overflow-hidden p-2">
@@ -365,7 +365,7 @@ function Products() {
                           <img
                             src={getSafeOptimizedImage(product.image, 'card')}
                             alt={product.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                             loading="lazy"
                             onError={(e) => {
                               e.target.style.display = "none";
@@ -385,8 +385,8 @@ function Products() {
                       </div>
                     </Link>
 
-                  <div className="p-3">
-                      <p className="text-xs text-blue-600 font-semibold mb-1 truncate uppercase" style={{ letterSpacing: "0.5px" }}>{product.category}</p>
+                  <div className="p-3 flex flex-col flex-1">
+                      <p className="text-xs text-blue-600 font-semibold mb-1 uppercase leading-snug" style={{ letterSpacing: "0.5px", height: "2.5rem", overflow: "hidden" }}>{product.category}</p>
                       <Link to={`/products/${product._id}`}>
                         <h3 className="text-sm font-bold text-gray-900 mb-1 hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] leading-snug">
                           {product.name}
@@ -411,7 +411,7 @@ function Products() {
                         </span>
                       </div>
 
-                      <div className="flex gap-1.5">
+                      <div className="flex gap-1.5 mt-auto">
                         <Link
                           to={`/products/${product._id}`}
                           className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
