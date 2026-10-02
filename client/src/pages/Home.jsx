@@ -230,7 +230,7 @@ export default function Home() {
 
             <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link
-                to="/contact?subject=Request a Quote"
+                to="/contact?subject=Request%20a%20Quote"
                 className="cta-button cta-button-primary"
                 style={{
                   color: "#fff",
@@ -682,7 +682,7 @@ function ProductCard({ product, onAdd, isAdded }) {
 
         {product.priceType === 'quote' ? (
           <Link
-            to="/contact?subject=Request a Quote"
+            to="/contact?subject=Request%20a%20Quote"
             style={{
               display: "block",
               width: "100%",

@@ -64,7 +64,7 @@ export default function ContactUs() {
 
   useEffect(() => {
     if (subjectParam) {
-      const isProforma = subjectParam.toLowerCase().includes("proforma");
+      const isProforma = subjectParam.toLowerCase().includes("proforma") || subjectParam.toLowerCase().includes("quote");
       setForm(prev => ({ 
         ...prev, 
         subject: subjectParam,
@@ -88,7 +88,7 @@ export default function ContactUs() {
     
     // When subject changes to proforma or service, switch request type accordingly
     if (name === "subject") {
-      const isProforma = value.toLowerCase().includes("proforma");
+      const isProforma = value.toLowerCase().includes("proforma") || value.toLowerCase().includes("quote");
       const isAfterSales = value.toLowerCase().includes("after-sales") || value.toLowerCase().includes("service");
       if (isProforma) {
         setForm(prev => ({ ...prev, requestType: "proforma" }));
