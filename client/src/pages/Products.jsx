@@ -357,15 +357,23 @@ function Products() {
                 {sortedProducts.map((product) => (
                   <div
                     key={product._id}
-                    className="bg-white rounded-xl border border-gray-100 hover:shadow-md transition-shadow overflow-hidden group flex flex-col h-full"
+                    style={{
+                      background: "#fff",
+                      borderRadius: "16px",
+                      overflow: "hidden",
+                      border: "1.5px solid #f1f5f9",
+                      display: "flex",
+                      flexDirection: "column",
+                      height: "100%",
+                    }}
                   >
                     <Link to={`/products/${product._id}`}>
-                      <div className="bg-gray-50 h-44 flex items-center justify-center overflow-hidden p-2">
+                      <div style={{ background: "#f8fafc", height: "220px", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", padding: "8px" }}>
                         {product.image && product.image.startsWith("http") ? (
                           <img
                             src={getSafeOptimizedImage(product.image, 'card')}
                             alt={product.name}
-                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                            style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
                             loading="lazy"
                             onError={(e) => {
                               e.target.style.display = "none";
@@ -374,55 +382,106 @@ function Products() {
                           />
                         ) : null}
                         <div
-                          style={{ display: product.image && product.image.startsWith("http") ? "none" : "flex" }}
-                          className="w-full h-full flex-col items-center justify-center text-gray-300"
+                          style={{ display: product.image && product.image.startsWith("http") ? "none" : "flex", width: "100%", height: "100%", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#eff6ff,#e0f2fe)" }}
                         >
-                          <svg className="w-14 h-14 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          <span className="text-xs text-gray-400">No image</span>
+                          <span style={{ fontSize: "48px" }}>🏥</span>
+                          <span style={{ color: "#93c5fd", fontSize: "11px", fontWeight: 600, marginTop: "8px" }}>Medical Equipment</span>
                         </div>
                       </div>
                     </Link>
 
-                  <div className="p-3 flex flex-col flex-1">
-                      <Link to={`/products/${product._id}`}>
-                        <h3 className="text-sm font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors line-clamp-2 min-h-[2.5rem] leading-snug">
+                  <div style={{ padding: "16px", display: "flex", flexDirection: "column", flex: 1 }}>
+                      <Link to={`/products/${product._id}`} style={{ textDecoration: "none" }}>
+                        <h3 style={{
+                          color: "#0f172a",
+                          fontWeight: 700,
+                          fontSize: "15px",
+                          lineHeight: 1.4,
+                          margin: "0 0 8px",
+                          minHeight: "42px",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}>
                           {product.name}
                         </h3>
                       </Link>
-                      <p className="text-xs text-blue-600 font-semibold mb-2 uppercase leading-snug" style={{ letterSpacing: "0.5px", height: "2.5rem", overflow: "hidden" }}>{product.category}</p>
-                      <p className="text-xs text-gray-500 mb-2 font-medium">{product.manufacturer}</p>
 
-                      <div className="flex items-center justify-between mb-3">
-                        {product.priceType === 'quote' ? (
-                          <p className="text-blue-600 font-bold text-sm">
-                            Price on Request
-                          </p>
-                        ) : (
-                          <p className="text-blue-600 font-extrabold text-base">
-                            ETB {product.price?.toLocaleString()}
-                          </p>
-                        )}
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase ${
-                          product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                        }`} style={{ letterSpacing: "0.3px" }}>
-                          {product.stock > 0 ? "In Stock" : "Out of Stock"}
-                        </span>
-                      </div>
+                      <span style={{
+                        background: "#eff6ff",
+                        color: "#2563eb",
+                        fontSize: "11px",
+                        fontWeight: 700,
+                        padding: "3px 10px",
+                        borderRadius: "50px",
+                        display: "inline-block",
+                        marginBottom: "8px",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                        height: "2.5rem",
+                        overflow: "hidden",
+                        lineHeight: 1.2,
+                        alignContent: "center",
+                        maxWidth: "100%",
+                      }}>
+                        {product.category}
+                      </span>
 
-                      <div className="flex gap-1.5 mt-auto">
+                      {product.manufacturer && (
+                        <p style={{ color: "#64748b", fontSize: "12px", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
+                      )}
+
+                      {product.priceType === 'quote' ? (
+                        <div style={{ marginBottom: "14px" }}>
+                          <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "14px", margin: 0 }}>
+                            {t(language, "products.priceOnRequest")}
+                          </p>
+                        </div>
+                      ) : (
+                        <p style={{ color: "#2563eb", fontWeight: 800, fontSize: "18px", margin: "0 0 14px" }}>
+                          ETB {product.price?.toLocaleString()}
+                        </p>
+                      )}
+
+                      <div style={{ display: "flex", gap: "8px", marginTop: "auto" }}>
                         <Link
                           to={`/products/${product._id}`}
-                          className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
+                          style={{
+                            flex: 1,
+                            display: "block",
+                            padding: "11px",
+                            borderRadius: "50px",
+                            border: "1.5px solid #2563eb",
+                            fontWeight: 700,
+                            fontSize: "13px",
+                            textAlign: "center",
+                            textDecoration: "none",
+                            background: "#fff",
+                            color: "#2563eb",
+                            transition: "background 0.2s",
+                          }}
                         >
                           {t(language, "products.details")}
                         </Link>
                         {product.priceType === 'quote' ? (
                           <Link
                             to={`/contact?subject=Request a Quote&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
-                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-1.5 rounded-full text-xs font-semibold text-center transition-colors"
-                            style={{ color: '#ffffff' }}
+                            style={{
+                              flex: 1,
+                              display: "block",
+                              width: "100%",
+                              padding: "11px",
+                              borderRadius: "50px",
+                              border: "none",
+                              fontWeight: 700,
+                              fontSize: "13px",
+                              textAlign: "center",
+                              textDecoration: "none",
+                              background: "#2563eb",
+                              color: "#fff",
+                              transition: "background 0.2s",
+                            }}
                           >
                             {t(language, "products.requestQuote")}
                           </Link>
@@ -430,15 +489,20 @@ function Products() {
                           <button
                             onClick={(e) => handleAddToCart(product, e)}
                             disabled={product.stock === 0}
-                            className={`flex-1 py-1.5 rounded-full text-xs font-semibold transition-colors flex items-center justify-center gap-1 ${
-                              addedId === product._id
-                                ? "bg-green-500 text-white"
-                                : product.stock === 0
-                                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                                : "bg-blue-600 hover:bg-blue-700 text-white"
-                            }`}
+                            style={{
+                              flex: 1,
+                              padding: "11px",
+                              borderRadius: "50px",
+                              border: "none",
+                              fontWeight: 700,
+                              fontSize: "13px",
+                              cursor: product.stock === 0 ? "not-allowed" : "pointer",
+                              background: addedId === product._id ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
+                              color: product.stock === 0 ? "#94a3b8" : "#fff",
+                              transition: "background 0.2s",
+                            }}
                           >
-                            {addedId === product._id ? `✓ ${t(language, "products.added")}` : t(language, "products.addToCart")}
+                            {addedId === product._id ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
                           </button>
                         )}
                       </div>
