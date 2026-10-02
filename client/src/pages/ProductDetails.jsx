@@ -252,7 +252,7 @@ function ProductDetails() {
               {/* Quantity + Cart or Request Proforma Button */}
               {product.priceType === 'quote' ? (
                 <Link
-                  to={`/contact?subject=Request%20a%20Quote&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
+                  to={`/contact?subject=Request Proforma&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
                   className="block w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg font-bold text-center transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                   style={{ color: '#ffffff' }}
                 >

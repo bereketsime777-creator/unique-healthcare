@@ -64,7 +64,7 @@ export default function ContactUs() {
 
   useEffect(() => {
     if (subjectParam) {
-      const isProforma = subjectParam.toLowerCase().includes("proforma") || subjectParam.toLowerCase().includes("quote");
+      const isProforma = subjectParam.toLowerCase().includes("proforma");
       setForm(prev => ({ 
         ...prev, 
         subject: subjectParam,
