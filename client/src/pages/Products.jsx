@@ -554,6 +554,84 @@ function Products() {
                         <p style={{ color: "#64748b", fontSize: "clamp(11px, 2.5vw, 12px)", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
                       )}
 
+                      {/* Regulatory Compliance Badges */}
+                      {(product.compliance?.EFDA || product.compliance?.CE || product.compliance?.FDA) && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "12px" }}>
+                          {product.compliance?.EFDA && (
+                            <div
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "#fef3c7",
+                                color: "#92400e",
+                                fontSize: "10px",
+                                fontWeight: 700,
+                                padding: "3px 8px",
+                                borderRadius: "4px",
+                                border: "1px solid #fcd34d",
+                                cursor: "help",
+                                position: "relative",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.5px",
+                              }}
+                              title="EFDA: Ethiopian Food and Drug Authority"
+                              aria-label="EFDA certified: Ethiopian Food and Drug Authority approval"
+                            >
+                              EFDA
+                            </div>
+                          )}
+                          {product.compliance?.CE && (
+                            <div
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "#dbeafe",
+                                color: "#0c4a6e",
+                                fontSize: "10px",
+                                fontWeight: 700,
+                                padding: "3px 8px",
+                                borderRadius: "4px",
+                                border: "1px solid #7dd3fc",
+                                cursor: "help",
+                                position: "relative",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.5px",
+                              }}
+                              title="CE: European conformity marking"
+                              aria-label="CE marked: European conformity certification"
+                            >
+                              CE
+                            </div>
+                          )}
+                          {product.compliance?.FDA && (
+                            <div
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "#f3e8ff",
+                                color: "#581c87",
+                                fontSize: "10px",
+                                fontWeight: 700,
+                                padding: "3px 8px",
+                                borderRadius: "4px",
+                                border: "1px solid #e9d5ff",
+                                cursor: "help",
+                                position: "relative",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.5px",
+                              }}
+                              title="FDA: U.S. Food and Drug Administration"
+                              aria-label="FDA approved: U.S. Food and Drug Administration certification"
+                            >
+                              FDA
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       {/* Technical Specification PDF Badge - displays only if PDF is available */}
                       {product.technicalSpecificationPdf?.url && (
                         <div style={{ marginBottom: "12px" }}>

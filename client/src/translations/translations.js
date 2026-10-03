@@ -119,6 +119,9 @@ export const translations = {
       noSpecifications: "No specifications available for this product.",
       productNotFound: "Product Not Found",
       backToProducts: "← Back to Products",
+      complianceEFDA: "EFDA: Ethiopian Food and Drug Authority",
+      complianceCE: "CE: European conformity marking",
+      complianceFDA: "FDA: U.S. Food and Drug Administration",
     },
 
     // Footer
@@ -516,6 +519,9 @@ export const translations = {
       noSpecifications: "ለዚህ ምርት ምንም ዝርዝሮች የሉም።",
       productNotFound: "ምርት አልተገኘም",
       backToProducts: "← ወደ ምርቶች ተመለስ",
+      complianceEFDA: "EFDA: የኢትዮጵያ ምግብ እና መድሃኒት ባለሥልጣን",
+      complianceCE: "CE: የአውሮፓ ተጣጣፊነት ምልክት",
+      complianceFDA: "FDA: የአሜሪካ ምግብ እና መድሃኒት ፍትህ",
     },
 
     // Footer

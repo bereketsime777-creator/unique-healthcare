@@ -194,6 +194,48 @@ function ProductDetails() {
                 By <span className="font-semibold text-gray-700">{product.manufacturer || "Unknown"}</span>
               </p>
 
+              {/* Regulatory Compliance Badges */}
+              {(product.compliance?.EFDA || product.compliance?.CE || product.compliance?.FDA) && (
+                <div className="mb-5 flex flex-wrap gap-3">
+                  {product.compliance?.EFDA && (
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 bg-yellow-100 text-yellow-900 rounded-lg border border-yellow-300 cursor-help"
+                      title="EFDA: Ethiopian Food and Drug Authority"
+                      aria-label="EFDA certified: Ethiopian Food and Drug Authority approval"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm font-bold">EFDA</span>
+                    </div>
+                  )}
+                  {product.compliance?.CE && (
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 bg-blue-100 text-blue-900 rounded-lg border border-blue-300 cursor-help"
+                      title="CE: European conformity marking"
+                      aria-label="CE marked: European conformity certification"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm font-bold">CE</span>
+                    </div>
+                  )}
+                  {product.compliance?.FDA && (
+                    <div
+                      className="flex items-center gap-2 px-3 py-2 bg-purple-100 text-purple-900 rounded-lg border border-purple-300 cursor-help"
+                      title="FDA: U.S. Food and Drug Administration"
+                      aria-label="FDA approved: U.S. Food and Drug Administration certification"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-sm font-bold">FDA</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Model/Variants */}
               {product.model && (
                 <div className="mb-5 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
