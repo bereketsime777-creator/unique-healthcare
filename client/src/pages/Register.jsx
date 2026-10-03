@@ -52,7 +52,7 @@ export default function Register() {
   const onBlur  = (e) => { e.target.style.borderColor = "#e2e8f0"; e.target.style.background = "#f8fafc"; };
 
   const benefits = [
-    "Access to 500+ certified medical products",
+    "Access to 400+ certified medical products",
     "Fast delivery across all of Ethiopia",
     "Exclusive bulk order pricing",
     "Dedicated after-sales technical support",

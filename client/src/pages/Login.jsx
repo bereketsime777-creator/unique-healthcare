@@ -90,10 +90,10 @@ export default function Login() {
         {/* Stats */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", width: "100%", maxWidth: "320px" }}>
           {[
-            { val: "200+", lbl: "Hospitals Served" },
-            { val: "500+", lbl: "Products" },
-            { val: "10+",  lbl: "Years Experience" },
-            { val: "98%",  lbl: "Satisfaction" },
+            { val: "50+", lbl: "Hospitals Served" },
+            { val: "400+", lbl: "Products" },
+            { val: "5+",  lbl: "Years Experience" },
+            { val: "10+",  lbl: "Global Brands" },
           ].map((s) => (
             <div key={s.lbl} style={{ background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: "14px", padding: "16px", textAlign: "center", backdropFilter: "blur(10px)" }}>
               <p style={{ color: "#fff", fontWeight: 900, fontSize: "24px", margin: "0 0 2px", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>{s.val}</p>

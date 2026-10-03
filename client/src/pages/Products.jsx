@@ -65,7 +65,7 @@ function Products() {
     title: categoryQuery ? `${categoryQuery} | Unique Healthcare` : 'Medical Equipment & Supplies | Unique Healthcare',
     description: categoryQuery 
       ? `Browse our range of ${categoryQuery.toLowerCase()} products from leading manufacturers. Fast delivery across Ethiopia.`
-      : 'Browse 500+ certified medical devices from globally recognized brands. Hospital equipment, surgical instruments, diagnostic tools and more.',
+      : 'Browse 400+ certified medical devices from globally recognized brands. Hospital equipment, surgical instruments, diagnostic tools and more.',
     keywords: `${categoryQuery || 'medical equipment'}, healthcare supplies, ${categoryQuery || 'products'}, Ethiopia`,
     
     // OpenGraph tags

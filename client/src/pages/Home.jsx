@@ -44,12 +44,12 @@ export default function Home() {
   // Set home page meta tags
   useMetaTags({
     title: 'Unique Healthcare | Hospital Equipment & Medical Supplies in Ethiopia',
-    description: 'Ethiopia\'s trusted partner for certified hospital equipment, medical devices, and healthcare supplies. Serving 200+ hospitals nationwide with fast delivery and professional support.',
+    description: 'Ethiopia\'s trusted partner for certified hospital equipment, medical devices, and healthcare supplies. Serving 50+ hospitals nationwide with fast delivery and professional support.',
     keywords: 'hospital equipment, medical supplies, healthcare devices, Ethiopia, diagnostic equipment, surgical instruments',
     
     // OpenGraph tags for social sharing
     ogTitle: 'Unique Healthcare - Hospital Equipment & Medical Supplies',
-    ogDescription: 'Access 500+ certified medical products with fast delivery across Ethiopia. Trusted by 200+ hospitals.',
+    ogDescription: 'Access 400+ certified medical products with fast delivery across Ethiopia. Trusted by 50+ hospitals.',
     ogImage: `${getBaseUrl()}/logo.png`,
     ogUrl: getBaseUrl(),
     ogType: 'website',

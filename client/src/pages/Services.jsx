@@ -32,7 +32,7 @@ export default function Services() {
   const { language } = useLanguage();
 
   const services = [
-    { icon: "🔬", titleKey: "services.equipmentSupply", color: "#eff6ff", border: "#bfdbfe", descKey: "services.equipmentDesc", features: ["500+ products in catalog", "Genuine certified equipment", "Multiple global brands", "All healthcare categories"] },
+    { icon: "🔬", titleKey: "services.equipmentSupply", color: "#eff6ff", border: "#bfdbfe", descKey: "services.equipmentDesc", features: ["400+ products in catalog", "Genuine certified equipment", "Multiple global brands", "All healthcare categories"] },
     { icon: "🚚", titleKey: "services.delivery", color: "#f0fdf4", border: "#bbf7d0", descKey: "services.deliveryDesc", features: ["Delivery across Ethiopia", "Safe specialized packaging", "Real-time order tracking", "Express delivery available"] },
     { icon: "🛠️", titleKey: "services.installation", color: "#faf5ff", border: "#e9d5ff", descKey: "services.installationDesc", features: ["On-site installation", "Equipment calibration", "System integration", "Commissioning support"] },
     { icon: "📚", titleKey: "services.training", color: "#fffbeb", border: "#fde68a", descKey: "services.trainingDesc", features: ["Hands-on staff training", "Biomedical engineer training", "English & Amharic sessions", "Certificate of completion"] },
@@ -43,12 +43,10 @@ export default function Services() {
   ];
 
   const process = [
-    { step: "01", titleKey: "nav.contact", desc: "Reach out via phone, email, or contact form with your requirements." },
-    { step: "02", title: "Consultation", desc: "Our experts assess your needs and recommend the best solutions." },
-    { step: "03", title: "Quotation", desc: "We provide a detailed quote with pricing, timeline, and terms." },
-    { step: "04", title: "Order & Delivery", desc: "Confirm order and we handle procurement, logistics, and delivery." },
-    { step: "05", title: "Installation", desc: "Technicians install and commission the equipment at your facility." },
-    { step: "06", title: "Ongoing Support", desc: "Training, maintenance, and after-sales support long-term." },
+    { step: "01", title: "Needs Analysis", desc: "Facility audit & technical requirements assessment." },
+    { step: "02", title: "Solution Design", desc: "Custom equipment package & proforma specification." },
+    { step: "03", title: "Commissioning", desc: "Turnkey installation & clinical staff training." },
+    { step: "04", title: "Ongoing Support", desc: "Scheduled PPMC & 24/7 emergency technical response." },
   ];
 
   return (

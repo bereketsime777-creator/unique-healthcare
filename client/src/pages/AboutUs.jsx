@@ -4,10 +4,10 @@ import { t } from "../translations/translations";
 import Testimonials from "../components/Testimonials";
 
 const stats = [
-  { value: "200+", labelKey: "home.stats.hospitalsServed" },
-  { value: "11",   labelKey: "home.stats.yearsExperience" },
-  { value: "500+", labelKey: "home.stats.productsAvailable" },
-  { value: "10+",  label: "Years of Service" },
+  { value: "50+", labelKey: "home.stats.hospitalsServed" },
+  { value: "5+",   labelKey: "home.stats.yearsExperience" },
+  { value: "400+", labelKey: "home.stats.productsAvailable" },
+  { value: "10+",  label: "Global Brands" },
 ];
 
 const valuesData = [
