@@ -129,13 +129,13 @@ export default function Home() {
         }
       `}</style>
 
-      {/* HERO - Modern Centered Design */}
+      {/* HERO - Professional B2B Medical Equipment */}
       <section
         style={{
           backgroundImage: `url(${HERO_BG})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          minHeight: "90vh",
+          minHeight: "85vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -143,98 +143,130 @@ export default function Home() {
         }}
         className="hero-section"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 text-center">
-          <div className="hero-content" style={{ maxWidth: "900px", margin: "0 auto" }}>
+        {/* Dark overlay for readability */}
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "linear-gradient(135deg, rgba(29, 78, 216, 0.7), rgba(30, 58, 138, 0.7))",
+          zIndex: 1
+        }} />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 text-center" style={{ position: "relative", zIndex: 2 }}>
+          <div className="hero-content" style={{ maxWidth: "950px", margin: "0 auto" }}>
+            {/* Professional headline */}
             <h1 style={{ 
               color: "#ffffff", 
               fontWeight: 900, 
               fontSize: "clamp(36px, 6vw, 72px)", 
               lineHeight: 1.1, 
-              marginBottom: "32px",
-              textShadow: "0 4px 20px rgba(0,0,0,0.3)"
+              marginBottom: "24px",
+              textShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              letterSpacing: "-0.5px"
             }}>
-              {t(language, "home.heroTitle")}
+              Medical Equipment & Healthcare Solutions You Can Trust
             </h1>
 
+            {/* Supporting statement */}
             <p style={{ 
               color: "#ffffff", 
               fontSize: "clamp(16px, 2vw, 20px)", 
               lineHeight: 1.7, 
-              marginBottom: "48px", 
-              maxWidth: "700px",
-              margin: "0 auto 48px",
-              opacity: 0.95,
-              textShadow: "0 2px 8px rgba(0,0,0,0.2)"
+              maxWidth: "750px",
+              margin: "0 auto 24px",
+              opacity: 0.98,
+              textShadow: "0 2px 8px rgba(0,0,0,0.3)",
+              fontWeight: 400
             }}>
-              {t(language, "home.heroDesc")}
+              Supplying hospitals, clinics, laboratories, and healthcare professionals across Ethiopia with quality medical equipment, healthcare solutions, and professional support.
             </p>
 
-            {/* Trust Badges */}
+            {/* Professional Trust & Compliance Section */}
             <div style={{ 
               display: "flex", 
-              gap: "16px", 
+              gap: "12px", 
               justifyContent: "center", 
               flexWrap: "wrap",
-              marginBottom: "40px",
+              marginBottom: "48px",
               flexDirection: "row"
             }}>
               <div style={{
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                borderRadius: "50px",
-                padding: "8px 16px",
+                background: "rgba(255,255,255,0.12)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "6px",
+                padding: "6px 14px",
                 color: "#fff",
-                fontSize: "12px",
+                fontSize: "11px",
                 fontWeight: 600,
+                letterSpacing: "0.5px",
+                textTransform: "uppercase"
               }}>
-                ✓ {t(language, "home.trustBadge1")}
+                ✓ EFDA Approved
               </div>
               <div style={{
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                borderRadius: "50px",
-                padding: "8px 16px",
+                background: "rgba(255,255,255,0.12)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "6px",
+                padding: "6px 14px",
                 color: "#fff",
-                fontSize: "12px",
+                fontSize: "11px",
                 fontWeight: 600,
+                letterSpacing: "0.5px",
+                textTransform: "uppercase"
               }}>
-                ✓ {t(language, "home.trustBadge2")}
+                ✓ ISO 13485 Certified
               </div>
               <div style={{
-                background: "rgba(255,255,255,0.15)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255,255,255,0.25)",
-                borderRadius: "50px",
-                padding: "8px 16px",
+                background: "rgba(255,255,255,0.12)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(255,255,255,0.2)",
+                borderRadius: "6px",
+                padding: "6px 14px",
                 color: "#fff",
-                fontSize: "12px",
+                fontSize: "11px",
                 fontWeight: 600,
+                letterSpacing: "0.5px",
+                textTransform: "uppercase"
               }}>
-                ✓ {t(language, "home.trustBadge3")}
+                ✓ 24/7 Technical Support
               </div>
             </div>
 
+            {/* Primary CTAs */}
             <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
               <Link
                 to="/contact?subject=Request a Quote"
                 className="cta-button cta-button-primary"
                 style={{
                   color: "#fff",
-                  padding: "16px 40px",
-                  borderRadius: "50px",
+                  padding: "15px 44px",
+                  borderRadius: "8px",
                   fontWeight: 700,
-                  fontSize: "16px",
+                  fontSize: "15px",
                   textDecoration: "none",
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: "8px",
-                  background: "#2563eb",
+                  gap: "10px",
+                  background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
+                  boxShadow: "0 4px 15px rgba(37, 99, 235, 0.4)",
+                  transition: "all 0.3s ease",
+                  border: "none"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 6px 20px rgba(37, 99, 235, 0.6)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 4px 15px rgba(37, 99, 235, 0.4)";
                 }}
               >
-                {t(language, "home.requestQuote")}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                Request a Quote
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
               </Link>
@@ -243,17 +275,32 @@ export default function Home() {
                 className="cta-button cta-button-secondary"
                 style={{
                   color: "#fff",
-                  padding: "16px 40px",
-                  borderRadius: "50px",
+                  padding: "15px 44px",
+                  borderRadius: "8px",
                   fontWeight: 700,
-                  fontSize: "16px",
+                  fontSize: "15px",
                   textDecoration: "none",
-                  display: "inline-block",
-                  background: "rgba(255,255,255,0.15)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  background: "rgba(255,255,255,0.1)",
                   border: "2px solid rgba(255,255,255,0.3)",
+                  transition: "all 0.3s ease",
+                  backdropFilter: "blur(8px)"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.2)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.5)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.3)";
                 }}
               >
-                {t(language, "home.exploreProducts")}
+                Browse Products
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
               </Link>
             </div>
           </div>
@@ -289,18 +336,18 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATS BAR */}
-      <section style={{ background: "#1d4ed8", padding: "20px 0" }}>
+      {/* STATISTICS & TRUST BAR */}
+      <section style={{ background: "linear-gradient(135deg, #1d4ed8, #1e3a8a)", padding: "32px 0", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
         <div className="page-wrap">
           <div className="stats-bar-grid">
             {stats.map((s, i) => (
               <div key={s.label} style={{
                 textAlign: "center",
-                padding: "8px 16px",
-                borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.3)" : "none",
+                padding: "16px",
+                borderRight: i < stats.length - 1 ? "1px solid rgba(255,255,255,0.15)" : "none",
               }}>
-                <p style={{ color: "#fff", fontWeight: 900, fontSize: "28px", margin: 0 }}>{s.value}</p>
-                <p style={{ color: "#bfdbfe", fontSize: "12px", margin: "2px 0 0", fontWeight: 500 }}>{s.label}</p>
+                <p style={{ color: "#fff", fontWeight: 900, fontSize: "32px", margin: "0", letterSpacing: "-0.5px" }}>{s.value}</p>
+                <p style={{ color: "#bfdbfe", fontSize: "13px", margin: "6px 0 0", fontWeight: 500, letterSpacing: "0.3px" }}>{s.label}</p>
               </div>
             ))}
           </div>
