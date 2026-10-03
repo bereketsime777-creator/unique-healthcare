@@ -554,6 +554,32 @@ function Products() {
                         <p style={{ color: "#64748b", fontSize: "clamp(11px, 2.5vw, 12px)", margin: "0 0 12px", fontWeight: 500 }}>{product.manufacturer}</p>
                       )}
 
+                      {/* Technical Specification PDF Badge - displays only if PDF is available */}
+                      {product.technicalSpecificationPdf?.url && (
+                        <div style={{ marginBottom: "12px" }}>
+                          <span style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            background: "#f0fdf4",
+                            color: "#16a34a",
+                            fontSize: "clamp(10px, 2.5vw, 11px)",
+                            fontWeight: 600,
+                            padding: "4px 8px",
+                            borderRadius: "6px",
+                            border: "1px solid #dcfce7",
+                          }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                              <line x1="12" y1="19" x2="12" y2="11" />
+                              <polyline points="9 14 12 11 15 14" />
+                            </svg>
+                            {t(language, "products.specAvailable")}
+                          </span>
+                        </div>
+                      )}
+
                       {product.priceType === 'quote' ? (
                         <div style={{ marginBottom: "14px" }}>
                           <p style={{ color: "#2563eb", fontWeight: 700, fontSize: "clamp(12px, 3vw, 14px)", margin: 0 }}>
@@ -567,46 +593,136 @@ function Products() {
                       )}
 
                       {product.priceType === 'quote' ? (
-                        <Link
-                          to={`/contact?subject=Request a Quote&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
-                          style={{
-                            display: "block",
-                            width: "100%",
-                            padding: "clamp(9px, 2.5vw, 11px)",
-                            borderRadius: "50px",
-                            border: "none",
-                            fontWeight: 700,
-                            fontSize: "clamp(12px, 3vw, 13px)",
-                            textAlign: "center",
-                            textDecoration: "none",
-                            background: "#2563eb",
-                            color: "#fff",
-                            transition: "background 0.2s",
-                            marginTop: "auto",
-                          }}
-                        >
-                          {t(language, "products.requestQuote")}
-                        </Link>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "auto" }}>
+                          <Link
+                            to={`/contact?subject=Request a Quote&productId=${product._id}&productName=${encodeURIComponent(product.name)}`}
+                            style={{
+                              display: "block",
+                              width: "100%",
+                              padding: "clamp(9px, 2.5vw, 11px)",
+                              borderRadius: "50px",
+                              border: "none",
+                              fontWeight: 700,
+                              fontSize: "clamp(12px, 3vw, 13px)",
+                              textAlign: "center",
+                              textDecoration: "none",
+                              background: "#2563eb",
+                              color: "#fff",
+                              transition: "background 0.2s",
+                            }}
+                          >
+                            {t(language, "products.requestQuote")}
+                          </Link>
+                          {/* PDF Download Button for "Request Quote" products */}
+                          {product.technicalSpecificationPdf?.url && (
+                            <a
+                              href={product.technicalSpecificationPdf.url}
+                              download={product.technicalSpecificationPdf.fileName || "technical-specifications.pdf"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "6px",
+                                width: "100%",
+                                padding: "clamp(9px, 2.5vw, 11px)",
+                                borderRadius: "50px",
+                                border: "1.5px solid #e0e7ff",
+                                fontWeight: 600,
+                                fontSize: "clamp(12px, 3vw, 13px)",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                background: "#ffffff",
+                                color: "#2563eb",
+                                transition: "all 0.2s",
+                                cursor: "pointer",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "#eff6ff";
+                                e.currentTarget.style.borderColor = "#2563eb";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "#ffffff";
+                                e.currentTarget.style.borderColor = "#e0e7ff";
+                              }}
+                              aria-label={`Download technical specifications PDF for ${product.name}`}
+                              title="Download Technical Specifications PDF"
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                              </svg>
+                              {t(language, "products.downloadSpec")}
+                            </a>
+                          )}
+                        </div>
                       ) : (
-                        <button
-                          onClick={(e) => handleAddToCart(product, e)}
-                          disabled={product.stock === 0}
-                          style={{
-                            width: "100%",
-                            padding: "clamp(9px, 2.5vw, 11px)",
-                            borderRadius: "50px",
-                            border: "none",
-                            fontWeight: 700,
-                            fontSize: "clamp(12px, 3vw, 13px)",
-                            cursor: product.stock === 0 ? "not-allowed" : "pointer",
-                            background: addedId === product._id ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
-                            color: product.stock === 0 ? "#94a3b8" : "#fff",
-                            transition: "background 0.2s",
-                            marginTop: "auto",
-                          }}
-                        >
-                          {addedId === product._id ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
-                        </button>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "auto" }}>
+                          <button
+                            onClick={(e) => handleAddToCart(product, e)}
+                            disabled={product.stock === 0}
+                            style={{
+                              width: "100%",
+                              padding: "clamp(9px, 2.5vw, 11px)",
+                              borderRadius: "50px",
+                              border: "none",
+                              fontWeight: 700,
+                              fontSize: "clamp(12px, 3vw, 13px)",
+                              cursor: product.stock === 0 ? "not-allowed" : "pointer",
+                              background: addedId === product._id ? "#22c55e" : product.stock === 0 ? "#e2e8f0" : "#2563eb",
+                              color: product.stock === 0 ? "#94a3b8" : "#fff",
+                              transition: "background 0.2s",
+                            }}
+                          >
+                            {addedId === product._id ? `✓ ${t(language, "products.added")}` : product.stock === 0 ? t(language, "products.outOfStock") : t(language, "products.addToCart")}
+                          </button>
+                          {/* PDF Download Button for fixed price products */}
+                          {product.technicalSpecificationPdf?.url && (
+                            <a
+                              href={product.technicalSpecificationPdf.url}
+                              download={product.technicalSpecificationPdf.fileName || "technical-specifications.pdf"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "6px",
+                                width: "100%",
+                                padding: "clamp(9px, 2.5vw, 11px)",
+                                borderRadius: "50px",
+                                border: "1.5px solid #e0e7ff",
+                                fontWeight: 600,
+                                fontSize: "clamp(12px, 3vw, 13px)",
+                                textAlign: "center",
+                                textDecoration: "none",
+                                background: "#ffffff",
+                                color: "#2563eb",
+                                transition: "all 0.2s",
+                                cursor: "pointer",
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "#eff6ff";
+                                e.currentTarget.style.borderColor = "#2563eb";
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "#ffffff";
+                                e.currentTarget.style.borderColor = "#e0e7ff";
+                              }}
+                              aria-label={`Download technical specifications PDF for ${product.name}`}
+                              title="Download Technical Specifications PDF"
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                              </svg>
+                              {t(language, "products.downloadSpec")}
+                            </a>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>

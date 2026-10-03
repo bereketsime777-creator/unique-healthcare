@@ -84,6 +84,21 @@ const productSchema = new mongoose.Schema(
         default: "",
       },
     },
+
+    compliance: {
+      EFDA: {
+        type: Boolean,
+        default: false,
+      },
+      CE: {
+        type: Boolean,
+        default: false,
+      },
+      FDA: {
+        type: Boolean,
+        default: false,
+      },
+    },
   },
   {
     timestamps: true,

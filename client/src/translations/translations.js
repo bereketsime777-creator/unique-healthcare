@@ -93,6 +93,8 @@ export const translations = {
       added: "✓ Added",
       showCategories: "Show Categories ☰",
       hideCategories: "Hide Categories ✕",
+      downloadSpec: "Technical Specs",
+      specAvailable: "Technical specifications available",
     },
 
     // Product Details
@@ -488,6 +490,8 @@ export const translations = {
       added: "✓ ታክሏል",
       showCategories: "ምድቦችን አሳይ ☰",
       hideCategories: "ምድቦችን ደብቅ ✕",
+      downloadSpec: "ቴክኒካል መግለጫ",
+      specAvailable: "ቴክኒካል መግለጫዎች ይገኛሉ",
     },
 
     // Product Details
