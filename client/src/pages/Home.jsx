@@ -145,18 +145,6 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-8 py-16 text-center">
           <div className="hero-content" style={{ maxWidth: "900px", margin: "0 auto" }}>
-            <p style={{ 
-              color: "#fff", 
-              fontWeight: 700, 
-              fontSize: "14px", 
-              letterSpacing: "4px", 
-              textTransform: "uppercase", 
-              marginBottom: "24px",
-              opacity: 0.9
-            }}>
-              {t(language, "home.heroTag")}
-            </p>
-
             <h1 style={{ 
               color: "#ffffff", 
               fontWeight: 900, 
