@@ -89,7 +89,7 @@
 
 ### Products.jsx
 ```
-✅ Hero section with background
+✅ Hero section with hero1.png background image (client choice)
 ✅ Search bar with clear button
 ✅ Category sidebar (toggles on mobile)
 ✅ Product grid (responsive)

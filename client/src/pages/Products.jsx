@@ -171,28 +171,39 @@ function Products() {
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 py-12 md:py-16 lg:py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url(/images/hero1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
+      <section 
+        className="py-12 md:py-16 lg:py-20 relative overflow-hidden"
+        style={{
+          background: "#1d4ed8",
+          backgroundImage: 'url(/images/hero1.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: "35vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center">
             <p className="text-white font-bold text-xs md:text-sm tracking-widest uppercase opacity-90 mb-3">
               {t(language, "products.browseTag")}
             </p>
-            <h1 className="text-white font-bold text-3xl md:text-4xl lg:text-5xl mb-3 leading-tight">
+            <h1 className="text-white font-bold text-3xl md:text-4xl lg:text-5xl mb-3 leading-tight" style={{ textShadow: "0 4px 20px rgba(0,0,0,0.3)" }}>
               {categoryQuery || t(language, "products.allProducts")}
             </h1>
-            <p className="text-blue-100 text-sm md:text-base lg:text-lg max-w-2xl mx-auto mb-4">
+            <p className="text-white text-sm md:text-base lg:text-lg max-w-2xl mx-auto mb-4 opacity-95" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
               {categoryQuery 
                 ? t(language, "products.categoryDesc").replace("{category}", categoryQuery.toLowerCase())
                 : t(language, "products.defaultDesc")}
             </p>
             {categoryQuery && (
-              <div className="flex items-center justify-center gap-2 text-sm text-blue-100 flex-wrap">
-                <Link to="/" className="hover:text-white transition-colors">{t(language, "nav.home")}</Link>
+              <div className="flex items-center justify-center gap-2 text-sm text-white flex-wrap opacity-90">
+                <Link to="/" className="hover:text-blue-100 transition-colors">{t(language, "nav.home")}</Link>
                 <span>/</span>
-                <Link to="/products" className="hover:text-white transition-colors">{t(language, "nav.products")}</Link>
+                <Link to="/products" className="hover:text-blue-100 transition-colors">{t(language, "nav.products")}</Link>
                 <span>/</span>
-                <span className="font-semibold text-white">{categoryQuery}</span>
+                <span className="font-semibold">{categoryQuery}</span>
               </div>
             )}
           </div>

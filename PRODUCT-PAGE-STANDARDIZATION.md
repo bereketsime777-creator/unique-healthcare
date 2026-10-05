@@ -15,7 +15,7 @@ Both `Products.jsx` and `ProductDetails.jsx` have been completely standardized w
 - ✓ Responsive product image container with fallback placeholder
 
 ### Products Page:
-- ✓ Standardized hero section with gradient background
+- ✓ Standardized hero section with **hero1.png** background image (client choice)
 - ✓ 4-column grid layout (sidebar + 3-column products) that adapts to mobile
 - ✓ Unified search bar with clear button functionality
 - ✓ Responsive category sidebar that toggles on mobile
