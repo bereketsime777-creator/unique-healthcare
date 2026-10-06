@@ -2,16 +2,60 @@ import { useState } from "react";
 import API from "../services/api";
 import { useLanguage } from "../context/LanguageContext";
 import { t } from "../translations/translations";
-
-const info = [
-  { icon: "🔧", title: "After-Sales Support", desc: "We provide complete after-sales service for all equipment." },
-  { icon: "⚡", title: "Fast Response", desc: "Request submitted, response within 24 hours." },
-  { icon: "💼", title: "Professional Service", desc: "Our certified technicians handle all service requests." },
-  { icon: "📞", title: "Easy Communication", desc: "Track your service request status anytime." },
-];
+import { useMetaTags } from "../hooks/useMetaTags";
+import { CONTACT } from "../constants/contact";
 
 export default function AfterSalesService() {
   const { language } = useLanguage();
+
+  // Get base URL for absolute URLs
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin;
+    }
+    return import.meta.env.VITE_FRONTEND_URL || 'https://unique-healthcare.vercel.app';
+  };
+
+  // Set meta tags
+  useMetaTags({
+    title: 'After-Sales Service | Unique Healthcare PLC',
+    description: 'Submit service requests for maintenance, repair, installation, and training support. Fast response within 24 hours.',
+    keywords: 'after-sales service, maintenance, repair, installation, technical support, Ethiopia',
+    ogTitle: 'After-Sales Service | Unique Healthcare PLC',
+    ogDescription: 'Professional after-sales service and support for medical equipment',
+    ogImage: `${getBaseUrl()}/logo.png`,
+    ogUrl: `${getBaseUrl()}/after-sales-service`,
+    ogType: 'website',
+    ogSiteName: 'Unique Healthcare PLC',
+    twitterCard: 'summary',
+    twitterTitle: 'After-Sales Service | Unique Healthcare PLC',
+    twitterDescription: 'Submit maintenance and repair requests for medical equipment',
+    twitterImage: `${getBaseUrl()}/logo.png`,
+    canonical: `${getBaseUrl()}/after-sales-service`,
+  });
+
+  const serviceInfo = [
+    { 
+      icon: "🔧", 
+      title: language === 'am' ? "ድህረ ሽያጭ ድጋፍ" : "After-Sales Support", 
+      desc: language === 'am' ? "ለሁሉም መሳሪያዎች ሙሉ ድህረ ሽያጭ አገልግሎት ይሰጣል።" : "We provide complete after-sales service for all equipment." 
+    },
+    { 
+      icon: "⚡", 
+      title: language === 'am' ? "ፍጥን ምላሽ" : "Fast Response", 
+      desc: language === 'am' ? "ጥያቄ ቀርቦ ከ 24 ሰዓት ውስጥ ምላሽ ተሰጥቷል።" : "Request submitted, response within 24 hours." 
+    },
+    { 
+      icon: "💼", 
+      title: language === 'am' ? "ባለሙያ አገልግሎት" : "Professional Service", 
+      desc: language === 'am' ? "የተጠናቀቁ ቴክኒሻኖቻችን ሁሉንም የአገልግሎት ጥያቄዎች ያስተናግዳሉ።" : "Our certified technicians handle all service requests." 
+    },
+    { 
+      icon: "📞", 
+      title: language === 'am' ? "ቀላል ግንኙነት" : "Easy Communication", 
+      desc: language === 'am' ? "ማንኛውም ጊዜ የእርስዎን የአገልግሎት ጥያቄ ሁኔታ ይከታተሉ።" : "Track your service request status anytime." 
+    },
+  ];
 
   const [form, setForm] = useState({
     name: "",
@@ -50,7 +94,6 @@ export default function AfterSalesService() {
     setError("");
   };
 
-  // Equipment search and selection
   const handleEquipmentSearch = async (query) => {
     setProductSearch(query);
     if (query.length < 2) {
@@ -81,7 +124,7 @@ export default function AfterSalesService() {
 
   const enterManualEquipment = (equipmentName) => {
     if (!equipmentName || !equipmentName.trim()) {
-      setError("Please enter equipment name");
+      setError(language === 'am' ? "እባክዎ የመሳሪያ ስም ያስገቡ" : "Please enter equipment name");
       return;
     }
 
@@ -98,7 +141,6 @@ export default function AfterSalesService() {
     e.preventDefault();
     setError("");
 
-    // Validate required fields
     if (
       !form.contactPerson ||
       !form.serviceType ||
@@ -106,7 +148,11 @@ export default function AfterSalesService() {
       !form.serviceDescription ||
       !form.serviceLocation
     ) {
-      setError("Please fill in all required fields: contact person, service type, equipment, description, and location.");
+      setError(
+        language === 'am' 
+          ? "እባክዎ ሁሉንም የሚያስፈልጋቸው ሜዳዎች ይሙሉ"
+          : "Please fill in all required fields: contact person, service type, equipment, description, and location."
+      );
       return;
     }
 
@@ -141,171 +187,119 @@ export default function AfterSalesService() {
     }
   };
 
-  const input = {
-    width: "100%",
-    border: "1.5px solid #e2e8f0",
-    borderRadius: "12px",
-    padding: "12px 16px",
-    fontSize: "14px",
-    outline: "none",
-    fontFamily: "inherit",
-    color: "#0f172a",
-    background: "#fff",
-    boxSizing: "border-box",
+  const resetForm = () => {
+    setSubmitted(false);
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      subject: "After-Sales Service Request",
+      message: "",
+      requestType: "after_sales_service",
+      contactPerson: "",
+      organizationName: "",
+      serviceType: "",
+      serialNumber: "",
+      purchaseDate: "",
+      preferredServiceDate: "",
+      serviceDescription: "",
+      serviceLocation: "",
+    });
+    setSelectedEquipment({
+      equipmentProductId: null,
+      equipment: "",
+    });
+    setSubmittedData(null);
   };
 
   return (
-    <div style={{ background: "#fff", minHeight: "100vh" }}>
+    <div className="bg-white min-h-screen">
       <style>{`
-        @keyframes scroll-indicator {
-          0% { opacity: 1; transform: translate(-50%, 0); }
-          100% { opacity: 0; transform: translate(-50%, 20px); }
-        }
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
         }
+        @keyframes scroll-indicator {
+          0% { opacity: 1; transform: translate(-50%, 0); }
+          100% { opacity: 0; transform: translate(-50%, 20px); }
+        }
+        input, textarea, select {
+          font-family: inherit;
+        }
       `}</style>
 
-      {/* Hero */}
+      {/* Hero Section */}
       <section
-        className="hero-section"
+        className="relative overflow-hidden py-12 md:py-16 lg:py-20 flex items-center justify-center"
         style={{
           background: "#0369a1",
           backgroundImage: "url(/images/hero1.png)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          padding: "40px 0 50px",
-          textAlign: "center",
-          position: "relative",
           minHeight: "35vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
         }}
       >
-        <div style={{ maxWidth: "700px", margin: "0 auto", padding: "0 32px" }}>
-          <div className="hero-content">
-            <p
-              style={{
-                color: "#fff",
-                fontWeight: 700,
-                fontSize: "12px",
-                letterSpacing: "3px",
-                textTransform: "uppercase",
-                marginBottom: "14px",
-                opacity: 0.9,
-              }}
-            >
-              After-Sales Support
-            </p>
-            <h2
-              style={{
-                color: "#ffffff",
-                fontWeight: 900,
-                fontSize: "clamp(28px, 4.5vw, 40px)",
-                margin: "0 0 12px",
-                lineHeight: 1.2,
-                textShadow: "0 4px 20px rgba(0,0,0,0.3)",
-              }}
-            >
-              Service Request
-            </h2>
-            <p
-              style={{
-                color: "#ffffff",
-                fontSize: "15px",
-                lineHeight: 1.6,
-                margin: "0 auto 18px",
-                maxWidth: "600px",
-                opacity: 0.95,
-                textShadow: "0 2px 8px rgba(0,0,0,0.2)",
-              }}
-            >
-              Need maintenance, repair, or installation support? Submit your service request and our team will respond within 24 hours.
-            </p>
-          </div>
+        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+          <p className="text-white font-bold text-xs md:text-sm tracking-widest uppercase opacity-90 mb-4">
+            {language === 'am' ? "ድህረ ሽያጭ ድጋፍ" : "After-Sales Support"}
+          </p>
+          <h1
+            className="text-white font-bold text-3xl md:text-4xl lg:text-5xl mb-4 leading-tight"
+            style={{ textShadow: "0 4px 20px rgba(0,0,0,0.3)" }}
+          >
+            {language === 'am' ? "አገልግሎት ጥያቄ" : "Service Request"}
+          </h1>
+          <p
+            className="text-white text-sm md:text-base lg:text-lg max-w-2xl mx-auto opacity-95"
+            style={{ textShadow: "0 2px 8px rgba(0,0,0,0.2)" }}
+          >
+            {language === 'am'
+              ? "ጠገና፣ ጥገና ወይም ግንባታ ድጋፍ ያስፈልገዎታል? የእርስዎን የአገልግሎት ጥያቄ ያስቀምጡ እና 球ራ 24 ሰዓት ውስጥ ድንገተኛ ምላሽ እንሰጠዋለን።"
+              : "Need maintenance, repair, or installation support? Submit your service request and our team will respond within 24 hours."}
+          </p>
         </div>
 
         {/* Scroll Indicator */}
         <div
-          style={{
-            position: "absolute",
-            bottom: "20px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            animation: "float 2s ease-in-out infinite",
-          }}
+          className="absolute bottom-5 left-1/2 -translate-x-1/2"
+          style={{ animation: "float 2s ease-in-out infinite" }}
         >
-          <div
-            style={{
-              width: "26px",
-              height: "42px",
-              border: "2px solid rgba(255,255,255,0.5)",
-              borderRadius: "20px",
-              position: "relative",
-            }}
-          >
+          <div className="w-7 h-11 border-2 border-white border-opacity-50 rounded-full relative">
             <div
-              style={{
-                width: "5px",
-                height: "8px",
-                background: "rgba(255,255,255,0.8)",
-                borderRadius: "3px",
-                position: "absolute",
-                top: "6px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                animation: "scroll-indicator 1.5s infinite",
-              }}
-            ></div>
+              className="w-1 h-2 bg-white bg-opacity-80 rounded absolute top-1.5 left-1/2 -translate-x-1/2"
+              style={{ animation: "scroll-indicator 1.5s infinite" }}
+            />
           </div>
         </div>
       </section>
 
-      {/* Main content */}
-      <section style={{ padding: "72px 0", background: "#f8fafc" }}>
-        <div className="page-wrap">
-          <div className="responsive-grid-1-2">
-            {/* Info cards */}
-            <div>
-              <h2 style={{ color: "#0f172a", fontWeight: 700, fontSize: "20px", margin: "0 0 20px" }}>
-                Why Submit a Service Request?
+      {/* Main Content */}
+      <section className="bg-gray-50 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Info Cards */}
+            <div className="lg:col-span-1">
+              <h2 className="text-gray-900 font-bold text-xl md:text-2xl mb-6">
+                {language === 'am' ? "ለምን አገልግሎት ጥያቄ ያስቀምጡ?" : "Why Submit a Service Request?"}
               </h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {info.map((c) => (
+              <div className="space-y-4">
+                {serviceInfo.map((item) => (
                   <div
-                    key={c.title}
-                    style={{
-                      background: "#fff",
-                      border: "1.5px solid #7dd3fc",
-                      borderRadius: "16px",
-                      padding: "18px 20px",
-                      display: "flex",
-                      gap: "14px",
-                      alignItems: "flex-start",
-                    }}
+                    key={item.title}
+                    className="bg-white border-2 border-cyan-200 rounded-xl p-4 md:p-5 hover:shadow-lg transition-shadow"
                   >
-                    <div
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        background: "#dbeafe",
-                        borderRadius: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "20px",
-                        flexShrink: 0,
-                      }}
-                    >
-                      {c.icon}
-                    </div>
-                    <div>
-                      <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "14px", margin: "0 0 4px" }}>
-                        {c.title}
-                      </p>
-                      <p style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>{c.desc}</p>
+                    <div className="flex gap-3 md:gap-4 items-start">
+                      <div className="flex-shrink-0 w-11 h-11 bg-cyan-100 rounded-lg flex items-center justify-center text-lg md:text-xl">
+                        {item.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-gray-900 font-bold text-sm md:text-base mb-1">
+                          {item.title}
+                        </p>
+                        <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -313,123 +307,70 @@ export default function AfterSalesService() {
             </div>
 
             {/* Service Request Form */}
-            <div
-              style={{
-                background: "#fff",
-                border: "1.5px solid #f1f5f9",
-                borderRadius: "20px",
-                padding: "clamp(20px, 4vw, 36px)",
-              }}
-            >
-              <h2 style={{ color: "#0f172a", fontWeight: 700, fontSize: "20px", margin: "0 0 6px" }}>
-                Submit Service Request
+            <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-sm">
+              <h2 className="text-gray-900 font-bold text-xl md:text-2xl mb-2">
+                {language === 'am' ? "አገልግሎት ጥያቄ ያስቀምጡ" : "Submit Service Request"}
               </h2>
-              <p style={{ color: "#64748b", fontSize: "13px", margin: "0 0 28px" }}>
-                Fill out the form and our team will get back to you within 24 hours.
+              <p className="text-gray-600 text-sm md:text-base mb-8">
+                {language === 'am'
+                  ? "ፎርሙን ይሙሉ እና 球ራ 24 ሰዓት ውስጥ ወደ እርስዎ ይመለሳል።"
+                  : "Fill out the form and our team will get back to you within 24 hours."}
               </p>
 
               {submitted ? (
-                <div style={{ textAlign: "center", padding: "48px 0" }}>
-                  <div style={{ fontSize: "56px", marginBottom: "16px" }}>✅</div>
-                  <h3 style={{ color: "#0f172a", fontWeight: 800, fontSize: "22px", margin: "0 0 8px" }}>
-                    Service Request Submitted!
+                <div className="text-center py-12">
+                  <div className="text-5xl md:text-6xl mb-4">✅</div>
+                  <h3 className="text-gray-900 font-bold text-lg md:text-2xl mb-3">
+                    {language === 'am' ? "አገልግሎት ጥያቄ ተጠየቀ!" : "Service Request Submitted!"}
                   </h3>
-                  <p style={{ color: "#64748b", fontSize: "14px", margin: "0 0 6px" }}>
-                    Thank you for submitting your service request.
+                  <p className="text-gray-600 text-sm md:text-base mb-2">
+                    {language === 'am'
+                      ? "ለአገልግሎት ጥያቄዎ ምስጋና በልግ።"
+                      : "Thank you for submitting your service request."}
                   </p>
                   {submittedData?.serviceRequestNumber && (
-                    <p
-                      style={{
-                        color: "#0369a1",
-                        fontSize: "16px",
-                        fontWeight: 700,
-                        margin: "0 0 24px",
-                        backgroundColor: "#dbeafe",
-                        padding: "12px 16px",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      Your SR#: <strong>{submittedData.serviceRequestNumber}</strong>
+                    <p className="text-cyan-700 text-base md:text-lg font-bold mb-6 bg-cyan-50 p-3 md:p-4 rounded-lg">
+                      {language === 'am' ? "የእርስዎ SR#:" : "Your SR#:"} <strong>{submittedData.serviceRequestNumber}</strong>
                     </p>
                   )}
-                  <p style={{ color: "#64748b", fontSize: "13px", margin: "0 0 24px" }}>
-                    We will contact you within 24 hours. Keep your SR# for reference.
+                  <p className="text-gray-600 text-sm md:text-base mb-8">
+                    {language === 'am'
+                      ? "ኩርሳ 24 ሰዓት ውስጥ ደዋለን። ወደ ወደብ ለማጣቀስ የእርስዎን SR# ያስቀምጡ።"
+                      : "We will contact you within 24 hours. Keep your SR# for reference."}
                   </p>
                   <button
-                    onClick={() => {
-                      setSubmitted(false);
-                      setForm({
-                        name: "",
-                        email: "",
-                        phone: "",
-                        subject: "After-Sales Service Request",
-                        message: "",
-                        requestType: "after_sales_service",
-                        contactPerson: "",
-                        organizationName: "",
-                        serviceType: "",
-                        serialNumber: "",
-                        purchaseDate: "",
-                        preferredServiceDate: "",
-                        serviceDescription: "",
-                        serviceLocation: "",
-                      });
-                      setSelectedEquipment({
-                        equipmentProductId: null,
-                        equipment: "",
-                      });
-                      setSubmittedData(null);
-                    }}
-                    style={{
-                      background: "#0369a1",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "50px",
-                      padding: "12px 28px",
-                      fontWeight: 700,
-                      fontSize: "14px",
-                      cursor: "pointer",
-                      fontFamily: "inherit",
-                    }}
+                    onClick={resetForm}
+                    className="inline-block bg-cyan-600 hover:bg-cyan-700 text-white px-6 md:px-8 py-3 rounded-lg font-bold transition-colors"
                   >
-                    Submit Another Request
+                    {language === 'am' ? "ሌላ ጥያቄ ያስቀምጡ" : "Submit Another Request"}
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="space-y-5">
                   {error && (
-                    <div
-                      style={{
-                        background: "#fff1f2",
-                        border: "1px solid #fecdd3",
-                        color: "#e11d48",
-                        borderRadius: "10px",
-                        padding: "12px 16px",
-                        fontSize: "13px",
-                        marginBottom: "20px",
-                      }}
-                    >
+                    <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 md:p-4 text-sm md:text-base">
                       ⚠ {error}
                     </div>
                   )}
 
-                  <div className="responsive-grid-form-2" style={{ marginBottom: "16px" }}>
+                  {/* Name & Email */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Full Name *
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ሙሉ ስም *" : "Full Name *"}
                       </label>
                       <input
                         name="name"
                         value={form.name}
                         onChange={handleChange}
                         required
-                        placeholder="Your name"
-                        style={input}
+                        placeholder={language === 'am' ? "የእርስዎ ስም" : "Your name"}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                       />
                     </div>
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Email Address *
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ኢሜይል አድራሻ *" : "Email Address *"}
                       </label>
                       <input
                         type="email"
@@ -438,15 +379,16 @@ export default function AfterSalesService() {
                         onChange={handleChange}
                         required
                         placeholder="you@hospital.com"
-                        style={input}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                       />
                     </div>
                   </div>
 
-                  <div className="responsive-grid-form-2" style={{ marginBottom: "16px" }}>
+                  {/* Phone & Contact Person */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Phone Number *
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ስልክ ቁጥር *" : "Phone Number *"}
                       </label>
                       <input
                         name="phone"
@@ -454,90 +396,90 @@ export default function AfterSalesService() {
                         onChange={handleChange}
                         required
                         placeholder="+251 9XX XXX XXX"
-                        style={input}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                       />
                     </div>
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Contact Person *
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ተገናኝ ሰው ስም *" : "Contact Person *"}
                       </label>
                       <input
                         name="contactPerson"
                         value={form.contactPerson}
                         onChange={handleChange}
                         required
-                        placeholder="e.g., Dr. Abebe"
-                        style={input}
+                        placeholder={language === 'am' ? "ለምሳሌ ዶክተር አበበ" : "e.g., Dr. Abebe"}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                       />
                     </div>
                   </div>
 
-                  <div style={{ marginBottom: "16px" }}>
-                    <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                      Organization / Hospital / Clinic *
+                  {/* Organization */}
+                  <div>
+                    <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                      {language === 'am' ? "ተቋም / ሆስፒታል / ክሊኒክ *" : "Organization / Hospital / Clinic *"}
                     </label>
                     <input
                       name="organizationName"
                       value={form.organizationName}
                       onChange={handleChange}
                       required
-                      placeholder="e.g., Addis Ababa General Hospital"
-                      style={input}
+                      placeholder={language === 'am' ? "ለምሳሌ አዲስ አበባ ጠቅላላ ሆስፒታል" : "e.g., Addis Ababa General Hospital"}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                     />
                   </div>
 
-                  <div className="responsive-grid-form-2" style={{ marginBottom: "16px" }}>
+                  {/* Service Type & Serial Number */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Service Type *
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "አገልግሎት ዓይነት *" : "Service Type *"}
                       </label>
-                      <select name="serviceType" value={form.serviceType} onChange={handleChange} required style={{ ...input }}>
-                        <option value="">Select service type</option>
-                        <option value="installation">Installation</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="repair">Repair</option>
-                        <option value="troubleshooting">Troubleshooting</option>
-                        <option value="training">Training</option>
-                        <option value="other">Other</option>
+                      <select
+                        name="serviceType"
+                        value={form.serviceType}
+                        onChange={handleChange}
+                        required
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
+                      >
+                        <option value="">{language === 'am' ? "አገልግሎት ዓይነት ይምረጡ" : "Select service type"}</option>
+                        <option value="installation">{language === 'am' ? "ግንባታ" : "Installation"}</option>
+                        <option value="maintenance">{language === 'am' ? "ጠገና" : "Maintenance"}</option>
+                        <option value="repair">{language === 'am' ? "ጥገና" : "Repair"}</option>
+                        <option value="troubleshooting">{language === 'am' ? "ስህተት ፈለግ" : "Troubleshooting"}</option>
+                        <option value="training">{language === 'am' ? "ስልጠና" : "Training"}</option>
+                        <option value="other">{language === 'am' ? "ሌላ" : "Other"}</option>
                       </select>
                     </div>
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Serial Number
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ተከታታይ ቁጥር" : "Serial Number"}
                       </label>
                       <input
                         name="serialNumber"
                         value={form.serialNumber}
                         onChange={handleChange}
-                        placeholder="e.g., SN-2024-1234"
-                        style={input}
+                        placeholder={language === 'am' ? "ለምሳሌ SN-2024-1234" : "e.g., SN-2024-1234"}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                       />
                     </div>
                   </div>
 
-                  {/* Equipment Search */}
-                  <div style={{ marginBottom: "16px" }}>
-                    <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "8px" }}>
-                      Equipment / Product *
+                  {/* Equipment Selection */}
+                  <div>
+                    <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                      {language === 'am' ? "መሳሪያ / ምርት *" : "Equipment / Product *"}
                     </label>
                     {selectedEquipment.equipment ? (
-                      <div
-                        style={{
-                          background: "#fff",
-                          border: "1px solid #e2e8f0",
-                          borderRadius: "10px",
-                          padding: "12px",
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
+                      <div className="bg-white border border-gray-300 rounded-lg p-3 md:p-4 flex justify-between items-center">
                         <div>
-                          <p style={{ fontSize: "13px", fontWeight: "600", color: "#0f172a", margin: 0, marginBottom: "2px" }}>
+                          <p className="text-sm md:text-base font-bold text-gray-900 mb-1">
                             {selectedEquipment.equipment}
                           </p>
                           {!selectedEquipment.equipmentProductId && (
-                            <p style={{ fontSize: "11px", color: "#94a3b8", margin: 0, fontStyle: "italic" }}>(manually entered)</p>
+                            <p className="text-xs text-gray-500 italic">
+                              {language === 'am' ? "(በእጅ ተጀምሮ)" : "(manually entered)"}
+                            </p>
                           )}
                         </div>
                         <button
@@ -547,18 +489,9 @@ export default function AfterSalesService() {
                             setProductSearch("");
                             setShowEquipmentSearch(false);
                           }}
-                          style={{
-                            background: "#fff1f2",
-                            color: "#e11d48",
-                            border: "1px solid #fecdd3",
-                            padding: "6px 12px",
-                            borderRadius: "8px",
-                            cursor: "pointer",
-                            fontWeight: "600",
-                            fontSize: "12px",
-                          }}
+                          className="bg-red-50 text-red-600 border border-red-200 px-3 py-1.5 rounded text-xs font-bold hover:bg-red-100 transition-colors"
                         >
-                          Change
+                          {language === 'am' ? "ተጀምሮ" : "Change"}
                         </button>
                       </div>
                     ) : !showEquipmentSearch ? (
@@ -568,104 +501,52 @@ export default function AfterSalesService() {
                           setShowEquipmentSearch(true);
                           setProductSearch("");
                         }}
-                        style={{
-                          width: "100%",
-                          background: "#fff",
-                          color: "#0369a1",
-                          border: "2px solid #0369a1",
-                          borderRadius: "10px",
-                          padding: "10px",
-                          fontWeight: "600",
-                          fontSize: "13px",
-                          cursor: "pointer",
-                          transition: "all 0.15s",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = "#dbeafe";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "#fff";
-                        }}
+                        className="w-full bg-white border-2 border-cyan-600 text-cyan-600 hover:bg-cyan-50 rounded-lg py-2.5 font-bold text-sm md:text-base transition-colors"
                       >
-                        + Select Equipment
+                        + {language === 'am' ? "መሳሪያ ይምረጡ" : "Select Equipment"}
                       </button>
                     ) : (
-                      <div style={{ position: "relative" }}>
+                      <div className="relative">
                         <input
                           type="text"
-                          placeholder="Search equipment or type product name..."
+                          placeholder={language === 'am' ? "መሳሪያ ፈልግ ወይም ምርት ስም ይተይቡ..." : "Search equipment or type product name..."}
                           value={productSearch}
                           onChange={(e) => handleEquipmentSearch(e.target.value)}
                           autoFocus
-                          style={input}
+                          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                         />
                         {products.length > 0 && (
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: "100%",
-                              left: 0,
-                              right: 0,
-                              background: "#fff",
-                              border: "1px solid #e2e8f0",
-                              borderRadius: "12px",
-                              marginTop: "4px",
-                              zIndex: 10,
-                              maxHeight: "200px",
-                              overflowY: "auto",
-                              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                            }}
-                          >
+                          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg max-h-40 overflow-y-auto z-50">
                             {products.map((p) => (
                               <button
                                 key={p._id}
                                 type="button"
                                 onClick={() => selectEquipment(p)}
-                                style={{
-                                  width: "100%",
-                                  textAlign: "left",
-                                  padding: "12px 16px",
-                                  border: "none",
-                                  background: "transparent",
-                                  cursor: "pointer",
-                                  fontSize: "13px",
-                                  borderBottom: "1px solid #f1f5f9",
-                                  transition: "background 0.15s",
-                                }}
-                                onMouseEnter={(e) => (e.currentTarget.style.background = "#f8fafc")}
-                                onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                                className="w-full text-left px-4 py-3 border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors"
                               >
-                                <div style={{ fontWeight: "600", color: "#0f172a" }}>{p.name}</div>
-                                <div style={{ fontSize: "12px", color: "#94a3b8" }}>{p.category}</div>
+                                <div className="font-bold text-gray-900 text-sm">{p.name}</div>
+                                <div className="text-xs text-gray-500">{p.category}</div>
                               </button>
                             ))}
                           </div>
                         )}
                         {productSearch && products.length === 0 && !searchingProducts && (
-                          <div style={{ marginTop: "8px", padding: "12px", background: "#dbeafe", border: "1px solid #7dd3fc", borderRadius: "8px" }}>
-                            <p style={{ fontSize: "13px", color: "#0369a1", margin: 0, marginBottom: "8px" }}>
-                              No matching equipment. Add "{productSearch}" manually:
+                          <div className="mt-2 p-3 md:p-4 bg-cyan-50 border border-cyan-200 rounded-lg">
+                            <p className="text-xs md:text-sm text-cyan-700 mb-2">
+                              {language === 'am'
+                                ? `ምንም ተዛማጅ መሳሪያ ዋ። "${productSearch}" በእጅ ይጨምሩ:`
+                                : `No matching equipment. Add "${productSearch}" manually:`}
                             </p>
                             <button
                               type="button"
                               onClick={() => enterManualEquipment(productSearch)}
-                              style={{
-                                width: "100%",
-                                background: "#0369a1",
-                                color: "#fff",
-                                border: "none",
-                                padding: "10px",
-                                borderRadius: "8px",
-                                fontWeight: "600",
-                                fontSize: "13px",
-                                cursor: "pointer",
-                              }}
+                              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded font-bold text-xs md:text-sm transition-colors"
                             >
-                              Add "{productSearch}"
+                              {language === 'am' ? "ይጨምሩ" : "Add"} "{productSearch}"
                             </button>
                           </div>
                         )}
-                        <div style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
+                        <div className="mt-3 flex gap-2">
                           <button
                             type="button"
                             onClick={() => {
@@ -675,80 +556,71 @@ export default function AfterSalesService() {
                                 setShowEquipmentSearch(false);
                               }
                             }}
-                            style={{
-                              flex: 1,
-                              background: "#0369a1",
-                              color: "#fff",
-                              border: "none",
-                              borderRadius: "8px",
-                              padding: "8px",
-                              fontWeight: "600",
-                              fontSize: "12px",
-                              cursor: "pointer",
-                            }}
+                            className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white py-2 rounded font-bold text-xs md:text-sm transition-colors"
                           >
-                            {productSearch.trim() ? "Add as Manual Equipment" : "Done"}
+                            {productSearch.trim() 
+                              ? (language === 'am' ? "እንደ ቅጽ መሳሪያ ይጨምሩ" : "Add as Manual Equipment")
+                              : (language === 'am' ? "ተጠናቀቀ" : "Done")}
                           </button>
                           <button
                             type="button"
                             onClick={() => setShowEquipmentSearch(false)}
-                            style={{
-                              flex: 1,
-                              background: "#f1f5f9",
-                              color: "#64748b",
-                              border: "1px solid #e2e8f0",
-                              borderRadius: "8px",
-                              padding: "8px",
-                              fontWeight: "600",
-                              fontSize: "12px",
-                              cursor: "pointer",
-                            }}
+                            className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded font-bold text-xs md:text-sm transition-colors"
                           >
-                            Cancel
+                            {language === 'am' ? "ሰርዝ" : "Cancel"}
                           </button>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  <div className="responsive-grid-form-2" style={{ marginBottom: "16px" }}>
+                  {/* Dates */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Purchase Date
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ግዢ ቀን" : "Purchase Date"}
                       </label>
-                      <input type="date" name="purchaseDate" value={form.purchaseDate} onChange={handleChange} style={input} />
+                      <input
+                        type="date"
+                        name="purchaseDate"
+                        value={form.purchaseDate}
+                        onChange={handleChange}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
+                      />
                     </div>
                     <div>
-                      <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                        Preferred Service Date
+                      <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                        {language === 'am' ? "ምርጥ አገልግሎት ቀን" : "Preferred Service Date"}
                       </label>
                       <input
                         type="date"
                         name="preferredServiceDate"
                         value={form.preferredServiceDate}
                         onChange={handleChange}
-                        style={input}
+                        className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                       />
                     </div>
                   </div>
 
-                  <div style={{ marginBottom: "16px" }}>
-                    <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                      Service Location *
+                  {/* Service Location */}
+                  <div>
+                    <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                      {language === 'am' ? "አገልግሎት ቦታ *" : "Service Location *"}
                     </label>
                     <input
                       name="serviceLocation"
                       value={form.serviceLocation}
                       onChange={handleChange}
                       required
-                      placeholder="e.g., Bole Sub-City, Addis Ababa"
-                      style={input}
+                      placeholder={language === 'am' ? "ለምሳሌ ቦሌ ወረዳ፣ አዲስ አበባ" : "e.g., Bole Sub-City, Addis Ababa"}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200"
                     />
                   </div>
 
-                  <div style={{ marginBottom: "24px" }}>
-                    <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
-                      Service Description / Issue *
+                  {/* Service Description */}
+                  <div>
+                    <label className="block text-xs md:text-sm font-bold text-gray-700 mb-2">
+                      {language === 'am' ? "አገልግሎት መግለጫ / ጉዳይ *" : "Service Description / Issue *"}
                     </label>
                     <textarea
                       name="serviceDescription"
@@ -756,29 +628,28 @@ export default function AfterSalesService() {
                       onChange={handleChange}
                       required
                       rows={5}
-                      placeholder="Describe the issue, maintenance needed, or service required..."
-                      style={{ ...input, resize: "vertical", lineHeight: 1.6 }}
+                      placeholder={
+                        language === 'am'
+                          ? "ጉዳይውን፣ ጠገናን ወይም የሚያስፈልገውን አገልግሎትን ይግለጹ..."
+                          : "Describe the issue, maintenance needed, or service required..."
+                      }
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 resize-none"
                     />
                   </div>
 
+                  {/* Submit Button */}
                   <button
                     type="submit"
                     disabled={loading}
-                    style={{
-                      width: "100%",
-                      background: "#0369a1",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "50px",
-                      padding: "14px",
-                      fontWeight: 700,
-                      fontSize: "15px",
-                      cursor: loading ? "not-allowed" : "pointer",
-                      opacity: loading ? 0.7 : 1,
-                      fontFamily: "inherit",
-                    }}
+                    className={`w-full py-3 rounded-lg font-bold text-base md:text-lg transition-opacity ${
+                      loading
+                        ? "bg-gray-400 text-gray-200 cursor-not-allowed opacity-70"
+                        : "bg-cyan-600 hover:bg-cyan-700 text-white"
+                    }`}
                   >
-                    {loading ? "↻  Submitting..." : "Submit Service Request →"}
+                    {loading 
+                      ? `↻ ${language === 'am' ? "ይላክ..." : "Submitting..."}`
+                      : `${language === 'am' ? "አገልግሎት ጥያቄ ያስቀምጡ" : "Submit Service Request"} →`}
                   </button>
                 </form>
               )}
@@ -787,38 +658,22 @@ export default function AfterSalesService() {
         </div>
       </section>
 
-      {/* Info section */}
-      <section style={{ background: "#fff", borderTop: "1px solid #f1f5f9", padding: "48px 0" }}>
-        <div className="page-wrap">
-          <div className="responsive-grid-4" style={{ gap: "24px" }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "32px", marginBottom: "10px" }}>⚡</div>
-              <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>
-                Fast Response
-              </p>
-              <p style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>Within 24 hours</p>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "32px", marginBottom: "10px" }}>🔧</div>
-              <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>
-                Professional Team
-              </p>
-              <p style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>Certified technicians</p>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "32px", marginBottom: "10px" }}>📋</div>
-              <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>
-                Track Request
-              </p>
-              <p style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>Use your SR# anytime</p>
-            </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "32px", marginBottom: "10px" }}>📞</div>
-              <p style={{ color: "#0f172a", fontWeight: 700, fontSize: "15px", margin: "0 0 4px" }}>
-                Get Support
-              </p>
-              <p style={{ color: "#64748b", fontSize: "13px", margin: 0 }}>Anytime, anywhere</p>
-            </div>
+      {/* Info Section */}
+      <section className="bg-white border-t border-gray-200 py-12 md:py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {[
+              { icon: "⚡", label: language === 'am' ? "ፍጥን ምላሽ" : "Fast Response", sublabel: language === 'am' ? "24 ሰዓት ውስጥ" : "Within 24 hours" },
+              { icon: "🔧", label: language === 'am' ? "ባለሙያ ማኅበር" : "Professional Team", sublabel: language === 'am' ? "ተጠናቀቁ ቴክኒሻኖች" : "Certified technicians" },
+              { icon: "📋", label: language === 'am' ? "ምክንያት ይከታተሉ" : "Track Request", sublabel: language === 'am' ? "SR# ወደ ከ" : "Use your SR# anytime" },
+              { icon: "📞", label: language === 'am' ? "ድጋፍ ያግኙ" : "Get Support", sublabel: language === 'am' ? "ማንኛውም ጊዜ፣ ሁሉበቤት" : "Anytime, anywhere" },
+            ].map((item) => (
+              <div key={item.label} className="text-center">
+                <div className="text-3xl md:text-4xl mb-3">{item.icon}</div>
+                <p className="text-gray-900 font-bold text-sm md:text-base mb-1">{item.label}</p>
+                <p className="text-gray-600 text-xs md:text-sm">{item.sublabel}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
