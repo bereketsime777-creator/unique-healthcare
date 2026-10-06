@@ -53,6 +53,8 @@ function AddProduct() {
   const [pdfName, setPdfName] = useState(null);
   const [status, setStatus] = useState({ text: "", type: "" });
   const [loading, setLoading] = useState(false);
+  const [categoryMode, setCategoryMode] = useState("select"); // "select" or "custom"
+  const [customCategory, setCustomCategory] = useState("");
 
   useEffect(() => {
     // Fetch categories when component mounts
@@ -65,7 +67,22 @@ function AddProduct() {
       });
   }, []);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCategoryModeChange = (mode) => {
+    setCategoryMode(mode);
+    setCustomCategory("");
+    setFormData({ ...formData, category: "" });
+  };
+
+  const handleCustomCategoryChange = (e) => {
+    const value = e.target.value;
+    setCustomCategory(value);
+    setFormData({ ...formData, category: value });
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -164,15 +181,92 @@ function AddProduct() {
                 <div className="responsive-grid-form-2">
                   <div>
                     <label style={labelStyle}>Category *</label>
-                    <select name="category" value={formData.category} onChange={handleChange}
-                      required style={inputStyle} onFocus={focusInput} onBlur={blurInput}>
-                      <option value="">Select category</option>
-                      {categories.map((c) => (
-                        <option key={c._id} value={c.name}>
-                          {c.name}
-                        </option>
-                      ))}
-                    </select>
+                    
+                    {/* Category Mode Toggle */}
+                    <div style={{
+                      display: "flex",
+                      gap: "8px",
+                      marginBottom: "12px",
+                      background: "#f1f5f9",
+                      padding: "4px",
+                      borderRadius: "8px"
+                    }}>
+                      <button
+                        type="button"
+                        onClick={() => handleCategoryModeChange("select")}
+                        style={{
+                          flex: 1,
+                          padding: "8px 12px",
+                          borderRadius: "6px",
+                          border: "none",
+                          fontSize: "12px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          background: categoryMode === "select" ? "#2563eb" : "transparent",
+                          color: categoryMode === "select" ? "#fff" : "#64748b",
+                          transition: "all 0.15s"
+                        }}
+                      >
+                        Select Category
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleCategoryModeChange("custom")}
+                        style={{
+                          flex: 1,
+                          padding: "8px 12px",
+                          borderRadius: "6px",
+                          border: "none",
+                          fontSize: "12px",
+                          fontWeight: "600",
+                          cursor: "pointer",
+                          background: categoryMode === "custom" ? "#2563eb" : "transparent",
+                          color: categoryMode === "custom" ? "#fff" : "#64748b",
+                          transition: "all 0.15s"
+                        }}
+                      >
+                        Add Custom
+                      </button>
+                    </div>
+
+                    {/* Select from list */}
+                    {categoryMode === "select" && (
+                      <select
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        required
+                        style={inputStyle}
+                        onFocus={focusInput}
+                        onBlur={blurInput}
+                      >
+                        <option value="">Select from existing categories</option>
+                        {categories.map((c) => (
+                          <option key={c._id} value={c.name}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {/* Add custom category */}
+                    {categoryMode === "custom" && (
+                      <div>
+                        <input
+                          type="text"
+                          value={customCategory}
+                          onChange={handleCustomCategoryChange}
+                          required
+                          placeholder="e.g. Dental Equipment, Laboratory Instruments"
+                          style={inputStyle}
+                          onFocus={focusInput}
+                          onBlur={blurInput}
+                        />
+                        <small style={{ color: "#64748b", fontSize: "12px", marginTop: "4px", display: "block" }}>
+                          Enter a new category name (it will be added to your catalog)
+                        </small>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label style={labelStyle}>Manufacturer</label>
